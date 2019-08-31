@@ -1,3 +1,7 @@
+let sin = Math.sin;
+let sqrt = Math.sqrt;
+const PI = Math.PI;
+
 export function wrapper(func) {
 	return num => {
 		if(num <= 0) return 0;
@@ -5,10 +9,6 @@ export function wrapper(func) {
 		return func(num);
 	};
 }
-let sin = Math.sin;
-let sqrt = Math.sqrt;
-const PI = Math.PI;
-
 export let linear = wrapper(x => x);
 export let sine = wrapper(x => (sin((x - 1 / 2) * PI) + 1) / 2);
 export let sineIn = wrapper(x => sin((x - 1) * PI / 2) + 1);
