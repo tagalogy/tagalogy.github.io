@@ -5,4 +5,3 @@ export default function timeout(delay) {
 		}, delay);
 	});
 }
-//Is this neccessary??

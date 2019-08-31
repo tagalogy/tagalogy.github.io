@@ -1,15 +1,11 @@
 import Object2D from "./object2d.js";
 import Frame from "./frame.js";
-
 export default class Scene extends Object2D {
 	constructor(option) {
 		super(option);
-		
 		this.scene = this;
-		
 		let {canvas} = option;
 		this.canvas = canvas;
-		
 		if(option.autoresize) {
 			this.getBound = function() {
 				return {
@@ -21,7 +17,6 @@ export default class Scene extends Object2D {
 			};
 		}
 		let context = this.context = canvas.getContext("2d");
-		
 		this.frame = new Frame(() => {
 			let bound = this.getBound();
 			canvas.width = bound.width;

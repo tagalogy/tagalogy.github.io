@@ -2,24 +2,18 @@ import EventTarget from "./event.js";
 import {sine, alphaToRange, now} from "./easing.js";
 import Scene from "./scene.js";
 import timeout from "./timeout.js";
-
 export default class Object2D extends EventTarget{
 	constructor(option) {
 		super();
-		
 		this.boundAnimID = -1;
 		this.opacityAnimID = -1;
-		
 		this.visible = true;
 		this.children = [];
 		this.parent = null;
 		this.scene = null;
-		
 		this._z = 0;
-		
 		let {parent} = option;
 		if(parent) this.addTo(parent);
-		
 		this.setOpacity(option);
 		this.setBound(option);
 	}
@@ -55,12 +49,10 @@ export default class Object2D extends EventTarget{
 		clearTimeout(this.boundAnimID);
 		let oldGetBound = this.getBound;
 		let startTime = now();
-		
 		this.getBound = function() {
 			let alpha = easing((now() - startTime) / time);
 			let oldBound = oldGetBound.call(this);
 			let newBound = getBound.call(this);
-			
 			return {
 				x: alphaToRange(alpha, oldBound.x, newBound.x),
 				y: alphaToRange(alpha, oldBound.y, newBound.y),
@@ -86,12 +78,10 @@ export default class Object2D extends EventTarget{
 		clearTimeout(time);
 		let oldGetOpacity = this.getOpacity;
 		let startTime = now();
-		
 		this.getOpacity = function() {
 			let alpha = easing((now() - startTime) / time);
 			let oldOpacity = oldGetOpacity.call(this);
 			let newOpacity = getOpacity.call(this);
-			
 			return alphaToRange(alpha, oldOpacity, newOpacity);
 		};
 		this.opacityAnimID = setTimeout(() => {
@@ -122,7 +112,6 @@ export default class Object2D extends EventTarget{
 	updateDrawOrder(deep = false) {
 		let {children} = this;
 		children.sort((a, b) => a.z - b.z);
-		
 		if(deep) for(let child of children) child.updateDrawOrder(true);
 	}
 	draw(context, drawChildren = true) {
@@ -186,19 +175,16 @@ export default class Object2D extends EventTarget{
 			width,
 			height
 		} = this.getBound();
-		
 		return testX > x && testY > y && testX < x + width && testY < y + height;
 	}
 }
 export function getBoundWrapper(option) {
 	let {getBound} = option;
 	if(getBound) return getBound;
-	
 	let {copyBound} = option;
 	if(copyBound) return function() {
 		return copyBound.getBound();
 	}
-	
 	let {
 		x = 0,
 		y = 0,
@@ -207,14 +193,12 @@ export function getBoundWrapper(option) {
 		isPositionRelative = true,
 		isScaleRelative = false
 	} = option;
-	
 	return function() {
 		let {parent} = this;
 		let offsetX;
 		let offsetY;
 		let offsetWidth;
 		let offsetHeight;
-		
 		if(parent) {
 			let offsetBound = parent.getBound();
 			offsetX = isPositionRelative ? offsetBound.x : 0;
@@ -243,7 +227,6 @@ export function getOpacityWrapper(option) {
 	}
 	let {getOpacity} = option;
 	if(getOpacity) return getOpacity;
-	
 	let {copyOpacity} = option;
 	if(copyOpacity) return function() {
 		return copyOpacity.getOpacity();
@@ -252,11 +235,9 @@ export function getOpacityWrapper(option) {
 		opacity = 1,
 		isOpacityRelative = true
 	} = option;
-	
 	return function() {
 		let {parent} = this;
 		if(! (parent && isOpacityRelative)) return opacity;
 		return opacity * parent.getOpacity();
 	}
 }
-//Such a beautiful mess!!

@@ -22,5 +22,4 @@ export default class EventTarget{
 		for(let handler of handlers) handler.call(this);
 	}
 }
-
 //TODO: bubbling and propagation cancellation

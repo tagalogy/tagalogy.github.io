@@ -1,7 +1,6 @@
 let sin = Math.sin;
 let sqrt = Math.sqrt;
 const PI = Math.PI;
-
 export function wrapper(func) {
 	return num => {
 		if(num <= 0) return 0;
@@ -19,7 +18,6 @@ export let expoOut = wrapper(x => - (2 ** (x * -10)) + 1);
 export let circ = wrapper(x => x < 1 / 2 ? (sqrt(1 - x ** 2) + 1) / 2 : (sqrt(1 - (x - 1) ** 2) + 1) / 2);
 export let circIn = wrapper(x => sqrt(1 - x ** 2) + 1);
 export let circOut = wrapper(x => sqrt(1 - (x - 1) ** 2));
-
 export function alphaToRange(alpha, min, max) {
 	return alpha * (max - min) + min;
 }

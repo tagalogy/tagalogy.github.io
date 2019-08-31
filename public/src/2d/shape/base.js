@@ -1,7 +1,6 @@
 import Object2D from "../object2d.js";
 import {now} from "../easing.js";
 import Color from "../color.js";
-
 export const TRANSPARENT_OPTION = {
 	red: 0,
 	green: 0,
@@ -11,7 +10,6 @@ export const TRANSPARENT_OPTION = {
 export default class Base extends Object2D {
 	constructor(option) {
 		super(option);
-		
 		let {
 			fill = new Color(TRANSPARENT_OPTION),
 			line = new Color(TRANSPARENT_OPTION),
@@ -20,20 +18,15 @@ export default class Base extends Object2D {
 			dash = [],
 			dashSpeed = 0
 		} = option;
-		
 		this.fill = fill instanceof Color ? fill : new Color(fill);
 		this.line = line instanceof Color ? line : new Color(line);
-		
 		this.cap = cap;
 		this.join = join;
-		
 		this.dash = dash;
-		
 		this.dashStartOffset = 0;
 		this._dashSpeed = 0;
 		this.dashStartTime = now();
 		this.dashSpeed = dashSpeed;
-		
 		this.getThickness = getThicknessWrapper(option);
 	}
 	/*
@@ -86,16 +79,16 @@ export default class Base extends Object2D {
 	draw(context, drawChildren = true) {
 		if(! this.visible) return;
 		super.draw(context, false);
-		
+
 		context.fillStyle = this.fill.getString();
 		context.strokeStyle = this.line.getString();
 		context.lineCap = this.cap;
 		context.lineJoin = this.join;
 		let thickness = context.lineWidth = this.getThickness();
-		
+
 		context.setLineDash(this.dash.map(num => num * thickness));
 		context.lineDashOffset = this.getDashOffset() * thickness;
-		
+
 		if(drawChildren) this.drawChildren(context);
 	}
 }

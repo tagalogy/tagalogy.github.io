@@ -1,6 +1,5 @@
 import {sine, alphaToRange, now} from "./easing.js";
 import timeout from "./timeout.js";
-
 export default class Color{
 	constructor(option) {
 		this.colorAnimID = -1;
@@ -28,12 +27,10 @@ export default class Color{
 		clearTimeout(this.colorAnimID);
 		let oldGetColor = this.getColor;
 		let startTime = now();
-		
 		this.getColor = function() {
 			let alpha = easing((now() - startTime) / time);
 			let oldColor = oldGetColor.call(this);
 			let newColor = getColor.call(this);
-			
 			return {
 				red: alphaToRange(alpha, oldColor.red, newColor.red),
 				green: alphaToRange(alpha, oldColor.green, newColor.green),
@@ -81,14 +78,12 @@ export function getColorWrapper(option) {
 	}
 	let {getColor} = option;
 	if(getColor) return getColor;
-	
 	let {
 		red = 255,
 		green = 255,
 		blue = 255,
 		alpha = 1
 	} = option;
-	
 	return function() {
 		return {
 			red: red,

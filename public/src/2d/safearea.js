@@ -1,7 +1,5 @@
 import Object2D from "./object2d.js";
-
 let min = Math.min;
-
 export default class SafeArea extends Object2D {
 	constructor(option) {
 		super(option);
