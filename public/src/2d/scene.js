@@ -1,13 +1,22 @@
 import Object2D from "./object2d.js";
 import Frame from "./frame.js";
+import Color from "./color.js";
+export const TRANSPARENT_OPTION = {
+	red: 0,
+	green: 0,
+	blue: 0,
+	alpha: 0
+};
 export default class Scene extends Object2D {
 	constructor(option) {
 		super(option);
 		this.scene = this;
 		let {
+			fill = TRANSPARENT_OPTION,
 			canvas,
 			alpha = true
 		} = option;
+		this.fill = fill instanceof Color ? fill : new Color(fill);
 		this.canvas = canvas;
 		if(option.autoresize) {
 			this.getBound = function() {
@@ -32,6 +41,8 @@ export default class Scene extends Object2D {
 			canvas.width = width;
 			canvas.height = height;
 			context.clearRect(0, 0, width, height);
+			context.fillStyle = this.fill.getString();
+			context.fillRect(0, 0, width, height);
 			this.draw(context);
 		});
 		"click mouseup mousedown mousemove".split(" ").forEach(eventName => {
