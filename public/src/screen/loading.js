@@ -13,7 +13,7 @@ import {
 import {
 	colors
 } from "../asset.js";
-export function load(promise, callback) {
+export default function load(promise, callback) {
 	let loading = new Horizontal({
 		parent: safeArea,
 		isPositionRelative: true,

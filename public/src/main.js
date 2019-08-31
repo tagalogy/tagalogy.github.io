@@ -6,9 +6,7 @@ import {
 import {
 	start
 } from "./screen/mainmenu.js";
-import {
-	load
-} from "./screen/loading.js";
+import load from "./screen/loading.js";
 export let canvas = document.querySelector("canvas#scene");
 export let scene = new Scene({
 	canvas: canvas,
