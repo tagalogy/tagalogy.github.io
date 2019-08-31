@@ -9,6 +9,7 @@ import {
 import load from "./screen/loading.js";
 export let canvas = document.querySelector("canvas#scene");
 export let scene = new Scene({
+	fill: "#fff",
 	canvas: canvas,
 	alpha: false,
 	autoresize: true
