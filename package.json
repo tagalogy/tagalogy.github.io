@@ -1,7 +1,7 @@
 {
 	"name": "tagalogy",
 	"version": "0.0.1",
-	"description": "Web game aimed to help players understand Tagalog",
+	"description": "Web game aimed to help players understand Tagalog more",
 	"main": "start.js",
 	"scripts": {
 		"start": "node start.js"
