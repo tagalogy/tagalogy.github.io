@@ -1,5 +1,9 @@
 import EventTarget from "./event.js";
-import {sine, alphaToRange, now} from "./easing.js";
+import {
+	sine,
+	alphaToRange,
+	now
+} from "./easing.js";
 import Scene from "./scene.js";
 import timeout from "./timeout.js";
 export default class Object2D extends EventTarget{

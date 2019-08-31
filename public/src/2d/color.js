@@ -1,4 +1,8 @@
-import {sine, alphaToRange, now} from "./easing.js";
+import {
+	sine,
+	alphaToRange,
+	now
+} from "./easing.js";
 import timeout from "./timeout.js";
 export default class Color{
 	constructor(option) {

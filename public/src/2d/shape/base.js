@@ -1,5 +1,7 @@
 import Object2D from "../object2d.js";
-import {now} from "../easing.js";
+import {
+	now
+} from "../easing.js";
 import Color from "../color.js";
 export const TRANSPARENT_OPTION = {
 	red: 0,

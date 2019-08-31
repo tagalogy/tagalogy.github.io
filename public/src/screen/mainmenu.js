@@ -1,10 +1,19 @@
-import {safeArea, getThickness} from "../main.js";
+import {
+	safeArea,
+	getThickness
+} from "../main.js";
 import Color from "../2d/color.js";
 import RoundedRectangle from "../2d/shape/rounded_rectangle.js";
 import Text from "../2d/shape/text.js";
 import Image from "../2d/shape/image.js";
-import {images, colors} from "../asset.js";
-import {expoOut, sineIn} from "../2d/easing.js";
+import {
+	images,
+	colors
+} from "../asset.js";
+import {
+	expoOut,
+	sineIn
+} from "../2d/easing.js";
 let ongoing = false;
 let title, startButton, buttonColor, startText;
 export function start() {

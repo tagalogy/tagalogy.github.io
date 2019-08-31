@@ -1,7 +1,15 @@
-import {start} from "./mainmenu.js";
-import {safeArea, getThickness} from "../main.js";
+import {
+	start
+} from "./mainmenu.js";
+import {
+	safeArea,
+	getThickness
+} from "../main.js";
 import Horizontal from "../2d/shape/horizontal.js";
-import {sineIn, sineOut} from "../2d/easing.js";
+import {
+	sineIn,
+	sineOut
+} from "../2d/easing.js";
 import {colors} from "../asset.js";
 export function load(promise, callback) {
 	let loading = new Horizontal({

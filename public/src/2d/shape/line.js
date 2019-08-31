@@ -1,5 +1,9 @@
 import Base from "./base.js";
-import {sine, alphaToRange, now} from "../easing.js";
+import {
+	sine,
+	alphaToRange,
+	now
+} from "../easing.js";
 import timeout from "../timeout.js";
 export default class Line extends Base {
 	constructor(option) {

@@ -1,8 +1,14 @@
 import Scene from "./2d/scene.js";
 import SafeArea from "./2d/safearea.js";
-import {assets} from "./asset.js";
-import {start} from "./screen/mainmenu.js";
-import {load} from "./screen/loading.js";
+import {
+	assets
+} from "./asset.js";
+import {
+	start
+} from "./screen/mainmenu.js";
+import {
+	load
+} from "./screen/loading.js";
 export let canvas = document.querySelector("canvas#scene");
 export let scene = new Scene({
 	canvas: canvas,
