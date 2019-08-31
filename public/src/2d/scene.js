@@ -25,9 +25,13 @@ export default class Scene extends Object2D {
 		});
 		context.imageSmoothingEnabled = true;
 		this.frame = new Frame(() => {
-			let bound = this.getBound();
-			canvas.width = bound.width;
-			canvas.height = bound.height;
+			let {
+				width,
+				height
+			} = this.getBound();
+			canvas.width = width;
+			canvas.height = height;
+			context.clearRect(0, 0, width, height);
 			this.draw(context);
 		});
 		"click mouseup mousedown mousemove".split(" ").forEach(eventName => {
