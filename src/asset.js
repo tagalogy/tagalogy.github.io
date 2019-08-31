@@ -1,4 +1,4 @@
-import {loadImages} from "./2d/loadimage.js";
+import {loadImages} from "./2d/load_image.js";
 import Color from "./2d/color.js";
 
 export let images = {};
