@@ -4,7 +4,10 @@ export default class Scene extends Object2D {
 	constructor(option) {
 		super(option);
 		this.scene = this;
-		let {canvas} = option;
+		let {
+			canvas,
+			alpha = true
+		} = option;
 		this.canvas = canvas;
 		if(option.autoresize) {
 			this.getBound = function() {
@@ -16,7 +19,11 @@ export default class Scene extends Object2D {
 				};
 			};
 		}
-		let context = this.context = canvas.getContext("2d");
+		let context = this.context = canvas.getContext("2d", {
+			alpha: alpha,
+			antialias: true
+		});
+		context.imageSmoothingEnabled = true;
 		this.frame = new Frame(() => {
 			let bound = this.getBound();
 			canvas.width = bound.width;

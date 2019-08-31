@@ -12,6 +12,7 @@ import {
 export let canvas = document.querySelector("canvas#scene");
 export let scene = new Scene({
 	canvas: canvas,
+	alpha: false,
 	autoresize: true
 });
 let min = Math.min;
