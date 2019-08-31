@@ -7,7 +7,7 @@
 		"game"
 	],
 	"lang": "tl",
-	"background_color": "black",
+	"background_color": "white",
 	"theme_color": "#0f5fff",
 	"display": "fullscreen",
 	"orientation": "portrait",
