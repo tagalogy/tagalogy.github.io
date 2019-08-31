@@ -1,0 +1,22 @@
+{
+	"name": "Tagalogy - Liksi ng Isip",
+	"short_name": "Tagalogy",
+	"description": "Mas alamin ang wikang Tagalog sa madaling paraan. Isang mobile webgame.",
+	"categories": [
+		"education",
+		"game"
+	],
+	"lang": "tl",
+	"background_color": "black",
+	"theme_color": "#0f5fff",
+	"display": "fullscreen",
+	"orientation": "portrait",
+	"icons": [
+		{
+			"src": "icon/icon.png",
+			"sizes": "300x300",
+			"type": "image/png"
+		}
+	],
+	"start_url": "/index.html"
+}

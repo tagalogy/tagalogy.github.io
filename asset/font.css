@@ -1,0 +1,9 @@
+@font-face {
+	font-family: "ComicNueue Angular";
+	src: url(comicnueue_angular/regular.otf);
+}
+@font-face {
+	font-family: "ComicNueue Angular";
+	src: url(comicnueue_angular/bold.otf);
+	font-weight: bold
+}
