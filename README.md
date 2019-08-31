@@ -13,10 +13,8 @@ Twitter: [@BagongonSean](https://www.twitter.com/@BagongonSean)
 
 ### Joshua Emmanuel
 Facebook:
-
 Twitter:
 
 ### Jonathan Dale Zorilla
 Facebook:
-
 Mobile Legends:
