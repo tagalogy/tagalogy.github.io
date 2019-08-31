@@ -81,16 +81,13 @@ export default class Base extends Object2D {
 	draw(context, drawChildren = true) {
 		if(! this.visible) return;
 		super.draw(context, false);
-
 		context.fillStyle = this.fill.getString();
 		context.strokeStyle = this.line.getString();
 		context.lineCap = this.cap;
 		context.lineJoin = this.join;
 		let thickness = context.lineWidth = this.getThickness();
-
 		context.setLineDash(this.dash.map(num => num * thickness));
 		context.lineDashOffset = this.getDashOffset() * thickness;
-
 		if(drawChildren) this.drawChildren(context);
 	}
 }

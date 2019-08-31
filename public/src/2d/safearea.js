@@ -3,7 +3,9 @@ let min = Math.min;
 export default class SafeArea extends Object2D {
 	constructor(option) {
 		super(option);
-		let {ratio} = option;
+		let {
+			ratio
+		} = option;
 		this.getBound = function() {
 			let bound = this.parent.getBound();
 			let scale = min(bound.width / ratio, bound.height);

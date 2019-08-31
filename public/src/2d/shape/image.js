@@ -4,7 +4,9 @@ export default class Image extends Object2D{
 	constructor(option) {
 		super(option);
 		this.source = option.source;
-		let {imageScaling = "fit"} = option;
+		let {
+			imageScaling = "fit"
+		} = option;
 		this.imageScaling = imageScaling;
 	}
 	draw(context, drawChildren = true) {

@@ -1,4 +1,6 @@
-import {loadImages} from "./2d/load_image.js";
+import {
+	loadImages
+} from "./2d/load_image.js";
 import Color from "./2d/color.js";
 export let images = {};
 export let assets = loadImages([

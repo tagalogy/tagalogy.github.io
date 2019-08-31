@@ -31,7 +31,11 @@ export default class Text extends Object2D{
 		if(! this.visible) return;
 		super.draw(context, false);
 		context.fillStyle = this.color.getString();
-		let {style, weight, font} = this;
+		let {
+			style,
+			weight,
+			font
+		} = this;
 		context.textAlign = "center";
 		context.textBaseline = "middle";
 		if(typeof font == "string") font = [font];

@@ -80,7 +80,9 @@ export function getColorWrapper(option) {
 			};
 		}
 	}
-	let {getColor} = option;
+	let {
+		getColor
+	} = option;
 	if(getColor) return getColor;
 	let {
 		red = 255,

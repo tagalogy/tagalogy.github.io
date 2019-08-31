@@ -10,7 +10,9 @@ import {
 	sineIn,
 	sineOut
 } from "../2d/easing.js";
-import {colors} from "../asset.js";
+import {
+	colors
+} from "../asset.js";
 export function load(promise, callback) {
 	let loading = new Horizontal({
 		parent: safeArea,

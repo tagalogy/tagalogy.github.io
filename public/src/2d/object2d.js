@@ -183,9 +183,13 @@ export default class Object2D extends EventTarget{
 	}
 }
 export function getBoundWrapper(option) {
-	let {getBound} = option;
+	let {
+		getBound
+	} = option;
 	if(getBound) return getBound;
-	let {copyBound} = option;
+	let {
+		copyBound
+	} = option;
 	if(copyBound) return function() {
 		return copyBound.getBound();
 	}
@@ -229,9 +233,13 @@ export function getOpacityWrapper(option) {
 			return option;
 		};
 	}
-	let {getOpacity} = option;
+	let {
+		getOpacity
+	} = option;
 	if(getOpacity) return getOpacity;
-	let {copyOpacity} = option;
+	let {
+		copyOpacity
+	} = option;
 	if(copyOpacity) return function() {
 		return copyOpacity.getOpacity();
 	}

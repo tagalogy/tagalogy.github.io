@@ -51,7 +51,10 @@ export function getRadiusWrapper(option) {
 	} = option;
 	return function() {
 		if(isRadiusRelative) {
-			let {width, height} = this.getBound();
+			let {
+				width,
+				height
+			} = this.getBound();
 			return min(width, height) * radius;
 		}
 		return radius;
