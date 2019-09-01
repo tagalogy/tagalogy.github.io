@@ -20,7 +20,8 @@ export let safeArea = new SafeArea({
 	parent: scene
 });
 export function updateThickness() {
-	return safeArea.getBound().width / 100;
+	safeArea.updateBound();
+	return safeArea.width / 100;
 };
 load(assets, () => {
 	start();
