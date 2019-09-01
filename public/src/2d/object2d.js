@@ -16,7 +16,9 @@ export default class Object2D extends EventTarget{
 		this.parent = null;
 		this.scene = null;
 		this._z = 0;
-		let {parent} = option;
+		let {
+			parent
+		} = option;
 		if(parent) this.addTo(parent);
 		this.setOpacity(option);
 		this.setBound(option);
