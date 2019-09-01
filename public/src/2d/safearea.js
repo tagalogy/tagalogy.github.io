@@ -18,10 +18,10 @@ export default class SafeArea extends Object2D {
 				height
 			} = parent;
 			let scale = min(width / ratio, height);
-			let width = scale * ratio;
-			this.x = x + (width - width) / 2;
+			let finalWidth = scale * ratio;
+			this.x = x + (width - finalWidth) / 2;
 			this.y = y + (height - scale) / 2;
-			this.width = width;
+			this.width = finalWidth;
 			this.height = scale;
 		};
 	}
