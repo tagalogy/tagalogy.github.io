@@ -37,12 +37,13 @@ export default class Text extends Object2D{
 		if(typeof font == "string") font = [font];
 		font = font.map(font => `"${font}"`);
 		context.font = `${style} ${weight} ${size}px ${font.join(" ")}`;
+		this.updateBound();
 		let {
 			x,
 			y,
 			width,
 			height
-		} = this.getBound();
+		} = this;
 		context.fillText(this.content, x + width / 2, y + height / 2);
 		if(drawChildren) this.drawChildren(context);
 	}

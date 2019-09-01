@@ -12,6 +12,7 @@ export default class Image extends Object2D{
 	draw(context, drawChildren = true) {
 		if(! this.visible) return;
 		super.draw(context, false);
+		this.updateBound();
 		let {
 			source,
 			imageScaling
@@ -25,7 +26,7 @@ export default class Image extends Object2D{
 			y,
 			width: rawDestWidth,
 			height: rawDestHeight
-		} = this.getBound();
+		} = this;
 		if(imageScaling == "fit") {
 			let scaleX = rawDestWidth / rawSrcWidth;
 			let scaleY = rawDestHeight / rawSrcHeight;
