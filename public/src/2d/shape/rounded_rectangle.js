@@ -14,7 +14,7 @@ export default class RoundedRectangle extends Base{
 		this.updateBound();
 		this.updateRadius();
 		let {
-			raius,
+			radius,
 			x: minX,
 			y: minY,
 			width,
