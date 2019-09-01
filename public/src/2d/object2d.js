@@ -185,12 +185,13 @@ export default class Object2D extends EventTarget{
 	hitTest Methods
 	*/
 	hitTest(testX, testY) {
+		this.updateBound();
 		let {
 			x,
 			y,
 			width,
 			height
-		} = this.getBound();
+		} = this;
 		return testX > x && testY > y && testX < x + width && testY < y + height;
 	}
 }

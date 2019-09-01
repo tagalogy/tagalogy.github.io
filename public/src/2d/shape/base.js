@@ -59,12 +59,6 @@ export default class Base extends Object2D {
 		return ((now() - this.dashStartTime) * this._dashSpeed + this.dashStartOffset) % this.dashSum;
 	}
 	/*
-	thickness setting Method
-	*/
-	setThickness(option) {
-		this.getThickness = getThicknessWrapper(option);
-	}
-	/*
 	draw Method
 	*/
 	draw(context, drawChildren = true) {

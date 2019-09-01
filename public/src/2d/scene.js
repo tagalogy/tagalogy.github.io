@@ -27,10 +27,11 @@ export default class Scene extends Object2D {
 		});
 		context.imageSmoothingEnabled = true;
 		this.frame = new Frame(() => {
+			this.updateBound();
 			let {
 				width,
 				height
-			} = this.getBound();
+			} = this;
 			canvas.width = width;
 			canvas.height = height;
 			context.clearRect(0, 0, width, height);
