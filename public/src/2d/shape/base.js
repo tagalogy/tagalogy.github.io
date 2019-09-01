@@ -3,12 +3,7 @@ import {
 	now
 } from "../easing.js";
 import Color from "../color.js";
-export const TRANSPARENT_OPTION = {
-	red: 0,
-	green: 0,
-	blue: 0,
-	alpha: 0
-};
+export const TRANSPARENT_OPTION = "#0000";
 export default class Base extends Object2D {
 	constructor(option) {
 		super(option);

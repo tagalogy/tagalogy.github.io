@@ -1,12 +1,7 @@
 import Object2D from "./object2d.js";
 import Frame from "./frame.js";
 import Color from "./color.js";
-export const TRANSPARENT_OPTION = {
-	red: 0,
-	green: 0,
-	blue: 0,
-	alpha: 0
-};
+export const TRANSPARENT_OPTION = "#0000";
 export default class Scene extends Object2D {
 	constructor(option) {
 		super(option);
