@@ -224,10 +224,10 @@ export function updateBoundWrapper(option) {
 			offsetWidth = 1;
 			offsetHeight = 1;
 		}
-		this.x: offsetX + offsetWidth * x,
-		this.y: offsetY + offsetHeight * y,
-		this.width: offsetWidth * width,
-		this.height: offsetHeight * height
+		this.x = offsetX + offsetWidth * x;
+		this.y = offsetY + offsetHeight * y,
+		this.width = offsetWidth * width;
+		this.height = offsetHeight * height;
 	};
 }
 export function updateOpacityWrapper(option) {
