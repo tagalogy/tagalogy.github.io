@@ -27,7 +27,7 @@ export default class Base extends Object2D {
 		this.setThickness(option);
 	}
 	setThickness(option) {
-		this.updateThickness(option);
+		this.updateThickness = updateThicknessWrapper(option);
 	}
 	/*
 	Dash Properties
