@@ -10,45 +10,56 @@ export default class Color{
 		this.setColor(option);
 	}
 	getString() {
+		this.updateColor();
 		let {
 			red,
 			green,
 			blue,
 			alpha
-		} = this.getColor();
+		} = this;
 		return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
 	}
 	toString() {
 		return this.getString();
 	}
 	setColor(option) {
-		this.getColor = getColorWrapper(option);
+		this.updateColor = getColorWrapper(option);
 	}
 	animateColor(option, time, easing) {
-		return this.animateGetColor(getColorWrapper(option), time, easing);
+		return this.animateUpdateColor(updateColorWrapper(option), time, easing);
 	}
-	animateGetColor(getColor, time = 400, easing = sine) {
+	animateUpdateColor(updateColor, time = 400, easing = sine) {
 		clearTimeout(this.colorAnimID);
-		let oldGetColor = this.getColor;
+		let oldUpdateColor = this.updateColor;
 		let startTime = now();
-		this.getColor = function() {
+		this.updateColor = function() {
 			let alpha = easing((now() - startTime) / time);
-			let oldColor = oldGetColor.call(this);
-			let newColor = getColor.call(this);
-			return {
-				red: alphaToRange(alpha, oldColor.red, newColor.red),
-				green: alphaToRange(alpha, oldColor.green, newColor.green),
-				blue: alphaToRange(alpha, oldColor.blue, newColor.blue),
-				alpha: alphaToRange(alpha, oldColor.alpha, newColor.alpha)
-			};
+			oldUpdateColor.call(this);
+			let {
+				red: oldRed,
+				green: oldGreen,
+				blue: oldBlue,
+				alpha: oldAlpha
+			} = this;
+			updateColor.call(this);
+			let {
+				red: newRed,
+				green: newGreen,
+				blue: newBlue,
+				alpha: newAlpha
+			} = this;
+			this.red = alphaToRange(alpha, oldRed, newRed);
+			this.green = alphaToRange(alpha, oldGreen, newGreen);
+			this.blue = alphaToRange(alpha, oldBlue, newBlue);
+			this.alpha = alphaToRange(alpha, oldAlpha, newAlpha);
 		};
 		this.colorAnimID = setTimeout(() => {
-			this.getColor = getColor;
+			this.updateColor = updateColor;
 		}, time);
 		return timeout(time);
 	}
 }
-export function getColorWrapper(option) {
+export function updateColorWrapper(option) {
 	if(typeof option == "string") {
 		option = option.trim();
 		let red, green, blue;
@@ -83,19 +94,17 @@ export function getColorWrapper(option) {
 					break;
 			}
 			return function() {
-				return {
-					red: red,
-					green: green,
-					blue: blue,
-					alpha: alpha
-				};
-			};
+				this.red = red;
+				this.green = green;
+				this.blue = blue;
+				this.alpha = alpha;
+			}
 		}
 	}
 	let {
-		getColor
+		updateColor
 	} = option;
-	if(getColor) return getColor;
+	if(updateColor) return updateColor;
 	let {
 		red = 255,
 		green = 255,
@@ -103,11 +112,9 @@ export function getColorWrapper(option) {
 		alpha = 1
 	} = option;
 	return function() {
-		return {
-			red: red,
-			green: green,
-			blue: blue,
-			alpha: alpha
-		};
+		this.red = red;
+		this.green = green;
+		this.blue = blue;
+		this.alpha = alpha;
 	}
 }

@@ -12,40 +12,53 @@ export default class Line extends Base {
 		this.setCoords(option);
 	}
 	setCoords(option) {
-		this.getCoords = getCoordsWrapper(option);
+		this.updateCoords = updateCoordsWrapper(option);
 	}
 	animateCoords(option, time, easing) {
-		return this.animateGetCoords(getCoordsWrapper(option), time, easing);
+		return this.animateUpdateCoords(getCoordsWrapper(option), time, easing);
 	}
-	animateGetCoords(getCoords, time = 400, easing = SINE) {
+	animateUpdateCoords(updateCoords, time = 400, easing = SINE) {
 		clearTimeout(this.coordsAnimID);
-		let oldGetBound = this.getBound;
+		let oldUpdateCoords = this.updateCoords;
 		let startTime = now();
-		this.getBound = function() {
+		this.updateCoords = function() {
 			let alpha = easing((now() - startTime) / time);
-			let oldBound = oldGetBound.call(this);
-			let newBound = getBound.call(this);
+			oldUpdateCoords.call(this);
+			let {
+				x0: oldX0,
+				y0: oldY0,
+				x1: oldX1,
+				y1: oldY1
+			} = this;
+			updateCoords.call(this);
+			let {
+				x0: newX0,
+				y0: newY0,
+				x1: newX1,
+				y1: newY1
+			} = this;
 			return {
-				x: alphaToRange(alpha, oldBound.x, newBound.x),
-				y: alphaToRange(alpha, oldBound.y, newBound.y),
-				width: alphaToRange(alpha, oldBound.width, newBound.width),
-				height: alphaToRange(alpha, oldBound.height, newBound.height)
+				x0: alphaToRange(alpha, oldX0, newX0),
+				y0: alphaToRange(alpha, oldY0, newY0),
+				x1: alphaToRange(alpha, oldX1, newX1),
+				y1: alphaToRange(alpha, oldY1, newY1)
 			};
 		};
 		this.coordsAnimID = setTimeout(() => {
-			this.getCoords = getCoords;
+			this.updateCoords = updateCoords;
 		}, time);
 		return new timeout(time);
 	}
 	draw(context, drawChildren = true) {
 		if(! this.visible) return;
 		super.draw(context, false);
+		this.updateCoords();
 		let {
 			x0,
 			y0,
 			x1,
 			y1
-		} = this.getCoords();
+		} = this;
 		context.beginPath();
 		context.moveTo(x0, y0);
 		context.lineTo(x1, y1);
@@ -53,9 +66,9 @@ export default class Line extends Base {
 		if(drawChildren) this.drawChildren(context);
 	}
 }
-export function getCoordsWrapper(option) {
-	let {getCoords} = option;
-	if(getCoords) return getCoords;
+export function updateCoordsWrapper(option) {
+	let {updateCoords} = option;
+	if(updateCoords) return updateCoords;
 	let {
 		x0 = 0,
 		y0 = 0,
@@ -63,17 +76,16 @@ export function getCoordsWrapper(option) {
 		y1 = 0
 	} = option;
 	return function() {
+		this.updateBound();
 		let {
 			x,
 			y,
 			width,
 			height
-		} = this.getBound();
-		return {
-			x0: x + width * x0,
-			y0: y + height * y0,
-			x1: x + width * x1,
-			y1: y + height * y1
-		};
+		} = this;
+		this.x0 = x + width * x0;
+		this.y0 = y + height * y0;
+		this.x1 = x + width * x1;
+		this.y1 = y + height * y1;
 	};
 }

@@ -1,6 +1,6 @@
 import {
 	safeArea,
-	getThickness
+	updateThickness
 } from "../main.js";
 import Color from "../2d/color.js";
 import RoundedRectangle from "../2d/shape/rounded_rectangle.js";
@@ -52,7 +52,7 @@ export function start() {
 		line: colors.BLACK,
 		dash: [4, 4],
 		dashSpeed: 4 / 1000,
-		getThickness: getThickness,
+		updateThickness: updateThickness,
 		isRadiusRelative: true,
 		radius: 0.5
 	});

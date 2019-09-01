@@ -2,19 +2,11 @@ import Line from "./line.js";
 export default class Horizontal extends Line {
 	constructor(option) {
 		super(option);
-		this.getCoords = function() {
-			let {
-				x,
-				y,
-				width,
-				height
-			} = this.getBound();
-			return {
-				x0: x,
-				y0: y + height / 2,
-				x1: x + width,
-				y1: y + height / 2,
-			};
-		}
+		this.setCoords({
+			x0: 0,
+			y0: 1 / 2,
+			x1: 1,
+			y1: 1 / 2
+		});
 	}
 }

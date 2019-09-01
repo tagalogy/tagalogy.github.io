@@ -24,16 +24,10 @@ export default class Base extends Object2D {
 		this._dashSpeed = 0;
 		this.dashStartTime = now();
 		this.dashSpeed = dashSpeed;
-		this.getThickness = getThicknessWrapper(option);
+		this.setThickness(option);
 	}
-	/*
-	Thickness Properties
-	*/
-	get thickness() {
-		return this.getThickness();
-	}
-	set thickness(thickness) {
-		this.setThickness(thickness);
+	setThickness(option) {
+		this.updateThickness(option);
 	}
 	/*
 	Dash Properties
@@ -76,26 +70,35 @@ export default class Base extends Object2D {
 	draw(context, drawChildren = true) {
 		if(! this.visible) return;
 		super.draw(context, false);
-		context.fillStyle = this.fill.getString();
-		context.strokeStyle = this.line.getString();
-		context.lineCap = this.cap;
-		context.lineJoin = this.join;
-		let thickness = context.lineWidth = this.getThickness();
-		context.setLineDash(this.dash.map(num => num * thickness));
+		this.updateThickness();
+		let {
+			fill,
+			line,
+			cap,
+			join,
+			thickness,
+			dash
+		} = this;
+		context.fillStyle = fill.getString();
+		context.strokeStyle = line.getString();
+		context.lineCap = cap;
+		context.lineJoin = join;
+		context.lineWidth = thickness;
+		context.setLineDash(dash.map(num => num * thickness));
 		context.lineDashOffset = this.getDashOffset() * thickness;
 		if(drawChildren) this.drawChildren(context);
 	}
 }
-export function getThicknessWrapper(option) {
+export function updateThicknessWrapper(option) {
 	if(typeof option == "number") {
 		return function() {
 			return option;
 		};
 	}
-	let {getThickness} = option;
-	if(getThickness) return getThickness;
+	let {updateThickness} = option;
+	if(updateThickness) return updateThickness;
 	let {thickness = 2} = option;
 	return function() {
-		return thickness;
+		this.thickness = thickness;
 	}
 }

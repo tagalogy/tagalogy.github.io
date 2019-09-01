@@ -3,7 +3,7 @@ import {
 } from "./mainmenu.js";
 import {
 	safeArea,
-	getThickness
+	updateThickness
 } from "../main.js";
 import Horizontal from "../2d/shape/horizontal.js";
 import {
@@ -27,7 +27,7 @@ export default function load(promise, callback) {
 		line: colors.BLACK,
 		dash: [4, 4],
 		dashSpeed: 1 / 100,
-		getThickness: getThickness,
+		updateThickness: updateThickness,
 	});
 	let entrance = loading.animateBound({
 		isPositionRelative: true,

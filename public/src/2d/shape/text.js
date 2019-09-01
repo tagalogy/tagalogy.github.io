@@ -18,20 +18,16 @@ export default class Text extends Object2D{
 		this.color = color instanceof Color ? color : new Color(color);
 		this.setSize(option);
 	}
-	get size() {
-		return this.getSize();
-	}
-	set size(option) {
-		this.setSize(option);
-	}
 	setSize(option) {
-		this.getSize = getSizeWrapper(option);
+		this.updateSize = updateSizeWrapper(option);
 	}
 	draw(context, drawChildren = true) {
 		if(! this.visible) return;
 		super.draw(context, false);
 		context.fillStyle = this.color.getString();
+		this.updateSize();
 		let {
+			size,
 			style,
 			weight,
 			font
@@ -40,7 +36,7 @@ export default class Text extends Object2D{
 		context.textBaseline = "middle";
 		if(typeof font == "string") font = [font];
 		font = font.map(font => `"${font}"`);
-		context.font = `${style} ${weight} ${this.getSize()}px ${font.join(" ")}`;
+		context.font = `${style} ${weight} ${size}px ${font.join(" ")}`;
 		let {
 			x,
 			y,
@@ -51,20 +47,20 @@ export default class Text extends Object2D{
 		if(drawChildren) this.drawChildren(context);
 	}
 }
-export function getSizeWrapper(option) {
+export function updateSizeWrapper(option) {
 	if(typeof option == "number") {
 		return function() {
 			return option;
 		};
 	}
-	let {getSize} = option;
-	if(getSize) return getSize;
+	let {updateSize} = option;
+	if(updateSize) return updateSize;
 	let {size = 10, isSizeRelative = false} = option;
 	return function() {
 		if(isSizeRelative) {
-			return size * this.getBound().height;
+			this.size = size * this.getBound().height;
 		}else {
-			return size;
+			this.size = size;
 		}
 	}
 }

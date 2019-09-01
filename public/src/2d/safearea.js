@@ -6,16 +6,23 @@ export default class SafeArea extends Object2D {
 		let {
 			ratio
 		} = option;
-		this.getBound = function() {
-			let bound = this.parent.getBound();
-			let scale = min(bound.width / ratio, bound.height);
+		this.updateBound = function() {
+			let {
+				parent
+			} = this;
+			parent.updateBound();
+			let {
+				x,
+				y,
+				width,
+				height
+			} = parent;
+			let scale = min(width / ratio, height);
 			let width = scale * ratio;
-			return {
-				x: bound.x + (bound.width - width) / 2,
-				y: bound.y + (bound.height - scale) / 2,
-				width: width,
-				height: scale
-			};
+			this.x = x + (width - width) / 2;
+			this.y = y + (height - scale) / 2;
+			this.width = width;
+			this.height = scale;
 		};
 	}
 }

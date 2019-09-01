@@ -6,18 +6,20 @@ export default class RoundedRectangle extends Base{
 		this.setRadius(option);
 	}
 	setRadius(option) {
-		this.getRadius = getRadiusWrapper(option);
+		this.updateRadius = updateRadiusWrapper(option);
 	}
 	draw(context, drawChildren = true) {
 		if(! this.visible) return;
 		super.draw(context, false);
-		let radius = this.getRadius();
+		this.updateBound();
+		this.updateRadius();
 		let {
+			raius,
 			x: minX,
 			y: minY,
 			width,
 			height
-		} = this.getBound();
+		} = this;
 		let midX = minX + width / 2;
 		let midY = minY + height / 2;
 		let maxX = minX + width;
@@ -37,14 +39,14 @@ export default class RoundedRectangle extends Base{
 		if(drawChildren) this.drawChildren(context);
 	}
 }
-export function getRadiusWrapper(option) {
+export function updateRadiusWrapper(option) {
 	if(typeof option == "number")  {
 		return function() {
 			return option;
 		};
 	}
-	let {getRadius} = option;
-	if(getRadius) return getRadius;
+	let {updateRadius} = option;
+	if(updateRadius) return updateRadius;
 	let {
 		radius = 0,
 		isRadiusRelative = false
@@ -55,8 +57,9 @@ export function getRadiusWrapper(option) {
 				width,
 				height
 			} = this.getBound();
-			return min(width, height) * radius;
+			this.radius = min(width, height) * radius;
+			return;
 		}
-		return radius;
+		this.radius = radius;
 	}
 }

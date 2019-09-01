@@ -24,15 +24,6 @@ export default class Object2D extends EventTarget{
 		this.setBound(option);
 	}
 	/*
-	Opacity Properties
-	*/
-	get opacity() {
-		return this.getOpacity();
-	}
-	set opacity(opacity) {
-		return this.setOpacity(opacity);
-	}
-	/*
 	Z Properties
 	*/
 	get z() {
@@ -46,28 +37,38 @@ export default class Object2D extends EventTarget{
 	Bound Setting and Animating Methods
 	*/
 	setBound(option) {
-		this.getBound = getBoundWrapper(option);
+		this.updateBound = updateBoundWrapper(option);
 	}
 	animateBound(option, time, easing) {
-		return this.animateGetBound(getBoundWrapper(option), time, easing);
+		return this.animateUpdateBound(updateBoundWrapper(option), time, easing);
 	}
-	animateGetBound(getBound, time = 400, easing = sine) {
+	animateUpdateBound(updateBound, time = 400, easing = sine) {
 		clearTimeout(this.boundAnimID);
-		let oldGetBound = this.getBound;
+		let oldUpdateBound = this.updateBound;
 		let startTime = now();
-		this.getBound = function() {
+		this.updateBound = function() {
 			let alpha = easing((now() - startTime) / time);
-			let oldBound = oldGetBound.call(this);
-			let newBound = getBound.call(this);
-			return {
-				x: alphaToRange(alpha, oldBound.x, newBound.x),
-				y: alphaToRange(alpha, oldBound.y, newBound.y),
-				width: alphaToRange(alpha, oldBound.width, newBound.width),
-				height: alphaToRange(alpha, oldBound.height, newBound.height)
-			};
+			oldUpdateBound.call(this);
+			let {
+				x: oldX,
+				y: oldY,
+				width: oldWidth,
+				height: oldHeight
+			} = this;
+			updateBound.call(this);
+			let {
+				x: newX,
+				y: newY,
+				width: newWidth,
+				height: newHeight
+			} = this;
+			this.x = alphaToRange(alpha, oldX, newX);
+			this.y = alphaToRange(alpha, oldY, newY);
+			this.width = alphaToRange(alpha, oldWidth, newWidth);
+			this.height = alphaToRange(alpha, oldHeight, newHeight);
 		};
 		this.boundAnimID = setTimeout(() => {
-			this.getBound = getBound;
+			this.updateBound = updateBound;
 		}, time);
 		return timeout(time);
 	}
@@ -75,23 +76,29 @@ export default class Object2D extends EventTarget{
 	Opacity Setting and Animating Methods
 	*/
 	setOpacity(option) {
-		this.getOpacity = getOpacityWrapper(option);
+		this.updateOpacity = updateOpacityWrapper(option);
 	}
 	animateOpacity(option, time, easing) {
-		return this.animateGetOpacity(getOpacityWrapper(option), time, easing);
+		return this.animateUpdateOpacity(updateOpacityWrapper(option), time, easing);
 	}
-	animateGetOpacity(getOpacity, time = 400, easing = sine) {
+	animateUpdateOpacity(updateOpacity, time = 400, easing = sine) {
 		clearTimeout(time);
-		let oldGetOpacity = this.getOpacity;
+		let oldUpdateOpacity = this.updateOpacity;
 		let startTime = now();
-		this.getOpacity = function() {
+		this.updateOpacity = function() {
 			let alpha = easing((now() - startTime) / time);
-			let oldOpacity = oldGetOpacity.call(this);
-			let newOpacity = getOpacity.call(this);
-			return alphaToRange(alpha, oldOpacity, newOpacity);
+			oldUpdateOpacity.call(this);
+			let {
+				opacity: oldOpacity
+			} = this;
+			updateOpacity.call(this);
+			let {
+				opacity: newOpacity
+			} = this;
+			this.opacity = alphaToRange(alpha, oldOpacity, newOpacity);
 		};
 		this.opacityAnimID = setTimeout(() => {
-			this.getOpacity = getOpacity;
+			this.updateOpacity = updateOpacity;
 		}, time)
 		return timeout(time);
 	}
@@ -103,7 +110,9 @@ export default class Object2D extends EventTarget{
 		return animateOpacity(1, time, easing);
 	}
 	fadeOut(time, easingback) {
-		return animateOpacity(0, time, easing).then(() => void (this.visible = false));
+		return animateOpacity(0, time, easing).then(() => {
+			this.visible = false;
+		});
 	}
 	/*
 	forEachDescendant
@@ -122,7 +131,8 @@ export default class Object2D extends EventTarget{
 	}
 	draw(context, drawChildren = true) {
 		if(! this.visible) return;
-		context.globalOpacity = this.getOpacity();
+		this.updateOpacity();
+		context.globalOpacity = this.opacity;
 		if(drawChildren) this.drawChildren(context);
 	}
 	drawChildren(context) {
@@ -184,17 +194,11 @@ export default class Object2D extends EventTarget{
 		return testX > x && testY > y && testX < x + width && testY < y + height;
 	}
 }
-export function getBoundWrapper(option) {
+export function updateBoundWrapper(option) {
 	let {
-		getBound
+		updateBound
 	} = option;
-	if(getBound) return getBound;
-	let {
-		copyBound
-	} = option;
-	if(copyBound) return function() {
-		return copyBound.getBound();
-	}
+	if(updateBound) return updateBound;
 	let {
 		x = 0,
 		y = 0,
@@ -204,54 +208,51 @@ export function getBoundWrapper(option) {
 		isScaleRelative = false
 	} = option;
 	return function() {
-		let {parent} = this;
-		let offsetX;
-		let offsetY;
-		let offsetWidth;
-		let offsetHeight;
+		let {
+			parent
+		} = this;
+		let offsetX, offsetY, offsetWidth, offsetHeight;
 		if(parent) {
-			let offsetBound = parent.getBound();
-			offsetX = isPositionRelative ? offsetBound.x : 0;
-			offsetY = isPositionRelative ? offsetBound.y : 0;
-			offsetWidth = isScaleRelative ? offsetBound.width : 1;
-			offsetHeight = isScaleRelative ? offsetBound.height : 1;
+			parent.updateBound();
+			offsetX = isPositionRelative ? parent.x : 0;
+			offsetY = isPositionRelative ? parent.y : 0;
+			offsetWidth = isScaleRelative ? parent.width : 1;
+			offsetHeight = isScaleRelative ? parent.height : 1;
 		}else{
 			offsetX = 0;
 			offsetY = 0;
 			offsetWidth = 1;
 			offsetHeight = 1;
 		}
-		return {
-			x: offsetX + offsetWidth * x,
-			y: offsetY + offsetHeight * y,
-			width: offsetWidth * width,
-			height: offsetHeight * height
-		};
+		this.x: offsetX + offsetWidth * x,
+		this.y: offsetY + offsetHeight * y,
+		this.width: offsetWidth * width,
+		this.height: offsetHeight * height
 	};
 }
-export function getOpacityWrapper(option) {
+export function updateOpacityWrapper(option) {
 	if(typeof option == "number")  {
 		return function() {
 			return option;
 		};
 	}
 	let {
-		getOpacity
+		updateOpacity
 	} = option;
-	if(getOpacity) return getOpacity;
-	let {
-		copyOpacity
-	} = option;
-	if(copyOpacity) return function() {
-		return copyOpacity.getOpacity();
-	}
+	if(updateOpacity) return updateOpacity;
 	let {
 		opacity = 1,
 		isOpacityRelative = true
 	} = option;
 	return function() {
-		let {parent} = this;
-		if(! (parent && isOpacityRelative)) return opacity;
-		return opacity * parent.getOpacity();
+		let {
+			parent
+		} = this;
+		if(! (parent && isOpacityRelative)) {
+			this.opacity = opacity;
+			return;
+		}
+		parent.updateOpacity()
+		this.opacity = this.opacity * parent.opacity;
 	}
 }

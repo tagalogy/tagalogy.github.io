@@ -14,13 +14,11 @@ export default class Scene extends Object2D {
 		this.fill = fill instanceof Color ? fill : new Color(fill);
 		this.canvas = canvas;
 		if(option.autoresize) {
-			this.getBound = function() {
-				return {
-					x: 0,
-					y: 0,
-					width: canvas.clientWidth,
-					height: canvas.clientHeight
-				};
+			this.updateBound = function() {
+				this.x = 0;
+				this.y = 0;
+				this.width = canvas.clientWidth;
+				this.height = canvas.clientHeight;
 			};
 		}
 		let context = this.context = canvas.getContext("2d", {
