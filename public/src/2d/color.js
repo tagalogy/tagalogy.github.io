@@ -63,11 +63,23 @@ export function getColorWrapper(option) {
 					blue = ((raw >> 0 * 4) & 0xf) * 0x11;
 					alpha = 1;
 					break;
+				case 4:
+					red = ((raw >> 3 * 4) & 0xf) * 0x11;
+					green = ((raw >> 2 * 4) & 0xf) * 0x11;
+					blue = ((raw >> 1 * 4) & 0xf) * 0x11;
+					alpha = ((raw >> 0 * 4) & 0xf) / 0xf;
+					break;
 				case 6:
 					red = (raw >> 4 * 4) & 0xff;
 					green = (raw >> 2 * 4) & 0xff;
 					blue = (raw >> 0 * 4) & 0xff;
 					alpha = 1;
+					break;
+				case 8:
+					red = (raw >> 6 * 4) & 0xff;
+					green = (raw >> 4 * 4) & 0xff;
+					blue = (raw >> 2 * 4) & 0xff;
+					alpha = ((raw >> 0 * 4) & 0xff) / 0xff;
 					break;
 			}
 			return function() {
