@@ -23,7 +23,7 @@ export default class Color{
 		return this.getString();
 	}
 	setColor(option) {
-		this.updateColor = getColorWrapper(option);
+		this.updateColor = updateColorWrapper(option);
 	}
 	animateColor(option, time, easing) {
 		return this.animateUpdateColor(updateColorWrapper(option), time, easing);
