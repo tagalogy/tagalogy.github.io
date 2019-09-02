@@ -248,10 +248,10 @@ export function updateOpacityWrapper(option) {
 		let {
 			parent
 		} = this;
-		if(! (parent && isOpacityRelative)) {
-			this.opacity = opacity;
+		if(parent && isOpacityRelative) {
+		this.opacity = this.opacity * parent.opacity;
 		}else{
-			this.opacity = this.opacity * parent.opacity;
+			this.opacity = opacity;
 		}
 	}
 }
