@@ -214,7 +214,6 @@ export function updateBoundWrapper(option) {
 		} = this;
 		let offsetX, offsetY, offsetWidth, offsetHeight;
 		if(parent) {
-			parent.updateBound();
 			offsetX = isPositionRelative ? parent.x : 0;
 			offsetY = isPositionRelative ? parent.y : 0;
 			offsetWidth = isScaleRelative ? parent.width : 1;
@@ -251,9 +250,8 @@ export function updateOpacityWrapper(option) {
 		} = this;
 		if(! (parent && isOpacityRelative)) {
 			this.opacity = opacity;
-			return;
+		}else{
+			this.opacity = this.opacity * parent.opacity;
 		}
-		parent.updateOpacity()
-		this.opacity = this.opacity * parent.opacity;
 	}
 }

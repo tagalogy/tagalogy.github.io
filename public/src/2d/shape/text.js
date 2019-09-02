@@ -59,7 +59,6 @@ export function updateSizeWrapper(option) {
 	let {size = 10, isSizeRelative = false} = option;
 	return function() {
 		if(isSizeRelative) {
-			this.updateBound();
 			this.size = size * this.height;
 		}else {
 			this.size = size;
