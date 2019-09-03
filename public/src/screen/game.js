@@ -6,6 +6,9 @@ import {
 import {
     safeArea
 } from "../main.js";
+import {
+    expoOut
+} from "../2d/easing.js";
 let hud, score;
 export function startGame() {
     hud = new Object2D({
@@ -24,7 +27,7 @@ export function startGame() {
         y: 0 / 5,
         width: 3 / 3,
         height: 1 / 5
-    });
+    }, 200, expoOut);
     score = new Text({
         parent: hud,
         isPositionRelative: true,
