@@ -16,7 +16,7 @@ import {
 } from "../2d/easing.js";
 import {
 	startGame
-} from "game.js";
+} from "./game.js";
 let ongoing = false;
 let title, startButton, buttonColor, startText;
 export function start() {
