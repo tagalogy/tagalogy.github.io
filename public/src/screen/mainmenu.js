@@ -14,6 +14,9 @@ import {
 	expoOut,
 	sineIn
 } from "../2d/easing.js";
+import {
+	startGame
+} from "game.js";
 let ongoing = false;
 let title, startButton, buttonColor, startText;
 export function start() {
@@ -85,6 +88,7 @@ export function start() {
 	});
 	startButton.on("interactup", () => {
 		buttonColor.setColor("#fdc116");
+		startGame();
 		end();
 	});
 	ongoing = true;
