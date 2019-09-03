@@ -7,9 +7,10 @@ import {
     safeArea
 } from "../main.js";
 import {
-    expoOut
+    expoOut,
+    sineIn
 } from "../2d/easing.js";
-let hud, score;
+let hud, score, game;
 export function startGame() {
     hud = new Object2D({
         parent: safeArea,
@@ -27,7 +28,7 @@ export function startGame() {
         y: 0 / 5,
         width: 3 / 3,
         height: 1 / 5
-    }, 200, expoOut);
+    }, 400, expoOut);
     score = new Text({
         parent: hud,
         isPositionRelative: true,
@@ -43,4 +44,39 @@ export function startGame() {
         size: 6 / 10,
         content: "0"
     });
-};
+    game = new Object2D({
+        parent: safeArea,
+        isPositionRelative: true,
+        isScaleRelative: true,
+        x: 0 / 3,
+        y:  5 / 5,
+        width: 3 / 3,
+        height: 4 / 5
+    });
+    game.animateBound({
+        isPositionRelative: true,
+        isScaleRelative: true,
+        x: 0 / 3,
+        y:  1 / 5,
+        width: 3 / 3,
+        height: 4 / 5
+    }, 400, expoOut);
+}
+function exitGame() {
+    hud.animateBound({
+        isPositionRelative: true,
+        isScaleRelative: true,
+        x: 0 / 3,
+        y: -1 / 5,
+        width: 3 / 3,
+        height: 1 / 5
+    }, 200, sineIn);
+    game.animateBound({
+        isPositionRelative: true,
+        isScaleRelative: true,
+        x: 0 / 3,
+        y:  5 / 5,
+        width: 3 / 3,
+        height: 4 / 5
+    }, 200, sineIn);
+}
