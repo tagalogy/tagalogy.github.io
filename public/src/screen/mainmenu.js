@@ -111,7 +111,7 @@ export function end() {
 		x: 1 / 12,
 		y: -16 / 20,
 		width: 10 / 12,
-		height: 14 / 20,
+		height: 14 / 20
 	}, 200, sineIn).then(() => {
 		title.remove();
 	});
