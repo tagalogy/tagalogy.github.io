@@ -1,4 +1,4 @@
-import Object2D from "../object2d.js";
+import Object2D from "../2d/object2d.js";
 import Text from "../2d/shape/text.js";
 import {
     colors
