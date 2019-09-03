@@ -1,2 +1,2 @@
 npm i
-pause
+node start.js
