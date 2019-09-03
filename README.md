@@ -6,6 +6,9 @@ Web Browser: https://tagalogy.herokuapp.com/ (Made for mobile, compatible with d
 Play Store: (Will be available soon)
 App Store: (Will be available soon)
 
+## Hosting
+If you wish to host a clone of this project under the same license, keep note of that this project is written in NodeJS environment, but all it does is it server static files from `public`, which can be started by running `start.js`
+
 ## Contributing
 Found a very weird issue (assuming you have the latest version of w3c compliant web browser) or you have great suggestion for this game? You are free to report issue or open pull request on GitHub, or you can simply mention me on twitter [@BagongonSean](https://www.twitter.com/@BagongonSean/).
 
