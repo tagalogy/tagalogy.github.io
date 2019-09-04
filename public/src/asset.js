@@ -10,6 +10,7 @@ export let assets = loadImages([
 assets.then(rawImages => {
 	images.TITLE_PNG = rawImages[0];
 	images.PAUSE_PNG = rawImages[1];
+	console.log(images);
 });
 export let colors = {
 	WHITE: new Color("#fff"),

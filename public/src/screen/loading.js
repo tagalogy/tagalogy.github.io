@@ -13,22 +13,24 @@ import {
 import {
 	colors
 } from "../asset.js";
+let loading = new Horizontal({
+	cap: "flat",
+	join: "miter",
+	line: colors.BLACK,
+	dash: [4, 4],
+	dashSpeed: 1 / 100,
+	updateThickness: updateThickness,
+});
 export default function load(promise, callback) {
-	let loading = new Horizontal({
-		parent: safeArea,
+	loading.setBound({
 		isPositionRelative: true,
 		isScaleRelative: true,
 		x: 2 / 6,
 		y: 10 / 10,
 		width: 2 / 6,
 		height: 2 / 10,
-		cap: "flat",
-		join: "miter",
-		line: colors.BLACK,
-		dash: [4, 4],
-		dashSpeed: 1 / 100,
-		updateThickness: updateThickness,
 	});
+	loading.addTo(safeArea);
 	let entrance = loading.animateBound({
 		isPositionRelative: true,
 		isScaleRelative: true,
