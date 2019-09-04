@@ -7,7 +7,7 @@ import {
 import Scene from "./scene.js";
 import timeout from "../timeout.js";
 export default class Object2D extends EventTarget{
-	constructor(option) {
+	constructor(option = {}) {
 		super(option);
 		this.boundAnimID = -1;
 		this.opacityAnimID = -1;

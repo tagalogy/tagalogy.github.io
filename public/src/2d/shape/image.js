@@ -1,7 +1,7 @@
 import Object2D from "../object2d.js";
 let min = Math.min;
 export default class Image extends Object2D{
-	constructor(option) {
+	constructor(option = {}) {
 		super(option);
 		this.source = option.source;
 		let {

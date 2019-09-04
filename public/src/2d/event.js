@@ -1,5 +1,5 @@
 export default class EventTarget{
-	constructor(option) {
+	constructor(option = {}) {
 		this.listeners = new Map();
 		for(let name in option) if(name.substr(0, 2) == "on") this.on(name.substr(2), option[name]);
 	}

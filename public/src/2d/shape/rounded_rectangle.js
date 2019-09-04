@@ -1,7 +1,7 @@
 import Base from "./base.js";
 let min = Math.min;
 export default class RoundedRectangle extends Base{
-	constructor(option) {
+	constructor(option = {}) {
 		super(option);
 		this.setRadius(option);
 	}

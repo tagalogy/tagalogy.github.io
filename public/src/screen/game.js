@@ -16,7 +16,7 @@ import {
     expoOut,
     sineIn
 } from "../2d/easing.js";
-let hud = new Object2D({});
+let hud = new Object2D;
 let score = new Text({
     parent: hud,
     isPositionRelative: true,
@@ -54,7 +54,7 @@ let separator = new Horizontal({
     dashSpeed: 2 / 1000,
     updateThickness,
 });
-let game = new Object2D({});
+let game = new Object2D;
 export function startGame() {
     pause.source = images.PAUSE_PNG;
     hud.setBound({

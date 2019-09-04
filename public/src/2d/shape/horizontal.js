@@ -1,6 +1,6 @@
 import Line from "./line.js";
 export default class Horizontal extends Line {
-	constructor(option) {
+	constructor(option = {}) {
 		super(option);
 		this.setCoords({
 			x0: 0,

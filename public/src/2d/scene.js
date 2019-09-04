@@ -3,7 +3,7 @@ import Frame from "./frame.js";
 import Color from "./color.js";
 export const TRANSPARENT_OPTION = "#0000";
 export default class Scene extends Object2D {
-	constructor(option) {
+	constructor(option = {}) {
 		super(option);
 		this.scene = this;
 		let {

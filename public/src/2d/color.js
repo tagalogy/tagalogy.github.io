@@ -5,7 +5,7 @@ import {
 } from "./easing.js";
 import timeout from "../timeout.js";
 export default class Color{
-	constructor(option) {
+	constructor(option = {}) {
 		this.colorAnimID = -1;
 		this.setColor(option);
 	}

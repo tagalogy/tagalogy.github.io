@@ -19,8 +19,8 @@ import {
 } from "./game.js";
 import timeout from "../timeout.js";
 let ongoing = false;
-let title = new Image({});
-let buttonColor = new Color({});
+let title = new Image;
+let buttonColor = new Color;
 let startButton = new RoundedRectangle({
 	fill: buttonColor,
 	cap: "flat",

@@ -2,7 +2,7 @@ import Object2D from "../object2d.js";
 import Color from "../color.js";
 //TODO: text alignment and text wrapping
 export default class Text extends Object2D{
-	constructor(option) {
+	constructor(option = {}) {
 		super(option);
 		let {
 			style = "",

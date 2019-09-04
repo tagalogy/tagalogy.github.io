@@ -6,7 +6,7 @@ import {
 } from "../easing.js";
 import timeout from "../../timeout.js";
 export default class Line extends Base {
-	constructor(option) {
+	constructor(option = {}) {
 		super(option);
 		this.coordsAnimID = -1;
 		this.setCoords(option);
