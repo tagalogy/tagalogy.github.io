@@ -125,7 +125,7 @@ export function startGame() {
         width: 3 / 3,
         height: 4 / 5
     });
-    game.addTo({});
+    game.addTo(safeArea);
     game.animateBound({
         isPositionRelative: true,
         isScaleRelative: true,
