@@ -55,7 +55,7 @@ export function startGame() {
         width: 1 / 3,
         height: 1 / 1,
         source: images.PAUSE_PNG,
-    })
+    });
     game = new Object2D({
         parent: safeArea,
         isPositionRelative: true,
