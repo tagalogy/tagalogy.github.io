@@ -16,47 +16,39 @@ import {
     expoOut,
     sineIn
 } from "../2d/easing.js";
-let hud = new Object2D;
-let score = new Text({
-    parent: hud,
-    isPositionRelative: true,
-    isScaleRelative: true,
-    x: 1 / 3,
-    y: 0 / 1,
-    width: 1 / 3,
-    height: 1 / 1,
-    weight: "bold",
-    font: "ComicNueue Angular",
-    color: colors.BLACK,
-    isSizeRelative: true,
-    size: 6 / 10,
-    content: "0"
-});
-let pause = new Image({
-    parent: hud,
-    isPositionRelative: true,
-    isScaleRelative: true,
-    x: 0 / 3,
-    y: 0 / 1,
-    width: 1 / 3,
-    height: 1 / 1
-});
-let separator = new Horizontal({
-    parent: hud,
-    isPositionRelative: true,
-    isScaleRelative: true,
-    x: 0,
-    y: 1,
-    width: 1,
-    height: 0,
-    line: colors.BLACK,
-    dash: [4, 4],
-    dashSpeed: 2 / 1000,
-    updateThickness,
+let score;
+let hud = new Object2D({
+    children: [
+        score = new Text({
+            isPositionRelative: true,
+            isScaleRelative: true,
+            x: 1 / 3,
+            y: 0 / 1,
+            width: 1 / 3,
+            height: 1 / 1,
+            weight: "bold",
+            font: "ComicNueue Angular",
+            color: colors.BLACK,
+            isSizeRelative: true,
+            size: 6 / 10,
+            content: "0"
+        }),
+        new Horizontal({
+            isPositionRelative: true,
+            isScaleRelative: true,
+            x: 0,
+            y: 1,
+            width: 1,
+            height: 0,
+            line: colors.BLACK,
+            dash: [4, 4],
+            dashSpeed: 2 / 1000,
+            updateThickness,
+        })
+    ]
 });
 let game = new Object2D;
 export function startGame() {
-    pause.source = images.PAUSE_PNG;
     hud.setBound({
         isPositionRelative: true,
         isScaleRelative: true,
