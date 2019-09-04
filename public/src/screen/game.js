@@ -50,7 +50,7 @@ export function startGame() {
         parent: hud,
         isPositionRelative: true,
         isScaleRelative: true,
-        x: 1 / 3,
+        x: 0 / 3,
         y: 0 / 1,
         width: 1 / 3,
         height: 1 / 1,
