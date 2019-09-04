@@ -8,7 +8,7 @@ import Scene from "./scene.js";
 import timeout from "../timeout.js";
 export default class Object2D extends EventTarget{
 	constructor(option) {
-		super();
+		super(option);
 		this.boundAnimID = -1;
 		this.opacityAnimID = -1;
 		this.visible = true;
@@ -17,9 +17,13 @@ export default class Object2D extends EventTarget{
 		this.scene = null;
 		this._z = 0;
 		let {
-			parent
+			parent,
+			child,
+			children
 		} = option;
 		if(parent) this.addTo(parent);
+		if(child) this.addChild(child);
+		if(children) this.addChildren(children)
 		this.setOpacity(option);
 		this.setBound(option);
 	}

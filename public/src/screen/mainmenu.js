@@ -30,29 +30,28 @@ let startButton = new RoundedRectangle({
 	dashSpeed: 4 / 1000,
 	updateThickness: updateThickness,
 	isRadiusRelative: true,
-	radius: 0.5
-});
-startButton.on("interactdown", () => {
-	buttonColor.setColor(colors.WHITE);
-});
-startButton.on("interactup", () => {
-	buttonColor.setColor(colors.PH_YELLOW);
-	end();
-});
-let startText = new Text({
-	parent: startButton,
-	isPositionRelative: true,
-	isScaleRelative: true,
-	x: 0,
-	y: 0,
-	width: 1,
-	height: 1,
-	weight: "bold",
-	font: "ComicNueue Angular",
-	color: colors.BLACK,
-	isSizeRelative: true,
-	size: 6 / 10,
-	content: "simulan"
+	radius: 0.5,
+	child: new Text({
+		isPositionRelative: true,
+		isScaleRelative: true,
+		x: 0,
+		y: 0,
+		width: 1,
+		height: 1,
+		weight: "bold",
+		font: "ComicNueue Angular",
+		color: colors.BLACK,
+		isSizeRelative: true,
+		size: 6 / 10,
+		content: "simulan"
+	}),
+	oninteractdown() {
+		buttonColor.setColor(colors.WHITE);
+	},
+	oninteractup() {
+		buttonColor.setColor(colors.PH_YELLOW);
+		end();
+	}
 });
 export function start() {
 	if(ongoing) return;
