@@ -19,7 +19,7 @@ let loading = new Horizontal({
 	line: colors.BLACK,
 	dash: [4, 4],
 	dashSpeed: 1 / 100,
-	updateThickness: updateThickness,
+	updateThickness,
 });
 export default function load(promise, callback) {
 	loading.setBound({

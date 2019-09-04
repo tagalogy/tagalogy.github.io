@@ -28,7 +28,7 @@ let startButton = new RoundedRectangle({
 	line: colors.BLACK,
 	dash: [4, 4],
 	dashSpeed: 4 / 1000,
-	updateThickness: updateThickness,
+	updateThickness,
 	isRadiusRelative: true,
 	radius: 0.5,
 	child: new Text({
