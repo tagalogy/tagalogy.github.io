@@ -1,5 +1,7 @@
 import Object2D from "../2d/object2d.js";
 import Text from "../2d/shape/text.js";
+import Image from "../2d/shape/image.js";
+import {images} from "../asset.js";
 import {
     colors
 } from "../asset.js";
@@ -10,7 +12,7 @@ import {
     expoOut,
     sineIn
 } from "../2d/easing.js";
-let hud, score, game;
+let hud, score, game, pause;
 export function startGame() {
     hud = new Object2D({
         parent: safeArea,
@@ -44,6 +46,16 @@ export function startGame() {
         size: 6 / 10,
         content: "0"
     });
+    pause = new Image({
+        parent: hud,
+        isPositionRelative: true,
+        isScaleRelative: true,
+        x: 1 / 3,
+        y: 0 / 1,
+        width: 1 / 3,
+        height: 1 / 1,
+        source: images.PAUSE_PNG,
+    })
     game = new Object2D({
         parent: safeArea,
         isPositionRelative: true,
