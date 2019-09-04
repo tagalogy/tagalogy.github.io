@@ -49,7 +49,7 @@ export function updateRadiusWrapper(option) {
 	if(updateRadius) return updateRadius;
 	let {
 		radius = 0,
-		isRadiusRelative = false
+		isRadiusRelative = true
 	} = option;
 	return function() {
 		if(isRadiusRelative) {

@@ -29,11 +29,8 @@ let startButton = new RoundedRectangle({
 	dash: [4, 4],
 	dashSpeed: 4 / 1000,
 	updateThickness,
-	isRadiusRelative: true,
 	radius: 0.5,
 	child: new Text({
-		isPositionRelative: true,
-		isScaleRelative: true,
 		x: 0,
 		y: 0,
 		width: 1,
@@ -41,7 +38,6 @@ let startButton = new RoundedRectangle({
 		weight: "bold",
 		font: "ComicNueue Angular",
 		color: colors.BLACK,
-		isSizeRelative: true,
 		size: 6 / 10,
 		content: "simulan"
 	}),
@@ -57,8 +53,6 @@ export function start() {
 	if(ongoing) return;
 	title.source = images.TITLE_PNG;
 	title.setBound({
-		isPositionRelative: true,
-		isScaleRelative: true,
 		x: 1 / 12,
 		y: -16 / 20,
 		width: 10 / 12,
@@ -66,8 +60,6 @@ export function start() {
 	});
 	title.addTo(safeArea);
 	title.animateBound({
-		isPositionRelative: true,
-		isScaleRelative: true,
 		x: 1 / 12,
 		y: 0 / 20,
 		width: 10 / 12,
@@ -75,8 +67,6 @@ export function start() {
 	}, 400, expoOut);
 	buttonColor.setColor("#fdc116");
 	startButton.setBound({
-		isPositionRelative: true,
-		isScaleRelative: true,
 		x: 1 / 6,
 		y: 10 / 10,
 		width: 4 / 6,
@@ -85,8 +75,6 @@ export function start() {
 	startButton.addTo(safeArea);
 	startButton.animateOpacity(1, 400, expoOut);
 	startButton.animateBound({
-		isPositionRelative: true,
-		isScaleRelative: true,
 		x: 1 / 6,
 		y: 7 / 10,
 		width: 4 / 6,
@@ -97,8 +85,6 @@ export function start() {
 export function end() {
 	if(! ongoing) return;
 	startButton.animateBound({
-		isPositionRelative: true,
-		isScaleRelative: true,
 		x: 1 / 6,
 		y: 10 / 10,
 		width: 4 / 6,
@@ -107,8 +93,6 @@ export function end() {
 		startButton.remove();
 	});
 	title.animateBound({
-		isPositionRelative: true,
-		isScaleRelative: true,
 		x: 1 / 12,
 		y: -16 / 20,
 		width: 10 / 12,

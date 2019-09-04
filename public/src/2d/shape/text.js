@@ -58,7 +58,7 @@ export function updateSizeWrapper(option) {
 	if(updateSize) return updateSize;
 	let {
 		size = 10,
-		isSizeRelative = false
+		isSizeRelative = true
 	} = option;
 	return function() {
 		if(isSizeRelative) {

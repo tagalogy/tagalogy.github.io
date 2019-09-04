@@ -16,16 +16,18 @@ export default class Object2D extends EventTarget{
 		this.parent = null;
 		this.scene = null;
 		this._z = 0;
+		this.setOpacity(option);
+		this.setBound(option);
 		let {
 			parent,
 			child,
-			children
+			children,
+			z = 0
 		} = option;
 		if(parent) this.addTo(parent);
 		if(child) this.addChild(child);
-		if(children) this.addChildren(children)
-		this.setOpacity(option);
-		this.setBound(option);
+		if(children) this.addChildren(children);
+		this.z = z;
 	}
 	/*
 	Z Properties
@@ -35,7 +37,10 @@ export default class Object2D extends EventTarget{
 	}
 	set z(num) {
 		this._z = num;
-		this.parent.updateDrawOrder();
+		let {
+			parent
+		} = this;
+		if(parent) parent.updateDrawOrder();
 	}
 	/*
 	Bound Setting and Animating Methods
@@ -176,7 +181,9 @@ export default class Object2D extends EventTarget{
 		}
 	}
 	remove(setscene = true) {
-		let {parent} = this;
+		let {
+			parent
+		} = this;
 		if(parent) parent.removeChild(this, setscene);
 	}
 	removeChildren(children) {
@@ -210,7 +217,7 @@ export function updateBoundWrapper(option) {
 		width = 0,
 		height = 0,
 		isPositionRelative = true,
-		isScaleRelative = false
+		isScaleRelative = true
 	} = option;
 	return function() {
 		let {
@@ -255,7 +262,7 @@ export function updateOpacityWrapper(option) {
 		} = this;
 		if(parent && isOpacityRelative) {
 			parent.updateOpacity();
-			this.opacity = this.opacity * parent.opacity;
+			this.opacity = opacity * parent.opacity;
 		}else{
 			this.opacity = opacity;
 		}

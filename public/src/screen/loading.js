@@ -23,8 +23,6 @@ let loading = new Horizontal({
 });
 export default function load(promise, callback) {
 	loading.setBound({
-		isPositionRelative: true,
-		isScaleRelative: true,
 		x: 2 / 6,
 		y: 10 / 10,
 		width: 2 / 6,
@@ -32,8 +30,6 @@ export default function load(promise, callback) {
 	});
 	loading.addTo(safeArea);
 	let entrance = loading.animateBound({
-		isPositionRelative: true,
-		isScaleRelative: true,
 		x: 2 / 6,
 		y: 8 / 10,
 		width: 2 / 6,
@@ -41,8 +37,6 @@ export default function load(promise, callback) {
 	}, 200, sineOut);
 	Promise.all([entrance, promise]).then(() => {
 		return loading.animateBound({
-			isPositionRelative: true,
-			isScaleRelative: true,
 			x: 2 / 6,
 			y: 10 / 10,
 			width: 2 / 6,
