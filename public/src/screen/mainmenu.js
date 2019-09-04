@@ -17,6 +17,7 @@ import {
 import {
 	startGame
 } from "./game.js";
+import timeout from "../timeout.js";
 let ongoing = false;
 let title, startButton, buttonColor, startText;
 export function start() {
@@ -88,7 +89,6 @@ export function start() {
 	});
 	startButton.on("interactup", () => {
 		buttonColor.setColor("#fdc116");
-		startGame();
 		end();
 	});
 	ongoing = true;
@@ -114,6 +114,9 @@ export function end() {
 		height: 14 / 20
 	}, 200, sineIn).then(() => {
 		title.remove();
+	});
+	timeout(200).then(() => {
+		startGame();
 	});
 	ongoing = false;
 }
