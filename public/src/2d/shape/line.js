@@ -4,7 +4,7 @@ import {
 	alphaToRange,
 	now
 } from "../easing.js";
-import timeout from "../timeout.js";
+import timeout from "../../timeout.js";
 export default class Line extends Base {
 	constructor(option) {
 		super(option);

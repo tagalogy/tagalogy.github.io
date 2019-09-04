@@ -3,7 +3,7 @@ import {
 	alphaToRange,
 	now
 } from "./easing.js";
-import timeout from "./timeout.js";
+import timeout from "../timeout.js";
 export default class Color{
 	constructor(option) {
 		this.colorAnimID = -1;

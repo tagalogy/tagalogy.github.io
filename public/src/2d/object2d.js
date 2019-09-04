@@ -5,7 +5,7 @@ import {
 	now
 } from "./easing.js";
 import Scene from "./scene.js";
-import timeout from "./timeout.js";
+import timeout from "../timeout.js";
 export default class Object2D extends EventTarget{
 	constructor(option) {
 		super();
