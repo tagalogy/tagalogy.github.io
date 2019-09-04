@@ -70,6 +70,7 @@ export function startGame() {
         height: 0,
         line: colors.BLACK,
 		dash: [4, 4],
+		dashSpeed: 2 / 1000,
         updateThickness,
     });
     game = new Object2D({
