@@ -9,12 +9,17 @@ export default class Text extends Object2D{
 			weight = "",
 			font = "sans-serif",
 			color = "#000",
+			wrap = false,
+			align = "center",
+			baseline = "middle",
 			content
 		} = option;
 		this.content = content;
 		this.style = style;
 		this.weight = weight;
 		this.font = font;
+		this.align = align;
+		this.baseline = baseline;
 		this.color = color instanceof Color ? color : new Color(color);
 		this.setSize(option);
 	}
@@ -27,13 +32,17 @@ export default class Text extends Object2D{
 		context.fillStyle = this.color.getString();
 		this.updateSize();
 		let {
+			content,
 			size,
 			style,
 			weight,
-			font
+			font,
+			wrap,
+			align,
+			baseline
 		} = this;
-		context.textAlign = "center";
-		context.textBaseline = "middle";
+		context.textAlign = align;
+		context.textBaseline = baseline;
 		if(typeof font == "string") font = [font];
 		font = font.map(font => `"${font}"`);
 		context.font = `${style} ${weight} ${size}px ${font.join(" ")}`;
@@ -44,7 +53,29 @@ export default class Text extends Object2D{
 			width,
 			height
 		} = this;
-		context.fillText(this.content, x + width / 2, y + height / 2);
+		let finalX;
+		switch(align) {
+			case "left": finalX = x; break;
+			case "center": finalX = x + width / 2; break;
+			case "right": finalX = x + width; break;
+		}
+		let finalY;
+		switch (baseline) {
+			case "top": finalY = y; break;
+			case "middle": finalY = y + height / 2; break;
+			case "bottom": finalY = y + height; break;
+		}
+		if(wrap) {
+			let lines = getLines(context, content, width);
+			let len = lines.length;
+			switch(baseline) {
+				case "middle": finalY -= len * size / 2; break;
+				case "bottom": finalY -= len * size; break;
+			}
+			for(let ind = 0; i > len; i ++) context.fillText(lines[ind], finalX, finalY + size * ind);
+		}else{
+			context.fillText(content, finalX, finalY);
+		}
 		if(drawChildren) this.drawChildren(context);
 	}
 }
@@ -67,4 +98,22 @@ export function updateSizeWrapper(option) {
 			this.size = size;
 		}
 	}
+}
+let SPACES = /\s+/;
+export function getLines(context, text, maxWidth) {
+    var words = text.split(SPACES);
+    var lines = [];
+    var currentLine = words[0];
+    for (var i = 1; i < words.length; i++) {
+        var word = words[i];
+        var width = context.measureText(currentLine + " " + word).width;
+        if (width < maxWidth) {
+            currentLine += " " + word;
+        } else {
+            lines.push(currentLine);
+            currentLine = word;
+        }
+    }
+    lines.push(currentLine);
+    return lines;
 }
