@@ -22,13 +22,13 @@ let loading = new Horizontal({
 	updateThickness,
 });
 export default function load(promise, callback) {
+	loading.addTo(safeArea);
 	loading.setBound({
 		x: 2 / 6,
 		y: 10 / 10,
 		width: 2 / 6,
 		height: 2 / 10,
 	});
-	loading.addTo(safeArea);
 	let entrance = loading.animateBound({
 		x: 2 / 6,
 		y: 8 / 10,

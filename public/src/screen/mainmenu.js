@@ -73,7 +73,6 @@ export function start() {
 		height: 1 / 10,
 	});
 	startButton.addTo(safeArea);
-	startButton.animateOpacity(1, 400, expoOut);
 	startButton.animateBound({
 		x: 1 / 6,
 		y: 7 / 10,

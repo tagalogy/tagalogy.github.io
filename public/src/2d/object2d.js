@@ -141,7 +141,7 @@ export default class Object2D extends EventTarget{
 	draw(context, drawChildren = true) {
 		if(! this.visible) return;
 		this.updateOpacity();
-		context.globalOpacity = this.opacity;
+		context.globalAlpha = this.opacity;
 		if(drawChildren) this.drawChildren(context);
 	}
 	drawChildren(context) {
@@ -244,9 +244,9 @@ export function updateBoundWrapper(option) {
 }
 export function updateOpacityWrapper(option) {
 	if(typeof option == "number")  {
-		return function() {
-			return option;
-		};
+		option = {
+			opacity: option
+		}
 	}
 	let {
 		updateOpacity

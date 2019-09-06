@@ -20,6 +20,7 @@ export default class Text extends Object2D{
 		this.font = font;
 		this.align = align;
 		this.baseline = baseline;
+		this.wrap = wrap;
 		this.color = color instanceof Color ? color : new Color(color);
 		this.setSize(option);
 	}
@@ -72,7 +73,7 @@ export default class Text extends Object2D{
 				case "middle": finalY -= len * size / 2; break;
 				case "bottom": finalY -= len * size; break;
 			}
-			for(let ind = 0; i > len; i ++) context.fillText(lines[ind], finalX, finalY + size * ind);
+			for(let ind = 0; ind < len; ind ++) context.fillText(lines[ind], finalX, finalY + size * ind);
 		}else{
 			context.fillText(content, finalX, finalY);
 		}
