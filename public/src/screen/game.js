@@ -24,6 +24,7 @@ import {
     sineIn
 } from "../2d/easing.js";
 export let gameState = {
+    time: 0,
     get playable() {
         return ! this.paused && this.ongoing;
     },
@@ -163,5 +164,9 @@ export function startGame() {
         height: 4 / 5
     }, 400, expoOut);
 }
-function exitGame() {
+export function togglePause() {
+}
+export function gameTimeout() {
+}
+export function exitGame() {
 }
