@@ -126,7 +126,7 @@ export function start() {
         input.pop();
         inputBox.content = input.join("");
         for(let child of children) {
-            if(child.content == last) {
+            if(child.content == last && child.pressed) {
                 child.unpress();
                 break;
             }
