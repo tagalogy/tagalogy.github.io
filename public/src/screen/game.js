@@ -23,6 +23,11 @@ import {
     expoOut,
     sineIn
 } from "../2d/easing.js";
+import {
+    start as startTwist
+} from "./game/twist.js";
+let allGames = [startTwist];
+let gameSize = allGames.length;
 export let gameState = {
     time: 0,
     get playable() {
@@ -127,7 +132,7 @@ let playIcon = new FreeForm({
         [1 / 4, 4 / 4]
     ]
 });
-let game = new Object2D;
+export let game = new Object2D;
 export function startGame() {
     hud.addTo(safeArea);
     hud.setBound({
@@ -163,10 +168,19 @@ export function startGame() {
         width: 3 / 3,
         height: 4 / 5
     }, 400, expoOut);
+    newGame();
 }
-export function togglePause() {
+export function newGame() {
+    allGames[Math.floor(Math.random() * gameSize)]();
 }
-export function gameTimeout() {
+export async function nextGame(promise) {
+    score.content = "" + (+ score.content + 1);
+    if(promise) {
+        await promise;
+        newGame();
+        return;
+    }
+    newGame();
 }
 export function exitGame() {
 }

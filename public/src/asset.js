@@ -12,6 +12,7 @@ assets.then(rawImages => {
 	images.PAUSE_PNG = rawImages[1];
 });
 export let colors = {
+	TRANSPARENT: new Color("#0000"),
 	WHITE: new Color("#fff"),
 	BLACK: new Color("#000"),
 	PH_BLUE: new Color("#0038a8"),

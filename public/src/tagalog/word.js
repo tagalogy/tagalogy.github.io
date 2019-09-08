@@ -273,4 +273,4 @@ export const GREEK = [
 	"Selos",
 	"Teknolohiya"
 ];
-export const WORD = [...SPANISH, ...LATIN, ...GREEK];
+export const WORD = [...SPANISH, ...LATIN, ...GREEK].map(str => str.toUpperCase());
