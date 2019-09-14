@@ -27,16 +27,6 @@ export default class Scene extends Object2D {
 		});
 		context.imageSmoothingEnabled = true;
 		this.frame = new Frame(() => {
-			this.updateBound();
-			let {
-				width,
-				height
-			} = this;
-			canvas.width = width;
-			canvas.height = height;
-			context.clearRect(0, 0, width, height);
-			context.fillStyle = this.fill.getString();
-			context.fillRect(0, 0, width, height);
 			this.draw(context);
 		});
 		"click mouseup mousedown mousemove".split(" ").forEach(eventName => {
@@ -70,5 +60,21 @@ export default class Scene extends Object2D {
 				});
 			});
 		});
+	}
+	draw(context, drawChildren = true) {
+		if(! this.visible) return;
+		super.draw(context, false);
+		this.updateBound();
+		let {
+			canvas,
+			width,
+			height
+		} = this;
+		canvas.width = width;
+		canvas.height = height;
+		context.clearRect(0, 0, width, height);
+		context.fillStyle = this.fill.getString();
+		context.fillRect(0, 0, width, height);
+		if(drawChildren) this.drawChildren(context);
 	}
 }
