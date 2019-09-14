@@ -6,12 +6,10 @@ import RoundedRectangle from "../2d/shape/rounded_rectangle.js";
 import Rectangle from "../2d/shape/rectangle.js";
 import Image from "../2d/shape/image.js";
 import Horizontal from "../2d/shape/horizontal.js";
+import GameState from "../game_state.js";
 import {
     popup
 } from "./dialog_box.js";
-import {
-    images
-} from "../asset.js";
 import {
     colors
 } from "../asset.js";
@@ -24,18 +22,16 @@ import {
     sineIn
 } from "../2d/easing.js";
 import {
+    start as pauseStart
+} from "./pause.js";
+import {
     start as startTwist
 } from "./game/twist.js";
-let allGames = [startTwist];
+let allGames = [
+    startTwist
+];
 let gameSize = allGames.length;
-export let gameState = {
-    time: 0,
-    get playable() {
-        return ! this.paused && this.ongoing;
-    },
-    paused: false,
-    ongoing: true
-};
+export let gameState;
 let score;
 let button;
 let pauseBar0;
@@ -85,10 +81,14 @@ let hud = new Object2D({
                 ]
             }),
             oninteractdown() {
+                if(gameState.paused) return;
                 pauseColor.setColor(colors.SKY_BLUE);
             },
             oninteractup() {
+                if(gameState.paused) return;
                 pauseColor.setColor(colors.WHITE);
+                pauseStart();
+                gameState.pause();
             }
         }),
         new Object2D({
@@ -118,22 +118,9 @@ let hud = new Object2D({
         })
     ]
 });
-let playIcon = new FreeForm({
-    x: 0,
-    y: 0,
-    width: 1,
-    height: 1,
-    fill: pauseColor,
-    line: colors.BLACK,
-    updateThickness,
-    path: [
-        [1 / 4, 0 / 4],
-        [3 / 4, 2 / 4],
-        [1 / 4, 4 / 4]
-    ]
-});
 export let game = new Object2D;
 export function startGame() {
+    gameState = new GameState;
     hud.addTo(safeArea);
     hud.setBound({
         isPositionRelative: true,

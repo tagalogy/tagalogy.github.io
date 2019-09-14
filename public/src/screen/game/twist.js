@@ -19,14 +19,14 @@ import {
 import parseWord from "../../tagalog/parser.js";
 import {
     nextGame,
+    gameState,
     game
 } from "../game.js";
 let wordLen = WORD.length;
 let inputBox = new Text({
     font: "ComicNueue Angular",
     weight: "bold",
-    size: 5 / 10,
-    content: ""
+    size: 5 / 10
 });
 let buttonBox = new Object2D;
 let prevHandler;
@@ -64,25 +64,26 @@ export function start() {
     word.sort(() => Math.random() - Math.random());
     let currentLen = word.length;
     word.forEach((syllable, ind) => {
-        debugger;
         syllable = syllable.toLowerCase();
         let lineColor = new Color(colors.TRANSPARENT);
         let fillColor = new Color(colors.PH_BLUE);
         let textColor = new Color(colors.WHITE);
         let currentPlace = new Object2D({
             x: 0,
-            y: (5 - ind)/ 6,
+            y: (4 - ind)/ 5,
             width: 1,
-            height: 1 / 6,
+            height: 1 / 5,
             child: new RoundedRectangle({
                 x: 1 / 8,
                 y: 1 / 8,
                 width: 6 / 8,
                 height: 6 / 8,
-                dash: [4 / 4],
+                dash: [2, 2],
+                dashSpeed: 4 / 1000,
                 fill: fillColor,
                 line: lineColor,
                 updateThickness,
+                radius: 1 / 2,
                 child: new Text({
                     x: 0,
                     y: 0,
@@ -96,15 +97,21 @@ export function start() {
                 })
             }),
             oninteractup() {
-                if(this.pressed) return;
-                this.pressed = true;
-                input.push(this.content);
-                inputBox.content += this.content;
-                lineColor.setColor(colors.PH_BLUE);
-                fillColor.setColor(colors.WHITE);
-                textColor.setColor(colors.PH_BLUE);
-                if(input.length >= currentLen && WORD.indexOf(input.join("").toUpperCase()) >= 0) {
-                    nextGame(end());
+                if(gameState.paused) return;
+                if(this.pressed) {
+                    this.unpress();
+                    input.splice(input.lastIndexOf(this.content), 1);
+                    inputBox.content = input.join("");
+                }else{
+                    this.pressed = true;
+                    input.push(this.content);
+                    inputBox.content += this.content;
+                    lineColor.setColor(colors.PH_BLUE);
+                    fillColor.setColor(colors.WHITE);
+                    textColor.setColor(colors.PH_BLUE);
+                    if(input.length >= currentLen && WORD.indexOf(input.join("").toUpperCase()) >= 0) {
+                        nextGame(end());
+                    }
                 }
             }
         });
@@ -121,6 +128,7 @@ export function start() {
         children
     } = buttonBox;
     prevHandler = () => {
+        if(gameState.paused) return;
         if(input.length <= 0) return;
         let last = input[input.length - 1];
         input.pop();
