@@ -12,7 +12,8 @@ export let scene = new Scene({
 	fill: "#fff",
 	canvas: canvas,
 	alpha: false,
-	autoresize: true
+	autoresize: true,
+	ratio: 1
 });
 let min = Math.min;
 export let safeArea = new SafeArea({

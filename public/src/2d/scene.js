@@ -9,16 +9,18 @@ export default class Scene extends Object2D {
 		let {
 			fill = TRANSPARENT_OPTION,
 			canvas,
-			alpha = true
+			alpha = true,
+			scale = 1
 		} = option;
+		this.scale = scale;
 		this.fill = fill instanceof Color ? fill : new Color(fill);
 		this.canvas = canvas;
 		if(option.autoresize) {
 			this.updateBound = function() {
 				this.x = 0;
 				this.y = 0;
-				this.width = canvas.clientWidth;
-				this.height = canvas.clientHeight;
+				this.width = canvas.clientWidth * scale;
+				this.height = canvas.clientHeight * scale;
 			};
 		}
 		let context = this.context = canvas.getContext("2d", {
@@ -37,7 +39,7 @@ export default class Scene extends Object2D {
 					pageY: y
 				} = event;
 				this.forEachDescendant(descendant => {
-					if(descendant.hitTest(x, y)) {
+					if(descendant.hitTest(x * scale, y * scale)) {
 						descendant.invoke(eventName);
 						if(eventName == "mousedown") descendant.invoke("interactdown");
 						if(eventName == "mouseup") descendant.invoke("interactup");
@@ -53,7 +55,7 @@ export default class Scene extends Object2D {
 				event.preventDefault();
 				let touches = Array.from(event.changedTouches);
 				this.forEachDescendant(descendant => {
-					if(touches.some(touch => descendant.hitTest(touch.pageX, touch.pageY))) {
+					if(touches.some(touch => descendant.hitTest(touch.pageX * scale, touch.pageY * scale))) {
 						if(eventName == "touchstart") descendant.invoke("interactdown");
 						if(eventName == "touchend") descendant.invoke("interactup");
 					}
