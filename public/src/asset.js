@@ -5,11 +5,9 @@ import Color from "./2d/color.js";
 export let images = {};
 export let assets = loadImages([
 	"./asset/title.png",
-	"./asset/pause.png",
 ]);
 assets.then(rawImages => {
 	images.TITLE_PNG = rawImages[0];
-	images.PAUSE_PNG = rawImages[1];
 });
 export let colors = {
 	TRANSPARENT: new Color("#0000"),
