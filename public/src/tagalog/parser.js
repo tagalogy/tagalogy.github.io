@@ -14,7 +14,9 @@ let pangpatinig = /[AEIOU]/;
 let panggrupong_may_gitling = /[^\-]+|\-+/g;
 function parseSingleWord(salita) {
     salita = salita.toUpperCase();
-    if(pangkatinig_lahat.test(salita)) return [salita];
+    if(pangkatinig_lahat.test(salita)) return [
+        salita
+    ];
     let [
         unahang_katinig,
         hulihang_katinig
