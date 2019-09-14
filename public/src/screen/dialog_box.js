@@ -19,8 +19,7 @@ let dialog = new Rectangle({
     y: 0,
     width: 1,
     height: 1,
-    fill: colors.WHITE,
-    z: 2,
+    fill: colors.BLACK,
     child: new SafeArea({
         ratio: 3 / 5,
         isOpacityRelative: false,
