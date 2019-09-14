@@ -12,7 +12,7 @@ export default class Text extends Object2D{
 			wrap = false,
 			align = "center",
 			baseline = "middle",
-			content
+			content = ""
 		} = option;
 		this.content = content;
 		this.style = style;
