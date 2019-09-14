@@ -1,4 +1,4 @@
-import EventTarget from "./event.js";
+import EventTarget from "../event.js";
 import {
 	sine,
 	alphaToRange,

@@ -13,6 +13,13 @@ export default class EventTarget{
 		let handlers = this.getHandler(name);
 		handlers.push(handler);
 	}
+	once(name, handler) {
+		let sub = () => {
+			handler();
+			this.off(name, sub);
+		};
+		this.on(name, sub);
+	}
 	off(name, handler) {
 		let handlers = this.getHandler(name);
 		let index = handlers.indexOf(handler);
