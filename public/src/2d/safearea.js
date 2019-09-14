@@ -10,7 +10,7 @@ export default class SafeArea extends Object2D {
 			let {
 				parent
 			} = this;
-			parent.updateBound();
+			//parent.updateBound();
 			let {
 				x,
 				y,
