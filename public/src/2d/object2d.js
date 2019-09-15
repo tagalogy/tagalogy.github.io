@@ -196,7 +196,7 @@ export default class Object2D extends EventTarget{
 	hitTest Methods
 	*/
 	hitTest(testX, testY) {
-		//this.updateBound();
+		this.updateBound();
 		let {
 			x,
 			y,
