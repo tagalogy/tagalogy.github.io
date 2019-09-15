@@ -14,11 +14,14 @@ export default class EventTarget{
 		handlers.push(handler);
 	}
 	once(name, handler) {
-		let sub = () => {
-			handler();
-			this.off(name, sub);
-		};
-		this.on(name, sub);
+		return new Promise((resolve, reject) => {
+			let sub = () => {
+				this.off(name, sub);
+				if(handler) handler();
+				resolve();
+			};
+			this.on(name, sub);
+		});
 	}
 	off(name, handler) {
 		let handlers = this.getHandler(name);
