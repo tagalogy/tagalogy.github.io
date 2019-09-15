@@ -164,9 +164,9 @@ export async function nextGame(promise) {
     if(promise) {
         await promise;
         newGame();
-        return;
+    }else{
+        newGame();
     }
-    newGame();
 }
 export async function pause() {
     gameState.pause();
