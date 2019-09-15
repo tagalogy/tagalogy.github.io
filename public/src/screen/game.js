@@ -87,8 +87,7 @@ let hud = new Object2D({
             oninteractup() {
                 if(gameState.paused) return;
                 pauseColor.setColor(colors.WHITE);
-                pauseStart();
-                gameState.pause();
+                pause();
             }
         }),
         new Object2D({
@@ -168,6 +167,11 @@ export async function nextGame(promise) {
         return;
     }
     newGame();
+}
+export async function pause() {
+    gameState.pause();
+    await pauseStart();
+    gameState.play();
 }
 export function exitGame() {
 }

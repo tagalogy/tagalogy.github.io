@@ -1,4 +1,5 @@
 import SafeArea from "../2d/safearea.js";
+import Object2D from "../2d/object2d.js";
 import Rectangle from "../2d/shape/rectangle.js";
 import Text from "../2d/shape/text.js";
 import Color from "../2d/color.js";
@@ -21,30 +22,24 @@ let pauseBox = new Rectangle({
     }),
     child: new SafeArea({
     	ratio: 3 / 5,
-        children: [
-            new Text({
-                x: 0 / 6,
-                y: 4 / 10,
-                width: 6 / 6,
-                height: 2 / 10,
-                font: "ComicNueue Angular",
-                weight: "bold",
-                size: 5 / 10,
-                content: "nakahinto",
-                color: colors.BLACK
-            })
-        ]
+        child: new Text({
+            x: 0 / 6,
+            y: 4 / 10,
+            width: 6 / 6,
+            height: 2 / 10,
+            font: "ComicNueue Angular",
+            weight: "bold",
+            size: 5 / 10,
+            content: "nakahinto",
+            color: colors.BLACK
+        }),
     })
 });
-export function start() {
+export async function start() {
     pauseBox.addTo(scene);
     pauseBox.setOpacity(0);
-    return pauseBox.animateOpacity(1, 200);
-}
-export function end() {
-    let prom = pauseBox.animateOpacity(0, 200);
-    prom.then(() => {
-        pauseBox.remove();
-    });
-    return prom;
+    await pauseBox.animateOpacity(1, 200);
+    await pauseBox.once("interactup");
+    await pauseBox.animateOpacity(0, 200);
+    pauseBox.remove();
 }
