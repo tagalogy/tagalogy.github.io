@@ -21,6 +21,7 @@ let loading = new Horizontal({
 	dashSpeed: 1 / 100,
 	updateThickness,
 });
+// TODO: why a callback parameter?? return a promise instead, or maybe use async
 export default function load(promise, callback) {
 	loading.addTo(safeArea);
 	loading.setBound({
