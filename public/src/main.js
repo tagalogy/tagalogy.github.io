@@ -23,6 +23,6 @@ export let safeArea = new SafeArea({
 export function updateThickness() {
 	this.thickness = safeArea.width / 100;
 };
-load(assets, () => {
+load(assets).then(() => {
 	start();
 });
