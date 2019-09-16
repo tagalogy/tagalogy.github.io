@@ -7,7 +7,7 @@ Mobile-first web game aimed to help players understand Tagalog more. Developed b
 - App Store: (Will be available soon)
 
 ## Hosting
-If you wish to host a fork of this project under the same license, keep note of that this project is written in NodeJS environment, but all it does is it serve static files from `public`, which can be started by running `start.js`. It is possible to start `public/python_start.bat` instead, this requires Python 3+
+If you wish to host a fork of this project under the same license, keep note of that this project is written in NodeJS environment, it can be started by running `npm start`. It is possible to start `public/python_start.bat` instead, this requires Python 3+
 
 ## Contributing
 Found a very weird issue or you have great suggestion for this game? You are free to report issue or open pull request on GitHub repository [Azertray/tagalogy](https://www.github.com/Azertray/tagalogy), or you can simply mention me on Twitter [@BagongonSean](https://www.twitter.com/@BagongonSean/).
