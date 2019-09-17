@@ -14,13 +14,3 @@ Found a very weird issue or you have great suggestion for this game? You are fre
 
 ## Made for Thesis
 This project is made for Thesis _Tagalogy: Pampakatutong Aplikasyon_ documented by Bagongon, Emmanuel, and Zorilla. Download and read it [here](about:blank).
-
-## Social Info
-- Sean Bagongon
-    - Twitter: [@BagongonSean](https://www.twitter.com/@BagongonSean/)
-- Joshua Emmanuel
-    - Facebook:
-    - Twitter: [@joshualontok](https://www.twitter.com/@joshualontok/)
-- Jonathan Dale Zorilla
-    - Facebook:
-    - Mobile Legends:
