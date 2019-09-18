@@ -1,13 +1,20 @@
 # Tagalogy
 Mobile-first web game aimed to help players understand Tagalog more. Developed by Sean Bagongon.
 
-## Play it for free
+## Play it
 - Web Browser: https://tagalogy.herokuapp.com/
 - Play Store: (Will be available soon)
 - App Store: (Will be available soon)
 
-## Hosting
-If you wish to host a fork of this project under the same license, keep note of that this project is written in NodeJS environment, it can be started by running `npm start`. It is possible to start `public/python_start.bat` instead, this requires Python 3+
+## Installation
+_This instruction is for those who wish to modify a fork of this project._
+
+This project is tested on NodeJS v10.16.3+ and NPM v6.9.0+, install it at [nodejs.org](https://nodejs.org/). Run the following code at command line interface, make sure the current directory is on the repository.
+```
+npm install
+npm start
+```
+You should be able to play Tagalogy on port 5000
 
 ## Contributing
 Found a very weird issue or you have great suggestion for this game? You are free to report issue or open pull request on GitHub repository [Azertray/tagalogy](https://www.github.com/Azertray/tagalogy), or you can simply mention me on Twitter [@BagongonSean](https://www.twitter.com/@BagongonSean/).
