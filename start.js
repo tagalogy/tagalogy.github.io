@@ -14,6 +14,3 @@ app.listen(app.get('port'), function(error) {
     if(error) throw error;
     console.log("Server started! Listening at port " + port);
 });
-var option = {
-    module: true
-};
