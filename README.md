@@ -7,9 +7,9 @@ Mobile-first web game aimed to help players understand Tagalog more. Developed b
 - App Store: (Will be available soon)
 
 ## Installation
-_This instruction is for those who wish to modify a fork of this project._
+_This instruction is for those who wish to contribute or modify a fork of this project._
 
-This project is tested on NodeJS v10.16.3+ and NPM v6.9.0+, install it at [nodejs.org](https://nodejs.org/). Run the following code at command line interface, make sure the current directory is on the repository.
+This project is tested on NodeJS v10.16.3+ and NPM v6.9.0+, install it at [nodejs.org](https://nodejs.org/). You need to have a fork if this project as well. Run the following code at command line interface, make sure the current directory is on the project.
 ```
 npm install
 npm start
