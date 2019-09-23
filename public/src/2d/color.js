@@ -62,7 +62,6 @@ export default class Color{
 export function updateColorWrapper(option) {
 	if(typeof option == "string") {
 		option = option.trim();
-		let red, green, blue;
 		if(option[0] == "#") {
 			let rawString = option.substr(1);
 			let raw = parseInt(rawString, 16);
