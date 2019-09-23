@@ -5,13 +5,18 @@ import RoundedRectangle from "../2d/shape/rounded_rectangle.js";
 import Rectangle from "../2d/shape/rectangle.js";
 import Horizontal from "../2d/shape/horizontal.js";
 import GameState from "../game_state.js";
+import dialog from "./dialog_box.js";
 import {
-    popup
-} from "./dialog_box.js";
+    start as startMainMenu
+} from "./mainmenu.js";
+import timeout, {
+    now
+} from "../timeout.js";
 import {
     colors
 } from "../asset.js";
 import {
+    scene,
     safeArea,
     updateThickness
 } from "../main.js";
@@ -31,9 +36,7 @@ let allGames = [
 let gameSize = allGames.length;
 export let gameState;
 let score;
-let button;
-let pauseBar0;
-let pauseBar1;
+let timer;
 let pauseColor = new Color(colors.WHITE);
 let hud = new Object2D({
     children: [
@@ -52,13 +55,13 @@ let hud = new Object2D({
             y: 0 / 1,
             width: 1 / 3,
             height: 1 / 1,
-            child: button = new Object2D({
+            child: new Object2D({
                 x: 3 / 10,
                 y: 3 / 10,
                 width: 4 / 10,
                 height: 4 / 10,
                 children: [
-                    pauseBar0 = new Rectangle({
+                    new Rectangle({
                         x: 0 / 3,
                         y: 0 / 3,
                         width: 1 / 3,
@@ -67,7 +70,7 @@ let hud = new Object2D({
                         line: colors.BLACK,
                         updateThickness
                     }),
-                    pauseBar1 = new Rectangle({
+                    new Rectangle({
                         x: 2 / 3,
                         y: 0 / 3,
                         width: 1 / 3,
@@ -112,6 +115,22 @@ let hud = new Object2D({
                     content: "0"
                 })
             })
+        }),
+        new Object2D({
+            x: 2 / 3,
+            y: 0 / 1,
+            width: 1 / 3,
+            height: 1 / 1,
+            child: timer = new Text({
+                x: 0,
+                y: 0 ,
+                width: 1,
+                height: 1,
+                size: 4 / 10,
+                weight: "bold",
+                font: "ComicNueue Angular",
+                content: ":10"
+            })
         })
     ]
 });
@@ -135,41 +154,85 @@ export function startGame() {
         width: 3 / 3,
         height: 1 / 5
     }, 400, expoOut);
-    game.setBound({
-        isPositionRelative: true,
-        isScaleRelative: true,
-        x: 0 / 3,
-        y:  5 / 5,
-        width: 3 / 3,
-        height: 4 / 5
-    });
     game.addTo(safeArea);
-    game.animateBound({
+    game.setBound({
         isPositionRelative: true,
         isScaleRelative: true,
         x: 0 / 3,
         y:  1 / 5,
         width: 3 / 3,
         height: 4 / 5
-    }, 400, expoOut);
+    });
+    timer.content = ":10";
     newGame();
 }
-export function newGame() {
-    allGames[Math.floor(Math.random() * gameSize)]();
-}
-export async function nextGame(promise) {
-    score.content = "" + (+ score.content + 1);
-    if(promise) {
-        await promise;
+let prevHandler;
+let currentGame;
+export async function newGame() {
+    let func = allGames[Math.floor(Math.random() * gameSize)];
+    await func();
+    let thisGame = currentGame;
+    let currentTime = gameState.time;
+    prevHandler = () => {
+        if(gameState.stopped) return;
+        let timeLeft = `${ Math.ceil(10 + (currentTime - gameState.time) / 1000) }`;
+        timer.content = `:${ `00${ timeLeft }`.substring(timeLeft.length) }`;
+    };
+    scene.on("frame", prevHandler);
+    await gameState.timeout(10000);
+    if(thisGame !== currentGame) return;
+    gameState.stop();
+    scene.off("frame", prevHandler);
+    timer.content = ":O";
+    let oldUpdateBound = game.updateBound;
+    let startTime = now();
+    game.updateBound = function() {
+        oldUpdateBound.call(this);
+        let {
+            x,
+            width
+        } = this;
+        let alphaTime = ((now() - startTime) / 500) - 1;
+        this.x = x + (Math.sin(alphaTime * 8 * Math.PI) * alphaTime * width / 8
+        );
+    };
+    await timeout(500);
+    game.updateBound = oldUpdateBound;
+    await timeout(500);
+    timer.content = ":(";
+    func.end();
+    if(await dialog(`Nakakuha ka ng ${score.content} na puntos. Simulan muli?`, "Oo", "Hindi")) {
+        score.content = "0";
+        gameState = new GameState;
         newGame();
     }else{
-        newGame();
+        score.content = "0";
+        exitGame();
     }
+}
+export async function nextGame(promise) {
+    score.content = `${ + score.content + 1 }`;
+    scene.off("frame", prevHandler);
+    timer.content = ":D";
+    currentGame = Symbol();
+    if(promise) await promise;
+    newGame();
 }
 export async function pause() {
     gameState.pause();
     await pauseStart();
     gameState.play();
 }
-export function exitGame() {
+export async function exitGame() {
+    await hud.animateBound({
+        isPositionRelative: true,
+        isScaleRelative: true,
+        x: 0 / 3,
+        y: - 1 / 5,
+        width: 3 / 3,
+        height: 1 / 5
+    }, 200, sineIn);
+    hud.remove();
+    game.remove();
+    startMainMenu();
 }
