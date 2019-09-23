@@ -161,3 +161,4 @@ export async function end() {
     inputBox.remove();
     buttonBox.remove();
 }
+start.end = end;
