@@ -5,3 +5,6 @@ export default function timeout(delay) {
 		}, delay);
 	});
 }
+export function now() {
+	return + new Date;
+}
