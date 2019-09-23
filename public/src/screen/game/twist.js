@@ -141,6 +141,7 @@ export function start() {
         }
     }
     inputBox.on("interactup", prevHandler);
+    return timeout(400);
 }
 export async function end() {
     inputBox.animateBound({
