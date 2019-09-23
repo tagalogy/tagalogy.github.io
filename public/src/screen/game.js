@@ -1,10 +1,8 @@
 import Object2D from "../2d/object2d.js";
 import Color from "../2d/color.js";
 import Text from "../2d/shape/text.js";
-import FreeForm from "../2d/shape/freeform.js";
 import RoundedRectangle from "../2d/shape/rounded_rectangle.js";
 import Rectangle from "../2d/shape/rectangle.js";
-import Image from "../2d/shape/image.js";
 import Horizontal from "../2d/shape/horizontal.js";
 import GameState from "../game_state.js";
 import {
