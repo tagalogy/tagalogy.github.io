@@ -29,6 +29,7 @@ export default class Scene extends Object2D {
 		context.imageSmoothingEnabled = true;
 		this.frame = new Frame(() => {
 			this.draw(context);
+			this.invoke("frame");
 		});
 		"click mouseup mousedown mousemove".split(" ").forEach(eventName => {
 			canvas.addEventListener(eventName, event => {
