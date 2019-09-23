@@ -58,7 +58,7 @@ export default class GameState extends EventTarget{
                 timeStart = this.time;
                 clearTimeout(id);
             };
-            if(! this.paused()) onplay();
+            if(! this.paused) onplay();
             this.on("play", onplay);
             this.on("pause", onpause);
             this.once("stop", () => {
