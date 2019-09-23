@@ -7,8 +7,7 @@ import {
     expoOut
 } from "../2d/easing.js";
 import {
-    scene,
-    updateThickness
+    scene
 } from "../main.js";
 import {
     colors
@@ -27,9 +26,6 @@ let dialog = new Rectangle({
         child: dialogBox = new RoundedRectangle({
             fill: colors.WHITE,
             radius: 1 / 16,
-            line: colors.BLACK,
-            dash: [2, 2],
-            updateThickness,
             children: [
                 msgBox = new Text({
                     x: 1 / 8,
@@ -40,7 +36,6 @@ let dialog = new Rectangle({
                     align: "left",
                     baseline: "middle",
                     font: "ComicNueue Angular",
-                    weight: "bold",
                     size: 1 / 4,
             		color: colors.BLACK
                 })
