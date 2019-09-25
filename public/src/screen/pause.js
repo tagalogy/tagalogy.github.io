@@ -1,8 +1,6 @@
 import SafeArea from "../2d/safearea.js";
-import Object2D from "../2d/object2d.js";
 import Rectangle from "../2d/shape/rectangle.js";
 import Text from "../2d/shape/text.js";
-import Color from "../2d/color.js";
 import {
     colors
 } from "../asset.js";
