@@ -1,10 +1,4 @@
 import Base from "./base.js";
-import {
-	sine,
-	alphaToRange,
-	now
-} from "../easing.js";
-import timeout from "../../timeout.js";
 export default class FreeForm extends Base {
 	constructor(option = {}) {
 		super(option);
