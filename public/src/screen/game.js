@@ -201,7 +201,12 @@ export async function newGame() {
     await timeout(500);
     timer.content = ":(";
     func.end();
-    if(await dialog(`Nakakuha ka ng ${score.content} na puntos. Simulan muli?`, "Oo", "Hindi")) {
+    let message = `
+        Tamang Sagot: ${correct}
+        Puntos: ${score.content}
+        Simulan muli?
+    `;
+    if(await dialog(message, "Oo", "Hindi")) {
         score.content = "0";
         gameState = new GameState;
         newGame();
