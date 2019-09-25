@@ -12,12 +12,7 @@ let pauseBox = new Rectangle({
     y: 0,
     width: 1,
     height: 1,
-    fill: new Color({
-        red: 255,
-        green: 255,
-        blue: 255,
-        alpha: 9 / 10
-    }),
+    fill: colors.WHITE,
     child: new SafeArea({
     	ratio: 3 / 5,
         child: new Text({
