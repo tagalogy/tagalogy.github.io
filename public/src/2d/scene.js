@@ -6,13 +6,11 @@ export default class Scene extends Object2D {
 		super(option);
 		this.scene = this;
 		let {
-			fill = "#0000",
 			canvas,
 			alpha = true,
 			scale = 1
 		} = option;
 		this.scale = scale;
-		this.fill = fill instanceof Color ? fill : new Color(fill);
 		this.canvas = canvas;
 		if(option.autoresize) {
 			this.updateBound = function() {
@@ -70,13 +68,11 @@ export default class Scene extends Object2D {
 		let {
 			canvas,
 			width,
-			height
+			height,
 		} = this;
 		canvas.width = width;
 		canvas.height = height;
 		context.clearRect(0, 0, width, height);
-		context.fillStyle = this.fill.getString();
-		context.fillRect(0, 0, width, height);
 		if(drawChildren) this.drawChildren(context);
 	}
 }
