@@ -1,6 +1,8 @@
 import Scene from "./2d/scene.js";
 import SafeArea from "./2d/safearea.js";
+import Rectangle from "./2d/shape/rectangle.js";
 import {
+	colors,
 	assets
 } from "./asset.js";
 import {
@@ -9,13 +11,18 @@ import {
 import load from "./screen/loading.js";
 export let canvas = document.querySelector("canvas#scene");
 export let scene = new Scene({
-	fill: "#fff",
 	canvas: canvas,
-	alpha: false,
 	autoresize: true,
-	ratio: 1
+	child: new Rectangle({
+		x: 0,
+		y: 0,
+		width: 1,
+		height: 1,
+		z: 2,
+		fill: colors.WHITE,
+		operation: "destination-over"
+	})
 });
-let min = Math.min;
 export let safeArea = new SafeArea({
 	ratio: 3 / 5,
 	parent: scene
