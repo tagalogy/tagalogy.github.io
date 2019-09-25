@@ -37,6 +37,7 @@ let gameSize = allGames.length;
 export let gameState;
 let score;
 let timer;
+let timerColor = new Color(colors.BLACK);
 let pauseColor = new Color(colors.WHITE);
 let hud = new Object2D({
     children: [
@@ -126,6 +127,7 @@ let hud = new Object2D({
                 y: 0 ,
                 width: 1,
                 height: 1,
+                color: timerColor,
                 size: 4 / 10,
                 weight: "bold",
                 font: "ComicNueue Angular",
@@ -170,13 +172,20 @@ let prevHandler;
 let currentGame;
 export async function newGame() {
     let func = allGames[Math.floor(Math.random() * gameSize)];
-    await func();
+    let correct = await func();
     let thisGame = currentGame;
     let currentTime = gameState.time;
+    let previousTime;
     prevHandler = () => {
         if(gameState.stopped) return;
-        let timeLeft = `${ Math.ceil(10 + (currentTime - gameState.time) / 1000) }`;
-        timer.content = `:${ `00${ timeLeft }`.substring(timeLeft.length) }`;
+        let timeLeft = Math.ceil(10 + (currentTime - gameState.time) / 1000);
+        let timeLeftString = `${ timeLeft }`;
+        timer.content = `:${ `00${ timeLeftString }`.substring(timeLeftString.length) }`;
+        if(timeLeft !== previousTime && timeLeft <= 3) {
+            timerColor.setColor("#f00");
+            timerColor.animateColor(colors.BLACK, 1000);
+        }
+        previousTime = timeLeft;
     };
     scene.on("frame", prevHandler);
     await gameState.timeout(10000);
@@ -193,8 +202,7 @@ export async function newGame() {
             width
         } = this;
         let alphaTime = ((now() - startTime) / 500) - 1;
-        this.x = x + (Math.sin(alphaTime * 8 * Math.PI) * alphaTime * width / 8
-        );
+        this.x = x + (Math.sin(alphaTime * 8 * Math.PI) * alphaTime * width / 8);
     };
     await timeout(500);
     game.updateBound = oldUpdateBound;
