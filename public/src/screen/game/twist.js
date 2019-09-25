@@ -30,7 +30,7 @@ let inputBox = new Text({
 });
 let buttonBox = new Object2D;
 let prevHandler;
-export function start() {
+export async function start() {
     if(prevHandler) inputBox.off("interactup", prevHandler);
     inputBox.content = "";
     inputBox.addTo(game);
@@ -60,7 +60,8 @@ export function start() {
         height: 3 / 4
     }, 400, expoOut);
     let input = [];
-    let word = parseWord(WORD[Math.floor(Math.random() * wordLen)]);
+    let correct = WORD[Math.floor(Math.random() * wordLen)]
+    let word = parseWord(correct);
     word.sort(() => Math.random() - Math.random());
     let currentLen = word.length;
     word.forEach((syllable, ind) => {
@@ -141,7 +142,8 @@ export function start() {
         }
     }
     inputBox.on("interactup", prevHandler);
-    return timeout(400);
+    await timeout(400);
+    return correct.toLocaleLowerCase();
 }
 export async function end() {
     inputBox.animateBound({
