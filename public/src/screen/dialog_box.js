@@ -90,7 +90,7 @@ let dialog = new Rectangle({
 export default async function popup(msg, ok, cancel) {
     dialog.addTo(scene);
     dialog.setOpacity(0);
-    dialog.animateOpacity(3 / 4, 400);
+    dialog.animateOpacity(1 / 2, 400);
     dialogBox.setBound({
         x: 1 / 6,
         y: 10 / 10,
