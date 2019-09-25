@@ -6,20 +6,49 @@ import Color from "../2d/color.js";
 import RoundedRectangle from "../2d/shape/rounded_rectangle.js";
 import Text from "../2d/shape/text.js";
 import Image from "../2d/shape/image.js";
+import FreeForm from "../2d/shape/freeform.js";
+import Object2D, {
+	updateBoundWrapper
+} from "../2d/object2d.js";
 import {
 	images,
 	colors
 } from "../asset.js";
 import {
+	linear,
 	expoOut,
 	sineIn
 } from "../2d/easing.js";
 import {
 	startGame
 } from "./game.js";
-import timeout from "../timeout.js";
+import timeout, {
+	now
+} from "../timeout.js";
 let ongoing = false;
-let title = new Image;
+let title;
+let shine;
+let titleBox = new Object2D({
+	children: [
+		title = new Image({
+			x: 0,
+			y: 0,
+			width: 1,
+			height: 1
+		}),
+		shine = new FreeForm({
+			path: [
+				[0    , 1],
+				[3 / 4, 0],
+				[1    , 0],
+				[1 / 4, 1]
+			],
+			opacity: 1 / 4,
+			fill: colors.WHITE,
+			operation: "source-atop"
+		})
+	]
+});
 let buttonColor = new Color;
 let startButton = new RoundedRectangle({
 	fill: buttonColor,
@@ -49,23 +78,49 @@ let startButton = new RoundedRectangle({
 		end();
 	}
 });
+let titleBoxPos = updateBoundWrapper({
+	x: 1 / 12,
+	y: 0 / 20,
+	width: 10 / 12,
+	height: 14 / 20
+});
+let intervalID = -1;
 export function start() {
 	if(ongoing) return;
 	title.source = images.TITLE_PNG;
-	title.setBound({
+	titleBox.setBound({
 		x: 1 / 12,
 		y: -16 / 20,
 		width: 10 / 12,
 		height: 14 / 20,
 	});
-	title.addTo(safeArea);
-	title.animateBound({
-		x: 1 / 12,
-		y: 0 / 20,
-		width: 10 / 12,
-		height: 14 / 20
+	titleBox.addTo(safeArea);
+	let startTime = now();
+	titleBox.animateUpdateBound(function() {
+		titleBoxPos.call(this);
+		this.y += Math.sin((now() - startTime) / 2000 * Math.PI) * this.height / 64;
 	}, 400, expoOut);
-	buttonColor.setColor("#fdc116");
+	shine.setBound({
+		x: -1,
+		y: 0,
+		width: 1,
+		height: 1,
+	});
+	intervalID = setInterval(() => {
+		shine.setBound({
+			x: -1,
+			y: 0,
+			width: 1,
+			height: 1,
+		});
+		shine.animateBound({
+			x: 1,
+			y: 0,
+			width: 1,
+			height: 1,
+		}, 750, linear);
+	}, 4000);
+	buttonColor.setColor(colors.PH_YELLOW);
 	startButton.setBound({
 		x: 1 / 6,
 		y: 10 / 10,
@@ -91,14 +146,15 @@ export function end() {
 	}, 200, sineIn).then(() => {
 		startButton.remove();
 	});
-	title.animateBound({
+	titleBox.animateBound({
 		x: 1 / 12,
 		y: -16 / 20,
 		width: 10 / 12,
 		height: 14 / 20
 	}, 200, sineIn).then(() => {
-		title.remove();
+		titleBox.remove();
 	});
+	clearInterval(intervalID);
 	timeout(200).then(() => {
 		startGame();
 	});
