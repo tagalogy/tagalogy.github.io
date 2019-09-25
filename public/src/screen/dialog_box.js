@@ -31,14 +31,14 @@ let dialog = new Rectangle({
             children: [
                 msgBox = new Text({
                     x: 1 / 8,
-                    y: 1 / 8,
+                    y: 0 / 8,
                     width: 6 / 8,
-                    height: 3 / 8,
+                    height: 6 / 8,
                     wrap: true,
                     align: "left",
                     baseline: "middle",
                     font: "ComicNueue Angular",
-                    size: 1 / 4,
+                    size: 1 / 9,
             		color: colors.BLACK
                 }),
                 new Object2D({
