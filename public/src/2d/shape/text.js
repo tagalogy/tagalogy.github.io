@@ -1,6 +1,5 @@
 import Object2D from "../object2d.js";
 import Color from "../color.js";
-//TODO: text alignment and text wrapping
 export default class Text extends Object2D{
 	constructor(option = {}) {
 		super(option);
@@ -100,21 +99,25 @@ export function updateSizeWrapper(option) {
 		}
 	}
 }
-let SPACES = /\s+/;
+const NEWLINES = /\r\n|\r|\n/;
+const SPACES = /\s+/;
 export function getLines(context, text, maxWidth) {
-    var words = text.split(SPACES);
-    var lines = [];
-    var currentLine = words[0];
-    for (var i = 1; i < words.length; i++) {
-        var word = words[i];
-        var width = context.measureText(currentLine + " " + word).width;
-        if (width < maxWidth) {
-            currentLine += " " + word;
-        } else {
-            lines.push(currentLine);
-            currentLine = word;
-        }
-    }
-    lines.push(currentLine);
-    return lines;
+	let lines = [];
+	for(let paragraph of text.trim().split(NEWLINES)) {
+		let words = paragraph.trim().split(SPACES);
+		let currentLine = words[0];
+		for (let i = 1; i < words.length; i++) {
+			let word = words[i];
+			let currentWord = `${ currentLine } ${ word }`;
+			let width = context.measureText(currentWord).width;
+			if (width < maxWidth) {
+				currentLine = currentWord;
+			} else {
+				lines.push(currentLine);
+				currentLine = word;
+			}
+		}
+		lines.push(currentLine);
+	}
+	return lines;
 }
