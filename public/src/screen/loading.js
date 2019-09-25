@@ -1,7 +1,4 @@
 import {
-	start
-} from "./mainmenu.js";
-import {
 	safeArea,
 	updateThickness
 } from "../main.js";
