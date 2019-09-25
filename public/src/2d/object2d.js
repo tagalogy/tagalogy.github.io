@@ -22,8 +22,10 @@ export default class Object2D extends EventTarget{
 			parent,
 			child,
 			children,
-			z = 0
+			z = 0,
+			operation = "source-over"
 		} = option;
+		this.operation = operation;
 		if(parent) this.addTo(parent);
 		if(child) this.addChild(child);
 		if(children) this.addChildren(children);
@@ -108,7 +110,7 @@ export default class Object2D extends EventTarget{
 		};
 		this.opacityAnimID = setTimeout(() => {
 			this.updateOpacity = updateOpacity;
-		}, time)
+		}, time);
 		return timeout(time);
 	}
 	/*
@@ -142,6 +144,7 @@ export default class Object2D extends EventTarget{
 		if(! this.visible) return;
 		this.updateOpacity();
 		context.globalAlpha = this.opacity;
+		context.globalCompositeOperation = this.operation;
 		if(drawChildren) this.drawChildren(context);
 	}
 	drawChildren(context) {
