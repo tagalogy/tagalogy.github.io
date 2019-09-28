@@ -2,6 +2,7 @@ let cacheName = "tagalogy-cache-01";
 let path = `
     /
     /index.html
+    /src_min/main.js
     /asset/comicnueue_angular/bold_italic.otf
     /asset/comicnueue_angular/bold.otf
     /asset/comicnueue_angular/italic.otf
@@ -10,7 +11,13 @@ let path = `
     /asset/comicnueue_angular/regular.otf
     /asset/font.css
     /asset/title.png
-    /src_min/main.js
+    /icon/16.png
+    /icon/32.png
+    /icon/64.png
+    /icon/128.png
+    /icon/256.png
+    /icon/1024.png
+    /icon/2048.png
 `.trim().split(/\s+/);
 self.addEventListener("install", event => {
     event.waitUntil(caches.open(cacheName).then(cache => {
