@@ -3,6 +3,7 @@ import Rectangle from "../2d/shape/rectangle.js";
 import RoundedRectangle from "../2d/shape/rounded_rectangle.js";
 import Text from "../2d/shape/text.js";
 import SafeArea from "../2d/safearea.js";
+import Color from "../2d/color.js";
 import {
     sineIn,
     expoOut
@@ -15,6 +16,10 @@ import {
 } from "../asset.js";
 import timeout from "../timeout.js";
 let dialogBox, msgBox, cancelBox, okBox, cancelText, okText;
+let cancelFill = new Color(colors.WHITE);
+let cancelColor = new Color(colors.BLACK);
+let okFill = new Color(colors.PH_BLUE);
+let okColor = new Color(colors.WHITE);
 let dialog = new Rectangle({
     x: 0,
     y: 0,
@@ -47,21 +52,31 @@ let dialog = new Rectangle({
                     width: 8 / 8,
                     height: 2 / 8,
                     children: [
-                        cancelBox = new Object2D({
+                        cancelBox = new RoundedRectangle({
                             x: 0,
                             y: 0,
                             width: 1 / 2,
                             height: 1,
+                            radius: 1 / 4,
+                            fill: cancelFill,
                             child: cancelText = new Text({
                                 x: 0,
                                 y: 0,
                                 width: 1,
                                 height: 1,
                                 size: 4 / 10,
-                                color: colors.BLACK,
+                                color: cancelColor,
                                 font: "ComicNueue Angular",
                                 weight: "bold"
-                            })
+                            }),
+                            oninteractdown() {
+                                cancelFill.setColor(colors.PH_RED);
+                                cancelColor.setColor(colors.WHITE);
+                            },
+                            oninteractup() {
+                                cancelFill.setColor(colors.WHITE);
+                                cancelColor.setColor(colors.BLACK);
+                            }
                         }),
                         okBox = new RoundedRectangle({
                             x: 1 / 2,
@@ -69,17 +84,25 @@ let dialog = new Rectangle({
                             width: 1 / 2,
                             height: 1,
                             radius: 1 / 4,
-                            fill: colors.PH_BLUE,
+                            fill: okFill,
                             child: okText = new Text({
                                 x: 0,
                                 y: 0,
                                 width: 1,
                                 height: 1,
                                 size: 4 / 10,
-                                color: colors.WHITE,
+                                color: okColor,
                                 font: "ComicNueue Angular",
                                 weight: "bold"
-                            })
+                            }),
+                            oninteractdown() {
+                                okFill.setColor(colors.WHITE);
+                                okColor.setColor(colors.BLACK);
+                            },
+                            oninteractup() {
+                                okFill.setColor(colors.PH_BLUE);
+                                okColor.setColor(colors.WHITE);
+                            }
                         })
                     ]
                 })
