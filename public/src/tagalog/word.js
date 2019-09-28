@@ -399,5 +399,13 @@ export const DRICK = [
 	"bungisngis",
 	"bungal",
 ];
-export const WORD = [...SPANISH, ...LATIN, ...GREEK, ...DRICK].map(str => str.toUpperCase());
+const TAMBALAN = [
+	"bahag-hari",
+	"urong-sulong",
+	"bungang-araw",
+	"hating-gabi",
+	"agaw-pansin",
+	"sawing-palad"
+];
+export const WORD = [...SPANISH, ...LATIN, ...GREEK, ...DRICK, ...TAMBALAN].map(str => str.toUpperCase());
 console.log(`Word Count: ${WORD.length}`);
