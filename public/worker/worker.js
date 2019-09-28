@@ -13,5 +13,18 @@ let path = `
     /src_min/main.js
 `.trim().split(/\s+/);
 self.addEventListener("install", event => {
-
+    event.waitUntil(caches.open(cacheName).then(cache => {
+        return cache.addAll(path);
+    }));
+});
+self.addEventListener("fetch", event => {
+    event.respondWith(caches.match(event.request).then(cache => {
+        if(cache) return cache;
+        return fetch(event.request).then(response => {
+            return caches.open(cacheName).then(cache => {
+                cache.put(event.request, request.clone());
+                return response;
+            });
+        });
+    }));
 });
