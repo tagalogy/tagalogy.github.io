@@ -47,9 +47,8 @@ function loadScript(src, type = "text/javascript") {
 		head.appendChild(script);
 	});
 }
-//Load the minified code first, if it failed, load the main source code instead
-loadScript("main.min.js", "module").catch(() => {
+//Load the bundled code first, if it failed, load the main source code instead
+loadScript("src_min/main.js").catch(() => {
 	loadScript("src/main.js", "module");
 });
-console.log("=    _______ ___     ______ ___    __   ___     ______ _     __    =\n==  |_    __|    \\ /   ____|    \\ |  |       \\/   ____| |   |  |  ==\n===   |  | |  |\\  \\   /  __  |\\  \\|  |   \\__  |  /  __  |   |  | ===\n===   |  | |   _   \\  \\_|  |  _   \\  |___     |  \\_|  |  \\__|  | ===\n===   |__| |__|  |__|______|_|  |__|_____|_  /\\ ______|  ___   | ===\n===                   __________    __________    _________/   | ===\n===                   \\_______   \\/   _______/  /____________ /  ===\n===                             ----                             ===\n==        Tagalogy is open source under Apache License 2.0        ==\n=             ( https://github.com/Azertray/tagalogy )             =\n")
 </script>
