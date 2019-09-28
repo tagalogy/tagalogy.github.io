@@ -1,4 +1,4 @@
-let cacheName = "tagalogy-cache-01";
+let cacheName = "tagalogy-cache-02";
 let path = `
     /
     /index.html
