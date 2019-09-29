@@ -35,6 +35,7 @@ let allGames = [
 ];
 let gameSize = allGames.length;
 export let gameState;
+let time = 20;
 let score;
 let timer;
 let timerColor = new Color(colors.BLACK);
@@ -131,7 +132,7 @@ let hud = new Object2D({
                 size: 4 / 10,
                 weight: "bold",
                 font: "ComicNueue Angular",
-                content: ":10"
+                content: `:${time}`
             })
         })
     ]
@@ -165,7 +166,7 @@ export function startGame() {
         width: 3 / 3,
         height: 4 / 5
     });
-    timer.content = ":10";
+    timer.content = `:${time}`;
     newGame();
 }
 let prevHandler;
@@ -178,17 +179,17 @@ export async function newGame() {
     let previousTime;
     prevHandler = () => {
         if(gameState.stopped) return;
-        let timeLeft = Math.ceil(10 + (currentTime - gameState.time) / 1000);
+        let timeLeft = Math.ceil(time + (currentTime - gameState.time) / 1000);
         let timeLeftString = `${ timeLeft }`;
         timer.content = `:${ `00${ timeLeftString }`.substring(timeLeftString.length) }`;
-        if(timeLeft !== previousTime && timeLeft <= 3) {
+        if(timeLeft !== previousTime && timeLeft <= 5) {
             timerColor.setColor("#f00");
             timerColor.animateColor(colors.BLACK, 1000);
         }
         previousTime = timeLeft;
     };
     scene.on("frame", prevHandler);
-    await gameState.timeout(10000);
+    await gameState.timeout(time * 1000);
     if(thisGame !== currentGame) return;
     gameState.stop();
     scene.off("frame", prevHandler);
