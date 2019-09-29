@@ -23,46 +23,115 @@ import {
     game
 } from "../game.js";
 let wordLen = WORD.length;
-let inputBox = new Text({
+let outputBox = new Text({
     font: "ComicNueue Angular",
     weight: "bold",
-    size: 5 / 10
+    size: 4 / 10
 });
-let buttonBox = new Object2D;
-let prevHandler;
+let syllableBox;
+let clearPlace, hyphenPlace;
+let inputBox = new Object2D({
+    children: [
+        syllableBox = new Object2D({
+            x: 0 / 5,
+            y: 0 / 5,
+            width: 4 / 5,
+            height: 5 / 5
+        }),
+        new Object2D({
+            x: 4 / 5,
+            y: 0 / 5,
+            width: 1 / 5,
+            height: 5 / 5,
+            children: [
+                clearPlace = new Object2D({
+                    x: 0,
+                    y: 0 / 5,
+                    width: 1,
+                    height: 1 / 5,
+                    child: new RoundedRectangle({
+                        x: 1 / 8,
+                        y: 1 / 8,
+                        width: 6 / 8,
+                        height: 6 / 8,
+                        fill: colors.PH_RED,
+                        radius: 1 / 2,
+                        child: new Text({
+                            x: 0,
+                            y: 0,
+                            width: 1,
+                            height: 1,
+                            font: "ComicNueue Angular",
+                            color: colors.WHITE,
+                            size: 10 / 10,
+                            content: "×",
+                        })
+                    }),
+                }),
+                hyphenPlace = new Object2D({
+                    x: 0,
+                    y: 4 / 5,
+                    width: 1,
+                    height: 1 / 5,
+                    child: new RoundedRectangle({
+                        x: 1 / 8,
+                        y: 1 / 8,
+                        width: 6 / 8,
+                        height: 6 / 8,
+                        fill: colors.PH_BLUE,
+                        radius: 1 / 2,
+                        child: new Text({
+                            x: 0,
+                            y: 0,
+                            width: 1,
+                            height: 1,
+                            font: "ComicNueue Angular",
+                            color: colors.WHITE,
+                            size: 10 / 10,
+                            content: "-",
+                        })
+                    })
+                })
+            ]
+        })
+    ]
+});
+let prevClearHandler;
+let prevHyphenHandler;
 export async function start() {
-    if(prevHandler) inputBox.off("interactup", prevHandler);
-    inputBox.content = "";
+    if(prevClearHandler) clearPlace.off("interactup", prevClearHandler);
+    if(prevHyphenHandler) hyphenPlace.off("interactup", prevHyphenHandler);
+    outputBox.content = "";
+    outputBox.addTo(game);
+    outputBox.setBound({
+        x: 1,
+        y: 0,
+        width: 3 / 3,
+        height: 1 / 4
+    });
+    outputBox.animateBound({
+        x: 0,
+        y: 0,
+        width: 3 / 3,
+        height: 1 / 4
+    }, 400, expoOut);
     inputBox.addTo(game);
     inputBox.setBound({
         x: 1,
-        y: 0,
+        y: 1 / 4,
         width: 3 / 3,
-        height: 1 / 4
+        height: 3 / 4
     });
     inputBox.animateBound({
         x: 0,
-        y: 0,
-        width: 3 / 3,
-        height: 1 / 4
-    }, 400, expoOut);
-    buttonBox.addTo(game);
-    buttonBox.setBound({
-        x: 1,
-        y: 1 / 4,
-        width: 3 / 3,
-        height: 3 / 4
-    });
-    buttonBox.animateBound({
-        x: 0,
         y: 1 / 4,
         width: 3 / 3,
         height: 3 / 4
     }, 400, expoOut);
-    let input = [];
-    let correct = WORD[Math.floor(Math.random() * wordLen)]
-    let word = parseWord(correct);
+    let correct = WORD[Math.floor(Math.random() * wordLen)];
+    let word = parseWord(correct).filter(syllable => syllable !== "-");
     word.sort(() => Math.random() - Math.random());
+    let currentPressed = 0;
     let currentLen = word.length;
     word.forEach((syllable, ind) => {
         syllable = syllable.toLowerCase();
@@ -77,7 +146,7 @@ export async function start() {
             child: new RoundedRectangle({
                 x: 1 / 8,
                 y: 1 / 8,
-                width: 6 / 8,
+                width: 54 / 64,
                 height: 6 / 8,
                 dash: [2, 2],
                 dashSpeed: 4 / 1000,
@@ -97,20 +166,19 @@ export async function start() {
                     content: syllable,
                 })
             }),
+            oninteractdown() {
+                if(gameState.paused) return;
+                lineColor.setColor(colors.PH_BLUE);
+                fillColor.setColor(colors.WHITE);
+                textColor.setColor(colors.PH_BLUE);
+            },
             oninteractup() {
                 if(gameState.paused) return;
-                if(this.pressed) {
-                    this.unpress();
-                    input.splice(input.lastIndexOf(this.content), 1);
-                    inputBox.content = input.join("");
-                }else{
+                if(! this.pressed) {
                     this.pressed = true;
-                    input.push(this.content);
-                    inputBox.content += this.content;
-                    lineColor.setColor(colors.PH_BLUE);
-                    fillColor.setColor(colors.WHITE);
-                    textColor.setColor(colors.PH_BLUE);
-                    if(input.length >= currentLen && WORD.indexOf(input.join("").toUpperCase()) >= 0) {
+                    outputBox.content += this.content;
+                    currentPressed ++;
+                    if(currentPressed >= currentLen && WORD.indexOf(outputBox.content.toUpperCase()) >= 0) {
                         nextGame(end());
                     }
                 }
@@ -123,44 +191,39 @@ export async function start() {
             fillColor.setColor(colors.PH_BLUE);
             textColor.setColor(colors.WHITE);
         }
-        currentPlace.addTo(buttonBox);
+        currentPlace.addTo(syllableBox);
     });
-    let {
-        children
-    } = buttonBox;
-    prevHandler = () => {
+    prevClearHandler = () => {
         if(gameState.paused) return;
-        if(input.length <= 0) return;
-        let last = input[input.length - 1];
-        input.pop();
-        inputBox.content = input.join("");
-        for(let child of children) {
-            if(child.content == last && child.pressed) {
-                child.unpress();
-                break;
-            }
-        }
+        outputBox.content = "";
+        currentPressed = 0;
+        for(let button of syllableBox.children) button.unpress();
+    };
+    clearPlace.on("interactup", prevClearHandler);
+    prevHyphenHandler = () => {
+        if(gameState.paused) return;
+        if(! outputBox.content.endsWith("-")) outputBox.content += "-";
     }
-    inputBox.on("interactup", prevHandler);
+    hyphenPlace.on("interactup", prevHyphenHandler);
     await timeout(400);
     return correct.toLocaleLowerCase();
 }
 export async function end() {
-    inputBox.animateBound({
+    outputBox.animateBound({
         x: -1,
         y: 0,
         width: 3 / 3,
         height: 1 / 4
     }, 200, sineIn);
-    buttonBox.animateBound({
+    inputBox.animateBound({
         x: -1,
         y: 1 / 4,
         width: 3 / 3,
         height: 3 / 4
     }, 200, sineIn);
     await timeout(200);
-    buttonBox.removeAllChildren();
+    syllableBox.removeAllChildren();
+    outputBox.remove();
     inputBox.remove();
-    buttonBox.remove();
 }
 start.end = end;
