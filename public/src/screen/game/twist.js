@@ -23,30 +23,38 @@ import {
     game
 } from "../game.js";
 let wordLen = WORD.length;
+let outputColor = new Color(colors.BLACK);
 let outputBox = new Text({
     font: "ComicNueue Angular",
     weight: "bold",
-    size: 4 / 10
+    size: 4 / 10,
+    color: outputColor
 });
 let syllableBox;
+let clearFill = new Color(colors.WHITE);
+let clearLine = new Color(colors.PH_RED);
+let clearColor = new Color(colors.PH_RED);
+let hyphenFill = new Color(colors.PH_BLUE);
+let hyphenLine = new Color(colors.TRANSPARENT);
+let hyphenColor = new Color(colors.WHITE);
 let clearPlace, hyphenPlace;
 let inputBox = new Object2D({
     children: [
         syllableBox = new Object2D({
-            x: 0 / 5,
+            x: 0 / 4,
             y: 0 / 5,
-            width: 4 / 5,
+            width: 3 / 4,
             height: 5 / 5
         }),
         new Object2D({
-            x: 4 / 5,
+            x: 3 / 4,
             y: 0 / 5,
-            width: 1 / 5,
+            width: 1 / 4,
             height: 5 / 5,
             children: [
                 clearPlace = new Object2D({
                     x: 0,
-                    y: 0 / 5,
+                    y: 3 / 5,
                     width: 1,
                     height: 1 / 5,
                     child: new RoundedRectangle({
@@ -54,7 +62,11 @@ let inputBox = new Object2D({
                         y: 1 / 8,
                         width: 6 / 8,
                         height: 6 / 8,
-                        fill: colors.PH_RED,
+                        dash: [2, 2],
+                        dashSpeed: 2 / 1000,
+                        fill: clearFill,
+                        line: clearLine,
+                        updateThickness,
                         radius: 1 / 2,
                         child: new Text({
                             x: 0,
@@ -62,11 +74,14 @@ let inputBox = new Object2D({
                             width: 1,
                             height: 1,
                             font: "ComicNueue Angular",
-                            color: colors.WHITE,
+                            color: clearColor,
                             size: 10 / 10,
                             content: "×",
                         })
                     }),
+                    oninteractdown() {
+                        clearColor.setColor(colors.BLACK);
+                    }
                 }),
                 hyphenPlace = new Object2D({
                     x: 0,
@@ -78,7 +93,11 @@ let inputBox = new Object2D({
                         y: 1 / 8,
                         width: 6 / 8,
                         height: 6 / 8,
-                        fill: colors.PH_BLUE,
+                        dash: [2, 2],
+                        dashSpeed: 2 / 1000,
+                        fill: hyphenFill,
+                        line: hyphenLine,
+                        updateThickness,
                         radius: 1 / 2,
                         child: new Text({
                             x: 0,
@@ -86,11 +105,14 @@ let inputBox = new Object2D({
                             width: 1,
                             height: 1,
                             font: "ComicNueue Angular",
-                            color: colors.WHITE,
+                            color: hyphenColor,
                             size: 10 / 10,
                             content: "-",
                         })
-                    })
+                    }),
+                    oninteractdown() {
+                        hyphenColor.setColor(colors.BLACK);
+                    }
                 })
             ]
         })
@@ -99,6 +121,12 @@ let inputBox = new Object2D({
 let prevClearHandler;
 let prevHyphenHandler;
 export async function start() {
+    clearFill.setColor(colors.WHITE);
+    clearLine.setColor(colors.PH_RED);
+    clearColor.setColor(colors.PH_RED);
+    hyphenFill.setColor(colors.PH_BLUE);
+    hyphenLine.setColor(colors.TRANSPARENT);
+    hyphenColor.setColor(colors.WHITE);
     if(prevClearHandler) clearPlace.off("interactup", prevClearHandler);
     if(prevHyphenHandler) hyphenPlace.off("interactup", prevHyphenHandler);
     outputBox.content = "";
@@ -119,13 +147,13 @@ export async function start() {
     inputBox.setBound({
         x: 1,
         y: 1 / 4,
-        width: 3 / 3,
+        width: 8 / 10,
         height: 3 / 4
     });
     inputBox.animateBound({
-        x: 0,
+        x: 1 / 10,
         y: 1 / 4,
-        width: 3 / 3,
+        width: 8 / 10,
         height: 3 / 4
     }, 400, expoOut);
     let correct = WORD[Math.floor(Math.random() * wordLen)];
@@ -133,6 +161,30 @@ export async function start() {
     word.sort(() => Math.random() - Math.random());
     let currentPressed = 0;
     let currentLen = word.length;
+    prevClearHandler = () => {
+        if(gameState.paused) return;
+        outputBox.content = "";
+        currentPressed = 0;
+        for(let button of syllableBox.children) button.unpress();
+        clearFill.setColor(colors.WHITE);
+        clearLine.setColor(colors.PH_RED);
+        clearColor.setColor(colors.PH_RED);
+        hyphenFill.setColor(colors.PH_BLUE);
+        hyphenLine.setColor(colors.TRANSPARENT);
+        hyphenColor.setColor(colors.WHITE);
+    };
+    clearPlace.on("interactup", prevClearHandler);
+    prevHyphenHandler = () => {
+        if(gameState.paused) return;
+        if(! outputBox.content.endsWith("-")) outputBox.content += "-";
+        clearFill.setColor(colors.PH_RED);
+        clearLine.setColor(colors.TRANSPARENT);
+        clearColor.setColor(colors.WHITE);
+        hyphenFill.setColor(colors.WHITE);
+        hyphenLine.setColor(colors.PH_BLUE);
+        hyphenColor.setColor(colors.PH_BLUE);
+    }
+    hyphenPlace.on("interactup", prevHyphenHandler);
     word.forEach((syllable, ind) => {
         syllable = syllable.toLowerCase();
         let lineColor = new Color(colors.TRANSPARENT);
@@ -144,9 +196,9 @@ export async function start() {
             width: 1,
             height: 1 / 5,
             child: new RoundedRectangle({
-                x: 1 / 8,
+                x: 1 / 48,
                 y: 1 / 8,
-                width: 54 / 64,
+                width: 46 / 48,
                 height: 6 / 8,
                 dash: [2, 2],
                 dashSpeed: 4 / 1000,
@@ -168,43 +220,44 @@ export async function start() {
             }),
             oninteractdown() {
                 if(gameState.paused) return;
+                textColor.setColor(colors.BLACK);
+            },
+            async oninteractup() {
+                if(gameState.paused) return;
                 lineColor.setColor(colors.PH_BLUE);
                 fillColor.setColor(colors.WHITE);
                 textColor.setColor(colors.PH_BLUE);
-            },
-            oninteractup() {
-                if(gameState.paused) return;
-                if(! this.pressed) {
-                    this.pressed = true;
-                    outputBox.content += this.content;
-                    currentPressed ++;
-                    if(currentPressed >= currentLen && WORD.indexOf(outputBox.content.toUpperCase()) >= 0) {
-                        nextGame(end());
-                    }
+                clearFill.setColor(colors.PH_RED);
+                clearLine.setColor(colors.TRANSPARENT);
+                clearColor.setColor(colors.WHITE);
+                hyphenFill.setColor(colors.PH_BLUE);
+                hyphenLine.setColor(colors.TRANSPARENT);
+                hyphenColor.setColor(colors.WHITE);
+                if(this.pressed) return;
+                this.pressed = true;
+                outputBox.content += this.content;
+                currentPressed ++;
+                if(currentPressed < currentLen) return;
+                if(WORD.indexOf(outputBox.content.toUpperCase()) >= 0) {
+                    nextGame(end());
+                    return;
                 }
+                outputColor.setColor("#f00");
+                await outputColor.animateColor("#f000", 200);
+                prevClearHandler();
+                outputColor.setColor("#000");
             }
         });
         currentPlace.content = syllable;
         currentPlace.unpress = () => {
+            if(! currentPlace.pressed) return;
             currentPlace.pressed = false;
             lineColor.setColor(colors.TRANSPARENT);
             fillColor.setColor(colors.PH_BLUE);
             textColor.setColor(colors.WHITE);
-        }
+        };
         currentPlace.addTo(syllableBox);
     });
-    prevClearHandler = () => {
-        if(gameState.paused) return;
-        outputBox.content = "";
-        currentPressed = 0;
-        for(let button of syllableBox.children) button.unpress();
-    };
-    clearPlace.on("interactup", prevClearHandler);
-    prevHyphenHandler = () => {
-        if(gameState.paused) return;
-        if(! outputBox.content.endsWith("-")) outputBox.content += "-";
-    }
-    hyphenPlace.on("interactup", prevHyphenHandler);
     await timeout(400);
     return correct.toLocaleLowerCase();
 }
