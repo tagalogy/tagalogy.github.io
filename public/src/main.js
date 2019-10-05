@@ -19,7 +19,7 @@ export let scene = new Scene({
 		width: 1,
 		height: 1,
 		z: 2,
-		fill: colors.WHITE,
+		fill: colors.BACKGROUND,
 		operation: "destination-over"
 	})
 });
@@ -30,6 +30,21 @@ export let safeArea = new SafeArea({
 export function updateThickness() {
 	this.thickness = safeArea.width / 100;
 };
+export let theme;
+export function setTheme(currentTheme) {
+	if(currentTheme == "dark") {
+		document.body.style.backgroundColor = "black";
+		theme = "dark";
+		colors.BACKGROUND.setColor(colors.BLACK);
+		colors.FOREGROUND.setColor(colors.WHITE);
+	}else{
+		document.body.style.backgroundColor = "white";
+		theme = "light";
+		colors.BACKGROUND.setColor(colors.WHITE);
+		colors.FOREGROUND.setColor(colors.BLACK);
+	}
+}
+setTheme("light");
 load(assets).then(() => {
 	start();
 });

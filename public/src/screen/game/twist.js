@@ -23,7 +23,7 @@ import {
     game
 } from "../game.js";
 let wordLen = WORD.length;
-let outputColor = new Color(colors.BLACK);
+let outputColor = new Color(colors.FOREGROUND);
 let outputBox = new Text({
     font: "ComicNueue Angular",
     weight: "bold",
@@ -31,12 +31,12 @@ let outputBox = new Text({
     color: outputColor
 });
 let syllableBox;
-let clearFill = new Color(colors.WHITE);
-let clearLine = new Color(colors.PH_RED);
-let clearColor = new Color(colors.PH_RED);
-let hyphenFill = new Color(colors.PH_BLUE);
-let hyphenLine = new Color(colors.TRANSPARENT);
-let hyphenColor = new Color(colors.WHITE);
+let clearFill = new Color;
+let clearLine = new Color;
+let clearColor = new Color;
+let hyphenFill = new Color;
+let hyphenLine = new Color;
+let hyphenColor = new Color;
 let clearPlace, hyphenPlace;
 let inputBox = new Object2D({
     children: [
@@ -121,7 +121,8 @@ let inputBox = new Object2D({
 let prevClearHandler;
 let prevHyphenHandler;
 export async function start() {
-    clearFill.setColor(colors.WHITE);
+    outputColor.setColor(colors.FOREGROUND);
+    clearFill.setColor(colors.BACKGROUND);
     clearLine.setColor(colors.PH_RED);
     clearColor.setColor(colors.PH_RED);
     hyphenFill.setColor(colors.PH_BLUE);
@@ -166,7 +167,7 @@ export async function start() {
         outputBox.content = "";
         currentPressed = 0;
         for(let button of syllableBox.children) button.unpress();
-        clearFill.setColor(colors.WHITE);
+        clearFill.setColor(colors.BACKGROUND);
         clearLine.setColor(colors.PH_RED);
         clearColor.setColor(colors.PH_RED);
         hyphenFill.setColor(colors.PH_BLUE);
@@ -180,7 +181,7 @@ export async function start() {
         clearFill.setColor(colors.PH_RED);
         clearLine.setColor(colors.TRANSPARENT);
         clearColor.setColor(colors.WHITE);
-        hyphenFill.setColor(colors.WHITE);
+        hyphenFill.setColor(colors.BACKGROUND);
         hyphenLine.setColor(colors.PH_BLUE);
         hyphenColor.setColor(colors.PH_BLUE);
     }
@@ -225,7 +226,7 @@ export async function start() {
             async oninteractup() {
                 if(gameState.paused) return;
                 lineColor.setColor(colors.PH_BLUE);
-                fillColor.setColor(colors.WHITE);
+                fillColor.setColor(colors.BACKGROUND);
                 textColor.setColor(colors.PH_BLUE);
                 clearFill.setColor(colors.PH_RED);
                 clearLine.setColor(colors.TRANSPARENT);
@@ -245,7 +246,7 @@ export async function start() {
                 outputColor.setColor("#f00");
                 await outputColor.animateColor("#f000", 200);
                 prevClearHandler();
-                outputColor.setColor("#000");
+                outputColor.setColor(colors.FOREGROUND);
             }
         });
         currentPlace.content = syllable;

@@ -12,7 +12,7 @@ let pauseBox = new Rectangle({
     y: 0,
     width: 1,
     height: 1,
-    fill: colors.WHITE,
+    fill: colors.BACKGROUND,
     child: new SafeArea({
     	ratio: 3 / 5,
         child: new Text({
@@ -24,7 +24,7 @@ let pauseBox = new Rectangle({
             weight: "bold",
             size: 5 / 10,
             content: "nakahinto",
-            color: colors.BLACK
+            color: colors.FOREGROUND
         }),
     })
 });

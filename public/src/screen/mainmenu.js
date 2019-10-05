@@ -1,4 +1,5 @@
 import {
+	theme,
 	safeArea,
 	updateThickness
 } from "../main.js";
@@ -49,16 +50,18 @@ let titleBox = new Object2D({
 		})
 	]
 });
+let buttonLine = new Color;
+let buttonFill = new Color;
 let buttonColor = new Color;
 let startButton = new RoundedRectangle({
-	fill: buttonColor,
-	cap: "flat",
-	join: "miter",
-	line: colors.BLACK,
+	fill: buttonFill,
+	line: buttonLine,
 	dash: [4, 4],
 	dashSpeed: 4 / 1000,
 	updateThickness,
 	radius: 0.5,
+	cap: "flat",
+	join: "miter",
 	child: new Text({
 		x: 0,
 		y: 0,
@@ -66,15 +69,11 @@ let startButton = new RoundedRectangle({
 		height: 1,
 		weight: "bold",
 		font: "ComicNueue Angular",
-		color: colors.BLACK,
+		color: buttonColor,
 		size: 6 / 10,
 		content: "simulan"
 	}),
-	oninteractdown() {
-		buttonColor.setColor(colors.WHITE);
-	},
 	oninteractup() {
-		buttonColor.setColor(colors.PH_YELLOW);
 		end();
 	}
 });
@@ -87,7 +86,17 @@ let titleBoxPos = updateBoundWrapper({
 let intervalID = -1;
 export function start() {
 	if(ongoing) return;
-	title.source = images.TITLE_PNG;
+	if(theme === "dark") {
+		buttonLine.setColor(colors.PH_YELLOW);
+		buttonFill.setColor(colors.BACKGROUND);
+		buttonColor.setColor(colors.PH_YELLOW);
+		title.source = images.TITLE_DARK_PNG;
+	}else{
+		buttonLine.setColor(colors.FOREGROUND);
+		buttonFill.setColor(colors.PH_YELLOW);
+		buttonColor.setColor(colors.BLACK);
+		title.source = images.TITLE_PNG;
+	}
 	titleBox.setBound({
 		x: 1 / 12,
 		y: -16 / 20,
@@ -120,7 +129,6 @@ export function start() {
 			height: 1,
 		}, 750, linear);
 	}, 4000);
-	buttonColor.setColor(colors.PH_YELLOW);
 	startButton.setBound({
 		x: 1 / 6,
 		y: 10 / 10,

@@ -16,8 +16,8 @@ import {
 } from "../asset.js";
 import timeout from "../timeout.js";
 let dialogBox, msgBox, cancelBox, okBox, cancelText, okText;
-let cancelFill = new Color(colors.WHITE);
-let cancelColor = new Color(colors.BLACK);
+let cancelFill = new Color;
+let cancelColor = new Color;
 let okFill = new Color(colors.PH_BLUE);
 let okColor = new Color(colors.WHITE);
 let dialog = new Rectangle({
@@ -31,7 +31,7 @@ let dialog = new Rectangle({
         isOpacityRelative: false,
         opacity: 1,
         child: dialogBox = new RoundedRectangle({
-            fill: colors.WHITE,
+            fill: colors.BACKGROUND,
             radius: 1 / 16,
             children: [
                 msgBox = new Text({
@@ -44,7 +44,7 @@ let dialog = new Rectangle({
                     baseline: "middle",
                     font: "ComicNueue Angular",
                     size: 1 / 9,
-            		color: colors.BLACK
+            		color: colors.FOREGROUND
                 }),
                 new Object2D({
                     x: 0 / 8,
@@ -74,8 +74,8 @@ let dialog = new Rectangle({
                                 cancelColor.setColor(colors.WHITE);
                             },
                             oninteractup() {
-                                cancelFill.setColor(colors.WHITE);
-                                cancelColor.setColor(colors.BLACK);
+                                cancelFill.setColor(colors.BACKGROUND);
+                                cancelColor.setColor(colors.FOREGROUND);
                             }
                         }),
                         okBox = new RoundedRectangle({
@@ -96,8 +96,8 @@ let dialog = new Rectangle({
                                 weight: "bold"
                             }),
                             oninteractdown() {
-                                okFill.setColor(colors.WHITE);
-                                okColor.setColor(colors.BLACK);
+                                okFill.setColor(colors.BACKGROUND);
+                                okColor.setColor(colors.FOREGROUND);
                             },
                             oninteractup() {
                                 okFill.setColor(colors.PH_BLUE);
@@ -111,6 +111,8 @@ let dialog = new Rectangle({
     })
 });
 export default async function popup(msg, ok, cancel) {
+    cancelFill.setColor(colors.BACKGROUND);
+    cancelColor.setColor(colors.FOREGROUND);
     dialog.addTo(scene);
     dialog.setOpacity(0);
     dialog.animateOpacity(1 / 2, 400);

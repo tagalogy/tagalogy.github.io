@@ -5,11 +5,16 @@ import Color from "./2d/color.js";
 export let images = {};
 export let assets = loadImages([
 	"./asset/title.png",
+	"./asset/title_dark.png",
 ]);
 assets.then(rawImages => {
 	images.TITLE_PNG = rawImages[0];
+	images.TITLE_DARK_PNG = rawImages[1];
 });
 export let colors = {
+	BACKGROUND: new Color("#fff"),
+	FOREGROUND: new Color("#000"),
+
 	TRANSPARENT: new Color("#0000"),
 	WHITE: new Color("#fff"),
 	BLACK: new Color("#000"),

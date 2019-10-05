@@ -38,8 +38,8 @@ export let gameState;
 let time = 20;
 let score;
 let timer;
-let timerColor = new Color(colors.BLACK);
-let pauseColor = new Color(colors.WHITE);
+let timerColor = new Color;
+let pauseColor = new Color;
 let hud = new Object2D({
     children: [
         new Horizontal({
@@ -47,7 +47,7 @@ let hud = new Object2D({
             y: 1,
             width: 1,
             height: 0,
-            line: colors.BLACK,
+            line: colors.FOREGROUND,
             dash: [4, 4],
             dashSpeed: 2 / 1000,
             updateThickness,
@@ -69,7 +69,7 @@ let hud = new Object2D({
                         width: 1 / 3,
                         height: 3 / 3,
                         fill: pauseColor,
-                        line: colors.BLACK,
+                        line: colors.FOREGROUND,
                         updateThickness
                     }),
                     new Rectangle({
@@ -78,7 +78,7 @@ let hud = new Object2D({
                         width: 1 / 3,
                         height: 3 / 3,
                         fill: pauseColor,
-                        line: colors.BLACK,
+                        line: colors.FOREGROUND,
                         updateThickness
                     })
                 ]
@@ -89,7 +89,7 @@ let hud = new Object2D({
             },
             oninteractup() {
                 if(gameState.paused) return;
-                pauseColor.setColor(colors.WHITE);
+                pauseColor.setColor(colors.BACKGROUND);
                 pause();
             }
         }),
@@ -139,6 +139,8 @@ let hud = new Object2D({
 });
 export let game = new Object2D;
 export function startGame() {
+    timerColor.setColor(colors.FOREGROUND);
+    pauseColor.setColor(colors.BACKGROUND);
     gameState = new GameState;
     hud.addTo(safeArea);
     hud.setBound({
@@ -184,7 +186,7 @@ export async function newGame() {
         timer.content = `:${ `00${ timeLeftString }`.substring(timeLeftString.length) }`;
         if(timeLeft !== previousTime && timeLeft <= 5) {
             timerColor.setColor("#f00");
-            timerColor.animateColor(colors.BLACK, 1000);
+            timerColor.animateColor(colors.FOREGROUND, 1000);
         }
         previousTime = timeLeft;
     };

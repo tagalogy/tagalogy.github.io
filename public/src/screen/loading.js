@@ -13,7 +13,7 @@ import {
 let loading = new Horizontal({
 	cap: "flat",
 	join: "miter",
-	line: colors.BLACK,
+	line: colors.FOREGROUND,
 	dash: [4, 4],
 	dashSpeed: 1 / 100,
 	updateThickness,
