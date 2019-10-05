@@ -1,5 +1,6 @@
 import {
 	theme,
+	setTheme,
 	safeArea,
 	updateThickness
 } from "../main.js";
@@ -26,7 +27,6 @@ import {
 import timeout, {
 	now
 } from "../timeout.js";
-let ongoing = false;
 let title;
 let shine;
 let titleBox = new Object2D({
@@ -73,9 +73,31 @@ let startButton = new RoundedRectangle({
 		size: 6 / 10,
 		content: "simulan"
 	}),
-	oninteractup() {
-		end();
+	async oninteractup() {
+		await end();
+		startGame();
 	}
+});
+let bulb;
+let settings = new Object2D({
+	children: [
+		new Object2D({
+			x: 0,
+			y: 0,
+			width: 1 / 6,
+			height: 1,
+			child: bulb = new Image({
+				x: 1 / 6,
+				y: 1 / 6,
+				width: 4 / 6,
+				height: 4 / 6
+			}),
+			oninteractup() {
+				setTheme(theme === "dark" ? "light" : "dark");
+				updateColor();
+			}
+		})
+	]
 });
 let titleBoxPos = updateBoundWrapper({
 	x: 1 / 12,
@@ -83,9 +105,7 @@ let titleBoxPos = updateBoundWrapper({
 	width: 10 / 12,
 	height: 14 / 20
 });
-let intervalID = -1;
-export function start() {
-	if(ongoing) return;
+function updateColor() {
 	if(theme === "dark") {
 		buttonLine.setColor(colors.PH_YELLOW);
 		buttonFill.setColor(colors.BACKGROUND);
@@ -97,6 +117,11 @@ export function start() {
 		buttonColor.setColor(colors.BLACK);
 		title.source = images.TITLE_PNG;
 	}
+}
+let intervalID = -1;
+export function start() {
+	updateColor();
+	bulb.source = images.BULB_PNG;
 	titleBox.setBound({
 		x: 1 / 12,
 		y: -16 / 20,
@@ -127,7 +152,7 @@ export function start() {
 			y: 0,
 			width: 1,
 			height: 1,
-		}, 750, linear);
+		}, 700, linear);
 	}, 4000);
 	startButton.setBound({
 		x: 1 / 6,
@@ -142,10 +167,17 @@ export function start() {
 		width: 4 / 6,
 		height: 1 / 10,
 	}, 400, expoOut);
-	ongoing = true;
+	settings.setOpacity(0);
+	settings.animateOpacity(1, 400);
+	settings.setBound({
+		x: 0 / 6,
+		y: 0 / 10,
+		width: 6 / 6,
+		height: 1 / 10,
+	})
+	settings.addTo(safeArea);
 }
-export function end() {
-	if(! ongoing) return;
+export async function end() {
 	startButton.animateBound({
 		x: 1 / 6,
 		y: 10 / 10,
@@ -162,9 +194,9 @@ export function end() {
 	}, 200, sineIn).then(() => {
 		titleBox.remove();
 	});
-	clearInterval(intervalID);
-	timeout(200).then(() => {
-		startGame();
+	settings.animateOpacity(0, 200).then(() => {
+		settings.remove();
 	});
-	ongoing = false;
+	clearInterval(intervalID);
+	await timeout(200);
 }

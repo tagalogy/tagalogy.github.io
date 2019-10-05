@@ -180,14 +180,13 @@ var main = (function (exports) {
 		/*
 		Shortcut Opacity Animation Methods
 		*/
-		fadeIn(time, easing) {
+		async fadeIn(time, easing) {
 			this.visible = true;
-			return animateOpacity(1, time, easing);
+			await animateOpacity(1, time, easing);
 		}
-		fadeOut(time, easingback) {
-			return animateOpacity(0, time, easing).then(() => {
-				this.visible = false;
-			});
+		async fadeOut(time, easing) {
+			await animateOpacity(0, time, easing);
+			this.visible = false;
 		}
 		/*
 		forEachDescendant
@@ -226,11 +225,13 @@ var main = (function (exports) {
 		*/
 		addChild(child, updateDrawOrder = true) {
 			if(child instanceof Scene) throw new Error("Unable to add scene as a child");
+			child.invoke("beforeadd");
 			child.remove(false);
 			child.parent = this;
 			child.setscene(this.scene);
 			this.children.push(child);
 			if(updateDrawOrder) this.updateDrawOrder();
+			child.invoke("afteradd");
 		}
 		addChildren(children, updateDrawOrder = true) {
 			for(let child of children) this.addChild(child, false);
@@ -240,12 +241,13 @@ var main = (function (exports) {
 			parent.addChild(this, updateDrawOrder);
 		}
 		removeChild(child, setscene = true) {
-			if(child.parent == this) {
-				child.parent = null;
-				if(setscene) child.setscene(null);
-				let {children} = this;
-				children.splice(children.indexOf(child), 1);
-			}
+			if(child.parent !== this) return;
+			child.invoke("beforeremove");
+			child.parent = null;
+			if(setscene) child.setscene(null);
+			let {children} = this;
+			children.splice(children.indexOf(child), 1);
+			child.invoke("afterremove");
 		}
 		remove(setscene = true) {
 			let {
@@ -700,11 +702,18 @@ var main = (function (exports) {
 	let images = {};
 	let assets = loadImages([
 		"./asset/title.png",
+		"./asset/title_dark.png",
+		"./asset/bulb.png",
 	]);
 	assets.then(rawImages => {
 		images.TITLE_PNG = rawImages[0];
+		images.TITLE_DARK_PNG = rawImages[1];
+		images.BULB_PNG = rawImages[2];
 	});
 	let colors = {
+		BACKGROUND: new Color("#fff"),
+		FOREGROUND: new Color("#000"),
+
 		TRANSPARENT: new Color("#0000"),
 		WHITE: new Color("#fff"),
 		BLACK: new Color("#000"),
@@ -884,14 +893,13 @@ var main = (function (exports) {
 		let lines = [];
 		for(let paragraph of text.trim().split(NEWLINES)) {
 			let words = paragraph.trim().split(SPACES);
-			let currentLine = words[0];
-			for (let i = 1; i < words.length; i++) {
-				let word = words[i];
-				let currentWord = `${ currentLine } ${ word }`;
-				let width = context.measureText(currentWord).width;
+			let [currentLine, ...nextLine] = words;
+			for (let word of nextLine) {
+				let currentWord = `${currentLine} ${word}`;
+				let {width} = context.measureText(currentWord);
 				if (width < maxWidth) {
 					currentLine = currentWord;
-				} else {
+				}else{
 					lines.push(currentLine);
 					currentLine = word;
 				}
@@ -1140,8 +1148,8 @@ var main = (function (exports) {
 	}
 
 	let dialogBox, msgBox, cancelBox, okBox, cancelText, okText;
-	let cancelFill = new Color(colors.WHITE);
-	let cancelColor = new Color(colors.BLACK);
+	let cancelFill = new Color;
+	let cancelColor = new Color;
 	let okFill = new Color(colors.PH_BLUE);
 	let okColor = new Color(colors.WHITE);
 	let dialog = new Rectangle({
@@ -1155,7 +1163,7 @@ var main = (function (exports) {
 	        isOpacityRelative: false,
 	        opacity: 1,
 	        child: dialogBox = new RoundedRectangle({
-	            fill: colors.WHITE,
+	            fill: colors.BACKGROUND,
 	            radius: 1 / 16,
 	            children: [
 	                msgBox = new Text({
@@ -1168,7 +1176,7 @@ var main = (function (exports) {
 	                    baseline: "middle",
 	                    font: "ComicNueue Angular",
 	                    size: 1 / 9,
-	            		color: colors.BLACK
+	            		color: colors.FOREGROUND
 	                }),
 	                new Object2D({
 	                    x: 0 / 8,
@@ -1198,8 +1206,8 @@ var main = (function (exports) {
 	                                cancelColor.setColor(colors.WHITE);
 	                            },
 	                            oninteractup() {
-	                                cancelFill.setColor(colors.WHITE);
-	                                cancelColor.setColor(colors.BLACK);
+	                                cancelFill.setColor(colors.BACKGROUND);
+	                                cancelColor.setColor(colors.FOREGROUND);
 	                            }
 	                        }),
 	                        okBox = new RoundedRectangle({
@@ -1220,8 +1228,8 @@ var main = (function (exports) {
 	                                weight: "bold"
 	                            }),
 	                            oninteractdown() {
-	                                okFill.setColor(colors.WHITE);
-	                                okColor.setColor(colors.BLACK);
+	                                okFill.setColor(colors.BACKGROUND);
+	                                okColor.setColor(colors.FOREGROUND);
 	                            },
 	                            oninteractup() {
 	                                okFill.setColor(colors.PH_BLUE);
@@ -1235,6 +1243,8 @@ var main = (function (exports) {
 	    })
 	});
 	async function popup(msg, ok, cancel) {
+	    cancelFill.setColor(colors.BACKGROUND);
+	    cancelColor.setColor(colors.FOREGROUND);
 	    dialog.addTo(scene);
 	    dialog.setOpacity(0);
 	    dialog.animateOpacity(1 / 2, 400);
@@ -1278,7 +1288,7 @@ var main = (function (exports) {
 	    y: 0,
 	    width: 1,
 	    height: 1,
-	    fill: colors.WHITE,
+	    fill: colors.BACKGROUND,
 	    child: new SafeArea({
 	    	ratio: 3 / 5,
 	        child: new Text({
@@ -1290,7 +1300,7 @@ var main = (function (exports) {
 	            weight: "bold",
 	            size: 5 / 10,
 	            content: "nakahinto",
-	            color: colors.BLACK
+	            color: colors.FOREGROUND
 	        }),
 	    })
 	});
@@ -44945,7 +44955,7 @@ YUYURAKAN
 	}
 
 	let wordLen = WORD.length;
-	let outputColor = new Color(colors.BLACK);
+	let outputColor = new Color(colors.FOREGROUND);
 	let outputBox = new Text({
 	    font: "ComicNueue Angular",
 	    weight: "bold",
@@ -44953,12 +44963,12 @@ YUYURAKAN
 	    color: outputColor
 	});
 	let syllableBox;
-	let clearFill = new Color(colors.WHITE);
-	let clearLine = new Color(colors.PH_RED);
-	let clearColor = new Color(colors.PH_RED);
-	let hyphenFill = new Color(colors.PH_BLUE);
-	let hyphenLine = new Color(colors.TRANSPARENT);
-	let hyphenColor = new Color(colors.WHITE);
+	let clearFill = new Color;
+	let clearLine = new Color;
+	let clearColor = new Color;
+	let hyphenFill = new Color;
+	let hyphenLine = new Color;
+	let hyphenColor = new Color;
 	let clearPlace, hyphenPlace;
 	let inputBox = new Object2D({
 	    children: [
@@ -45043,7 +45053,8 @@ YUYURAKAN
 	let prevClearHandler;
 	let prevHyphenHandler;
 	async function start$1() {
-	    clearFill.setColor(colors.WHITE);
+	    outputColor.setColor(colors.FOREGROUND);
+	    clearFill.setColor(colors.BACKGROUND);
 	    clearLine.setColor(colors.PH_RED);
 	    clearColor.setColor(colors.PH_RED);
 	    hyphenFill.setColor(colors.PH_BLUE);
@@ -45088,7 +45099,7 @@ YUYURAKAN
 	        outputBox.content = "";
 	        currentPressed = 0;
 	        for(let button of syllableBox.children) button.unpress();
-	        clearFill.setColor(colors.WHITE);
+	        clearFill.setColor(colors.BACKGROUND);
 	        clearLine.setColor(colors.PH_RED);
 	        clearColor.setColor(colors.PH_RED);
 	        hyphenFill.setColor(colors.PH_BLUE);
@@ -45102,7 +45113,7 @@ YUYURAKAN
 	        clearFill.setColor(colors.PH_RED);
 	        clearLine.setColor(colors.TRANSPARENT);
 	        clearColor.setColor(colors.WHITE);
-	        hyphenFill.setColor(colors.WHITE);
+	        hyphenFill.setColor(colors.BACKGROUND);
 	        hyphenLine.setColor(colors.PH_BLUE);
 	        hyphenColor.setColor(colors.PH_BLUE);
 	    };
@@ -45147,7 +45158,7 @@ YUYURAKAN
 	            async oninteractup() {
 	                if(gameState.paused) return;
 	                lineColor.setColor(colors.PH_BLUE);
-	                fillColor.setColor(colors.WHITE);
+	                fillColor.setColor(colors.BACKGROUND);
 	                textColor.setColor(colors.PH_BLUE);
 	                clearFill.setColor(colors.PH_RED);
 	                clearLine.setColor(colors.TRANSPARENT);
@@ -45167,7 +45178,7 @@ YUYURAKAN
 	                outputColor.setColor("#f00");
 	                await outputColor.animateColor("#f000", 200);
 	                prevClearHandler();
-	                outputColor.setColor("#000");
+	                outputColor.setColor(colors.FOREGROUND);
 	            }
 	        });
 	        currentPlace.content = syllable;
@@ -45203,16 +45214,12 @@ YUYURAKAN
 	}
 	start$1.end = end;
 
-	let allGames = [
-	    start$1
-	];
-	let gameSize = allGames.length;
 	let gameState;
 	let time = 20;
 	let score;
 	let timer;
-	let timerColor = new Color(colors.BLACK);
-	let pauseColor = new Color(colors.WHITE);
+	let timerColor = new Color;
+	let pauseColor = new Color;
 	let hud = new Object2D({
 	    children: [
 	        new Horizontal({
@@ -45220,7 +45227,7 @@ YUYURAKAN
 	            y: 1,
 	            width: 1,
 	            height: 0,
-	            line: colors.BLACK,
+	            line: colors.FOREGROUND,
 	            dash: [4, 4],
 	            dashSpeed: 2 / 1000,
 	            updateThickness,
@@ -45242,7 +45249,7 @@ YUYURAKAN
 	                        width: 1 / 3,
 	                        height: 3 / 3,
 	                        fill: pauseColor,
-	                        line: colors.BLACK,
+	                        line: colors.FOREGROUND,
 	                        updateThickness
 	                    }),
 	                    new Rectangle({
@@ -45251,7 +45258,7 @@ YUYURAKAN
 	                        width: 1 / 3,
 	                        height: 3 / 3,
 	                        fill: pauseColor,
-	                        line: colors.BLACK,
+	                        line: colors.FOREGROUND,
 	                        updateThickness
 	                    })
 	                ]
@@ -45262,7 +45269,7 @@ YUYURAKAN
 	            },
 	            oninteractup() {
 	                if(gameState.paused) return;
-	                pauseColor.setColor(colors.WHITE);
+	                pauseColor.setColor(colors.BACKGROUND);
 	                pause();
 	            }
 	        }),
@@ -45312,6 +45319,8 @@ YUYURAKAN
 	});
 	let game = new Object2D;
 	function startGame() {
+	    timerColor.setColor(colors.FOREGROUND);
+	    pauseColor.setColor(colors.BACKGROUND);
 	    gameState = new GameState;
 	    hud.addTo(safeArea);
 	    hud.setBound({
@@ -45345,8 +45354,7 @@ YUYURAKAN
 	let prevHandler;
 	let currentGame;
 	async function newGame() {
-	    let func = allGames[Math.floor(Math.random() * gameSize)];
-	    let correct = await func();
+	    let correct = await start$1();
 	    let thisGame = currentGame;
 	    let currentTime = gameState.time;
 	    let previousTime;
@@ -45357,7 +45365,7 @@ YUYURAKAN
 	        timer.content = `:${ `00${ timeLeftString }`.substring(timeLeftString.length) }`;
 	        if(timeLeft !== previousTime && timeLeft <= 5) {
 	            timerColor.setColor("#f00");
-	            timerColor.animateColor(colors.BLACK, 1000);
+	            timerColor.animateColor(colors.FOREGROUND, 1000);
 	        }
 	        previousTime = timeLeft;
 	    };
@@ -45382,7 +45390,7 @@ YUYURAKAN
 	    game.updateBound = oldUpdateBound;
 	    await timeout(500);
 	    timer.content = ":(";
-	    func.end();
+	    end();
 	    let message = `
         Tamang Sagot: ${correct}
         Puntos: ${score.content}
@@ -45424,7 +45432,6 @@ YUYURAKAN
 	    start$2();
 	}
 
-	let ongoing = false;
 	let title;
 	let shine;
 	let titleBox = new Object2D({
@@ -45448,16 +45455,18 @@ YUYURAKAN
 			})
 		]
 	});
+	let buttonLine = new Color;
+	let buttonFill = new Color;
 	let buttonColor = new Color;
 	let startButton = new RoundedRectangle({
-		fill: buttonColor,
-		cap: "flat",
-		join: "miter",
-		line: colors.BLACK,
+		fill: buttonFill,
+		line: buttonLine,
 		dash: [4, 4],
 		dashSpeed: 4 / 1000,
 		updateThickness,
 		radius: 0.5,
+		cap: "flat",
+		join: "miter",
 		child: new Text({
 			x: 0,
 			y: 0,
@@ -45465,17 +45474,35 @@ YUYURAKAN
 			height: 1,
 			weight: "bold",
 			font: "ComicNueue Angular",
-			color: colors.BLACK,
+			color: buttonColor,
 			size: 6 / 10,
 			content: "simulan"
 		}),
-		oninteractdown() {
-			buttonColor.setColor(colors.WHITE);
-		},
-		oninteractup() {
-			buttonColor.setColor(colors.PH_YELLOW);
-			end$1();
+		async oninteractup() {
+			await end$1();
+			startGame();
 		}
+	});
+	let bulb;
+	let settings = new Object2D({
+		children: [
+			new Object2D({
+				x: 0,
+				y: 0,
+				width: 1 / 6,
+				height: 1,
+				child: bulb = new Image$1({
+					x: 1 / 6,
+					y: 1 / 6,
+					width: 4 / 6,
+					height: 4 / 6
+				}),
+				oninteractup() {
+					setTheme(exports.theme === "dark" ? "light" : "dark");
+					updateColor();
+				}
+			})
+		]
 	});
 	let titleBoxPos = updateBoundWrapper({
 		x: 1 / 12,
@@ -45483,10 +45510,23 @@ YUYURAKAN
 		width: 10 / 12,
 		height: 14 / 20
 	});
+	function updateColor() {
+		if(exports.theme === "dark") {
+			buttonLine.setColor(colors.PH_YELLOW);
+			buttonFill.setColor(colors.BACKGROUND);
+			buttonColor.setColor(colors.PH_YELLOW);
+			title.source = images.TITLE_DARK_PNG;
+		}else{
+			buttonLine.setColor(colors.FOREGROUND);
+			buttonFill.setColor(colors.PH_YELLOW);
+			buttonColor.setColor(colors.BLACK);
+			title.source = images.TITLE_PNG;
+		}
+	}
 	let intervalID = -1;
 	function start$2() {
-		if(ongoing) return;
-		title.source = images.TITLE_PNG;
+		updateColor();
+		bulb.source = images.BULB_PNG;
 		titleBox.setBound({
 			x: 1 / 12,
 			y: -16 / 20,
@@ -45517,9 +45557,8 @@ YUYURAKAN
 				y: 0,
 				width: 1,
 				height: 1,
-			}, 750, linear);
+			}, 700, linear);
 		}, 4000);
-		buttonColor.setColor(colors.PH_YELLOW);
 		startButton.setBound({
 			x: 1 / 6,
 			y: 10 / 10,
@@ -45533,10 +45572,17 @@ YUYURAKAN
 			width: 4 / 6,
 			height: 1 / 10,
 		}, 400, expoOut);
-		ongoing = true;
+		settings.setOpacity(0);
+		settings.animateOpacity(1, 400);
+		settings.setBound({
+			x: 0 / 6,
+			y: 0 / 10,
+			width: 6 / 6,
+			height: 1 / 10,
+		});
+		settings.addTo(safeArea);
 	}
-	function end$1() {
-		if(! ongoing) return;
+	async function end$1() {
 		startButton.animateBound({
 			x: 1 / 6,
 			y: 10 / 10,
@@ -45553,17 +45599,17 @@ YUYURAKAN
 		}, 200, sineIn).then(() => {
 			titleBox.remove();
 		});
-		clearInterval(intervalID);
-		timeout(200).then(() => {
-			startGame();
+		settings.animateOpacity(0, 200).then(() => {
+			settings.remove();
 		});
-		ongoing = false;
+		clearInterval(intervalID);
+		await timeout(200);
 	}
 
 	let loading = new Horizontal({
 		cap: "flat",
 		join: "miter",
-		line: colors.BLACK,
+		line: colors.FOREGROUND,
 		dash: [4, 4],
 		dashSpeed: 1 / 100,
 		updateThickness,
@@ -45602,7 +45648,7 @@ YUYURAKAN
 			width: 1,
 			height: 1,
 			z: 2,
-			fill: colors.WHITE,
+			fill: colors.BACKGROUND,
 			operation: "destination-over"
 		})
 	});
@@ -45612,13 +45658,28 @@ YUYURAKAN
 	});
 	function updateThickness() {
 		this.thickness = safeArea.width / 100;
-	}load(assets).then(() => {
+	}function setTheme(currentTheme) {
+		if(currentTheme == "dark") {
+			document.body.style.backgroundColor = "black";
+			exports.theme = "dark";
+			colors.BACKGROUND.setColor(colors.BLACK);
+			colors.FOREGROUND.setColor(colors.WHITE);
+		}else{
+			document.body.style.backgroundColor = "white";
+			exports.theme = "light";
+			colors.BACKGROUND.setColor(colors.WHITE);
+			colors.FOREGROUND.setColor(colors.BLACK);
+		}
+	}
+	setTheme("light");
+	load(assets).then(() => {
 		start$2();
 	});
 
 	exports.canvas = canvas;
 	exports.safeArea = safeArea;
 	exports.scene = scene;
+	exports.setTheme = setTheme;
 	exports.updateThickness = updateThickness;
 
 	return exports;

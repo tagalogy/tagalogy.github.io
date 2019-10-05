@@ -6,10 +6,12 @@ export let images = {};
 export let assets = loadImages([
 	"./asset/title.png",
 	"./asset/title_dark.png",
+	"./asset/bulb.png",
 ]);
 assets.then(rawImages => {
 	images.TITLE_PNG = rawImages[0];
 	images.TITLE_DARK_PNG = rawImages[1];
+	images.BULB_PNG = rawImages[2];
 });
 export let colors = {
 	BACKGROUND: new Color("#fff"),
