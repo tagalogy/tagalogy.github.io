@@ -105,14 +105,13 @@ export function getLines(context, text, maxWidth) {
 	let lines = [];
 	for(let paragraph of text.trim().split(NEWLINES)) {
 		let words = paragraph.trim().split(SPACES);
-		let currentLine = words[0];
-		for (let i = 1; i < words.length; i++) {
-			let word = words[i];
-			let currentWord = `${ currentLine } ${ word }`;
-			let width = context.measureText(currentWord).width;
+		let [currentLine, ...nextLine] = words;
+		for (let word of nextLine) {
+			let currentWord = `${currentLine} ${word}`;
+			let {width} = context.measureText(currentWord);
 			if (width < maxWidth) {
 				currentLine = currentWord;
-			} else {
+			}else{
 				lines.push(currentLine);
 				currentLine = word;
 			}
