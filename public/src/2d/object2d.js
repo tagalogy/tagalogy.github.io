@@ -116,14 +116,13 @@ export default class Object2D extends EventTarget{
 	/*
 	Shortcut Opacity Animation Methods
 	*/
-	fadeIn(time, easing) {
+	async fadeIn(time, easing) {
 		this.visible = true;
-		return animateOpacity(1, time, easing);
+		await animateOpacity(1, time, easing);
 	}
-	fadeOut(time, easingback) {
-		return animateOpacity(0, time, easing).then(() => {
-			this.visible = false;
-		});
+	async fadeOut(time, easing) {
+		await animateOpacity(0, time, easing);
+		this.visible = false;
 	}
 	/*
 	forEachDescendant
@@ -162,11 +161,13 @@ export default class Object2D extends EventTarget{
 	*/
 	addChild(child, updateDrawOrder = true) {
 		if(child instanceof Scene) throw new Error("Unable to add scene as a child");
+		child.invoke("beforeadd");
 		child.remove(false);
 		child.parent = this;
 		child.setscene(this.scene);
 		this.children.push(child);
 		if(updateDrawOrder) this.updateDrawOrder();
+		child.invoke("afteradd");
 	}
 	addChildren(children, updateDrawOrder = true) {
 		for(let child of children) this.addChild(child, false);
@@ -176,12 +177,13 @@ export default class Object2D extends EventTarget{
 		parent.addChild(this, updateDrawOrder);
 	}
 	removeChild(child, setscene = true) {
-		if(child.parent == this) {
-			child.parent = null;
-			if(setscene) child.setscene(null);
-			let {children} = this;
-			children.splice(children.indexOf(child), 1);
-		}
+		if(child.parent !== this) return;
+		child.invoke("beforeremove");
+		child.parent = null;
+		if(setscene) child.setscene(null);
+		let {children} = this;
+		children.splice(children.indexOf(child), 1);
+		child.invoke("afterremove");
 	}
 	remove(setscene = true) {
 		let {
