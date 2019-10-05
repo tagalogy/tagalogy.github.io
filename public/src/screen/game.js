@@ -28,12 +28,9 @@ import {
     start as pauseStart
 } from "./pause.js";
 import {
-    start as startTwist
+    start as startTwist,
+    end as endTwist
 } from "./game/twist.js";
-let allGames = [
-    startTwist
-];
-let gameSize = allGames.length;
 export let gameState;
 let time = 20;
 let score;
@@ -174,8 +171,7 @@ export function startGame() {
 let prevHandler;
 let currentGame;
 export async function newGame() {
-    let func = allGames[Math.floor(Math.random() * gameSize)];
-    let correct = await func();
+    let correct = await startTwist();
     let thisGame = currentGame;
     let currentTime = gameState.time;
     let previousTime;
@@ -211,7 +207,7 @@ export async function newGame() {
     game.updateBound = oldUpdateBound;
     await timeout(500);
     timer.content = ":(";
-    func.end();
+    endTwist();
     let message = `
         Tamang Sagot: ${correct}
         Puntos: ${score.content}
