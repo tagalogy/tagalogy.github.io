@@ -1,55 +1,239 @@
-let blanko = /\s+/;
-let mga_unahang_katinig = `
-    b  c  d  f  g  h  j  k  l  m  n  p  ñ  ng  q  r  s  t  v  w  x  y  z
-       ch                                            sh
-    bl cl dl fl gl       kl          pl                 tl vl
-    br cr dr fr gr       kr          pr                 tr vr
-                                                        ts
-`.toUpperCase().trim().split(blanko);
-mga_unahang_katinig.push("");
-let pang_unahan_at_hulihan = /^[BCDFGHJKLMNÑPQRSTVWXYZ]*|[BCDFGHJKLMNÑPQRSTVWXYZ]*$/g;
-let pangkatinig_lahat = /^[BCDFGHJKLMNÑPQRSTVWXYZ]*$/;
-let panggrupo = /[BCDFGHJKLMNÑPQRSTVWXYZ]+|[AEIOU]/g;
-let pangpatinig = /[AEIOU]/;
-let panggrupong_may_gitling = /[^\-]+|\-+/g;
-function parseSingleWord(salita) {
-    salita = salita.toUpperCase();
-    if(pangkatinig_lahat.test(salita)) return [
-        salita
-    ];
-    let [
-        unahang_katinig,
-        hulihang_katinig
-    ] = salita.match(pang_unahan_at_hulihan);
-    let kasalukuyang_katinig = unahang_katinig;
-    let mga_pantig = [];
-    for(let grupo of salita.replace(pang_unahan_at_hulihan, "").match(panggrupo)) {
-        if(pangpatinig.test(grupo)) {
-            mga_pantig.push(kasalukuyang_katinig + grupo);
-            kasalukuyang_katinig = "";
-        }else{
-            for(let pang_ilan = 0, sukat = grupo.length; pang_ilan <= sukat; pang_ilan ++) {
-                let kasalukuyang_hulihang_katinig = grupo.substring(0, pang_ilan);
-                let kasalukuyang_unahang_katinig = grupo.substring(pang_ilan);
-                if(mga_unahang_katinig.indexOf(kasalukuyang_unahang_katinig) >= 0) {
-                    mga_pantig[mga_pantig.length - 1] += kasalukuyang_hulihang_katinig;
-                    kasalukuyang_katinig = kasalukuyang_unahang_katinig;
-                    break;
-                }
-            }
-        }
-    }
-    mga_pantig[mga_pantig.length - 1] += hulihang_katinig;
-    return mga_pantig;
+const SPACE = /\s+/;
+const NEWLINE = /\r\n|\r|\n/;
+function toSet(string) {
+    return new Set(string.trim().split(SPACE));
 }
-export default function parseWord(salita) {
-    let re = [];
-    for(let grupo of salita.match(panggrupong_may_gitling)) {
-        if(grupo == "-") {
-            re.push("-");
-        }else{
-            for(let pantig of parseSingleWord(grupo)) re.push(pantig);
+function toMap(string) {
+    return new Map(string.trim().split(NEWLINE).map(line => {
+        let value = line.trim().split("/").map(string => string.trim());
+        return [value.join(""), value];
+    }));
+}
+const FIRST_CONSONANT = toSet(`
+    B BL BR BW BY
+    K KL KR KW KY
+    D DR DY
+    G GL GR GW
+    H
+    L
+    M MY
+    N NY
+    Ŋ
+    P PL PR PY
+    R
+    S SH SW
+    T TR TS TY
+    W
+    Y
+`);
+FIRST_CONSONANT.add("");
+const LAST_CONSONANT = toSet(`
+    B
+    K KS
+    D DS
+    G
+    L LD LM LP LS LT
+    M MP MS
+    N ND NK NKS NS NT
+    Ŋ ŊS
+    P PS
+    R RB RD RK RM RN RP RS RT
+    S SH SK SM ST
+    T TS
+    W WG WN
+    Y YK YL YM YN YR YS YT
+`);
+LAST_CONSONANT.add("");
+const SPECIAL = toMap(`
+    B/L
+    /BR
+    B/W
+    B/Y
+    /DR
+    D/S
+    D/SH
+    D/SW
+    D/Y
+    G/L
+    G/R
+    G/W
+    K/L
+    /KR
+    K/S
+    K/SH
+    K/SW
+    K/W
+    K/Y
+    L/D
+    L/DR
+    L/DY
+    L/M
+    L/MY
+    L/P
+    L/PL
+    L/PR
+    L/PY
+    L/S
+    L/SH
+    L/SW
+    L/T
+    L/TR
+    LT/S
+    LT/Y
+    M/P
+    M/PL
+    M/PR
+    M/PY
+    M/S
+    M/SH
+    M/SW
+    M/Y
+    N/D
+    N/DR
+    N/DY
+    N/K
+    N/KL
+    N/KR
+    NK/S
+    NK/SH
+    NK/SW
+    N/KW
+    N/KY
+    N/S
+    N/SH
+    N/SW
+    N/T
+    N/TR
+    N/TS
+    N/TY
+    N/Y
+    P/L
+    /PR
+    P/S
+    P/SH
+    P/SW
+    P/Y
+    R/B
+    R/BL
+    R/BR
+    R/BW
+    R/BY
+    R/D
+    R/DR
+    R/DY
+    R/K
+    R/KL
+    R/KR
+    R/KW
+    R/KY
+    R/M
+    RM/Y
+    R/N
+    RN/Y
+    R/P
+    R/PL
+    R/PR
+    R/PY
+    R/S
+    R/SH
+    R/SW
+    R/T
+    R/TR
+    RT/S
+    RT/Y
+    /SH
+    S/K
+    S/KL
+    S/KR
+    S/KW
+    S/KY
+    S/M
+    S/MY
+    S/T
+    S/TR
+    ST/S
+    ST/Y
+    S/W
+    /TR
+    /TS
+    T/SH
+    T/SW
+    T/Y
+    W/G
+    W/GL
+    W/GR
+    W/GW
+    W/N
+    W/NY
+    Y/K
+    Y/KL
+    Y/KR
+    Y/KW
+    Y/KY
+    Y/L
+    Y/M
+    Y/MY
+    Y/N
+    Y/NY
+    Y/R
+    Y/S
+    Y/SH
+    Y/SW
+    Y/T
+    Y/TR
+    Y/TS
+    Y/TY
+    Ŋ/S
+    Ŋ/SH
+    Ŋ/SW
+`);
+function splitConsonant(consonant) {
+    if(consonant.length <= 0) return ["", ""];
+    if(consonant.length <= 1) return ["", consonant];
+    if(SPECIAL.has(consonant)) return SPECIAL.get(consonant);
+    for(let i = 0, len = consonant.length; i <= len; i ++) {
+        let lastRaw = consonant.slice(0, i);
+        let firstRaw = consonant.slice(i);
+        if(FIRST_CONSONANT.has(firstRaw) && LAST_CONSONANT.has(lastRaw)) {
+            let result = [lastRaw, firstRaw];
+            SPECIAL.set(consonant, result);
+            return result;
         }
     }
-    return re;
+    return null;
+}
+const HYPHEN = /(\-)/;
+const VOWEL = /([AEIOU])/;
+const NG = /NG/g;
+const ENG = /Ŋ/g;
+export function parsePartialWord(word) {
+    word = word.toUpperCase().replace(NG, "Ŋ");
+    let tokens = word.split(VOWEL);
+    let sliced = [tokens[0]];
+    for(let token of tokens.slice(1, -1)) {
+        if(VOWEL.test(token)) {
+            sliced.push(token);
+            continue;
+        }
+        let [lastRaw, firstRaw] = splitConsonant(token);
+        sliced.push(lastRaw);
+        sliced.push(firstRaw);
+    }
+    sliced.push(tokens[tokens.length - 1]);
+    let syllables = [];
+    for(let ind = 0, len = sliced.length; ind < len; ind += 3) {
+        syllables.push(sliced.slice(ind, ind + 3).join("").replace(ENG, "NG"));
+    }
+    return syllables;
+}
+export default function parseWord(word) {
+    let result = [];
+    for(let partialWord of word.split(HYPHEN)) {
+        if(partialWord === "-") {
+            result.push("-");
+            continue;
+        }
+        for(let syllable of parsePartialWord(partialWord)) result.push(syllable);
+    }
+    return result;
 }
