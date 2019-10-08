@@ -11,6 +11,10 @@ let path = `
     /asset/comicnueue_angular/regular.otf
     /asset/font.css
     /asset/title.png
+    /asset/word_3.txt
+    /asset/word_4.txt
+    /asset/word_5.txt
+    /asset/word_6.txt
     /icon/16.png
     /icon/32.png
     /icon/64.png
