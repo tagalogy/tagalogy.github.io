@@ -1,4 +1,4 @@
-let cacheName = "tagalogy-cache-02";
+let cacheName = "tagalogy-cache-03";
 let path = `
     /
     /index.html
@@ -10,7 +10,9 @@ let path = `
     /asset/comicnueue_angular/light.otf
     /asset/comicnueue_angular/regular.otf
     /asset/font.css
+    /asset/bulb.png
     /asset/title.png
+    /asset/title_dark.png
     /asset/word_3.txt
     /asset/word_4.txt
     /asset/word_5.txt
