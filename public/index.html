@@ -47,10 +47,21 @@ function loadScript(src, type = "text/javascript") {
 		head.appendChild(script);
 	});
 }
-//Load the bundled code first, if it failed, load the main source code instead
-loadScript("src_min/main.js").catch(() => {
-	loadScript("src/main.js", "module");
-});
-//Register the service worker
-if("serviceWorker" in navigator) navigator.serviceWorker.register("/worker/worker.js");
+async function startScript() {
+	try{
+		await loadScript("src_min/main.js");
+	}catch(error) {
+		await loadScript("src/main.js", "module");
+	}
+}
+let scope = "/";
+async function start() {
+	if(! ("serviceWorker" in navigator)) {
+		await navigator.serviceWorker.register("/worker/worker.js", {scope});
+		startScript();
+	}else{
+		startScript();
+	}
+}
+start();
 </script>
