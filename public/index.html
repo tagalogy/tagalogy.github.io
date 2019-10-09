@@ -57,7 +57,7 @@ async function startScript() {
 let scope = "/";
 async function start() {
 	if(! ("serviceWorker" in navigator)) {
-		await navigator.serviceWorker.register("/worker/worker.js", {scope});
+		await navigator.serviceWorker.register("/worker.js", {scope});
 		startScript();
 	}else{
 		startScript();
