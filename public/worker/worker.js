@@ -30,9 +30,18 @@ self.addEventListener("install", event => {
         return cache.addAll(path);
     }));
 });
+self.addEventListener('activate', event => {
+    event.waitUntil(caches.keys().then((keyList) => {
+        return Promise.all(keyList.map((key) => {
+            if (cacheName.indexOf(key) === -1) {
+                return caches.delete(key);
+            }
+        }));
+    }));
+});
 self.addEventListener("fetch", event => {
     event.respondWith(caches.match(event.request).then(cache => {
-        if(cache) return cache;
+        if (cache) return cache;
         return fetch(event.request).then(response => {
             return caches.open(cacheName).then(cache => {
                 cache.put(event.request, request.clone());
