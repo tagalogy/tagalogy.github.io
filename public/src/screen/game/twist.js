@@ -13,16 +13,12 @@ import {
 import {
     updateThickness
 } from "../../main.js";
-import {
-    WORD
-} from "../../tagalog/word.js";
 import parseWord from "../../tagalog/parser.js";
 import {
     nextGame,
     gameState,
     game
 } from "../game.js";
-let wordLen = WORD.length;
 let outputColor = new Color(colors.FOREGROUND);
 let outputBox = new Text({
     font: "ComicNueue Angular",
@@ -120,7 +116,7 @@ let inputBox = new Object2D({
 });
 let prevClearHandler;
 let prevHyphenHandler;
-export async function start() {
+export async function start(wordBank) {
     outputColor.setColor(colors.FOREGROUND);
     clearFill.setColor(colors.BACKGROUND);
     clearLine.setColor(colors.PH_RED);
@@ -157,7 +153,7 @@ export async function start() {
         width: 8 / 10,
         height: 3 / 4
     }, 400, expoOut);
-    let correct = WORD[Math.floor(Math.random() * wordLen)];
+    let correct = wordBank[Math.floor(Math.random() * wordBank.length)];
     let word = parseWord(correct).filter(syllable => syllable !== "-");
     word.sort(() => Math.random() - Math.random());
     let currentPressed = 0;
@@ -186,20 +182,38 @@ export async function start() {
         hyphenColor.setColor(colors.PH_BLUE);
     }
     hyphenPlace.on("interactup", prevHyphenHandler);
+    let {length} = word;
     word.forEach((syllable, ind) => {
         syllable = syllable.toLowerCase();
         let lineColor = new Color(colors.TRANSPARENT);
         let fillColor = new Color(colors.PH_BLUE);
         let textColor = new Color(colors.WHITE);
+        let width = 1;
+        let x = 0;
+        if(length >= 6 && ind > 3) {
+            width = 2 / 3;
+            if(ind > 4) x = 2 / 3;
+        }
+        let innerWidth;
+        let innerX;
+        if(length >= 6 && ind > 4) {
+            innerWidth = 14 / 16;
+            innerX = 1 / 16;
+        }else{
+            innerWidth = 46 / 48;
+            innerX = 1 / 48;
+        }
+        let y = (4 - ind)/ 5;
+        if(ind > 4) y = 0;
         let currentPlace = new Object2D({
-            x: 0,
-            y: (4 - ind)/ 5,
-            width: 1,
+            x,
+            y,
+            width,
             height: 1 / 5,
             child: new RoundedRectangle({
-                x: 1 / 48,
+                x: innerX,
                 y: 1 / 8,
-                width: 46 / 48,
+                width: innerWidth,
                 height: 6 / 8,
                 dash: [2, 2],
                 dashSpeed: 4 / 1000,
@@ -239,7 +253,7 @@ export async function start() {
                 outputBox.content += this.content;
                 currentPressed ++;
                 if(currentPressed < currentLen) return;
-                if(WORD.indexOf(outputBox.content.toUpperCase()) >= 0) {
+                if(wordBank.indexOf(outputBox.content.toUpperCase()) >= 0) {
                     nextGame(end());
                     return;
                 }

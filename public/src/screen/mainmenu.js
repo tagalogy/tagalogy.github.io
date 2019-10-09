@@ -22,8 +22,8 @@ import {
 	sineIn
 } from "../2d/easing.js";
 import {
-	startGame
-} from "./game.js";
+	start as startGame
+} from "./difficulty.js";
 import timeout, {
 	now
 } from "../timeout.js";

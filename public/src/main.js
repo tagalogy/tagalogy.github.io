@@ -5,6 +5,7 @@ import {
 	colors,
 	assets
 } from "./asset.js";
+import storage from "./storage.js";
 import {
 	start
 } from "./screen/mainmenu.js";
@@ -32,6 +33,7 @@ export function updateThickness() {
 };
 export let theme;
 export function setTheme(currentTheme) {
+	storage.setItem("theme", currentTheme);
 	if(currentTheme == "dark") {
 		document.body.style.backgroundColor = "black";
 		theme = "dark";
@@ -44,7 +46,14 @@ export function setTheme(currentTheme) {
 		colors.FOREGROUND.setColor(colors.BLACK);
 	}
 }
-setTheme("light");
+storage.setAllDefault({
+	theme: "light",
+	highscore_easy: 0,
+	highscore_medium: 0,
+	highscore_hard: 0,
+	highscore_veryHard: 0
+});
+setTheme(storage.getItem("theme"));
 load(assets).then(() => {
 	start();
 });

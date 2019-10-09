@@ -31,6 +31,7 @@ import {
     start as startTwist,
     end as endTwist
 } from "./game/twist.js";
+import storage from "../storage.js";
 export let gameState;
 let time = 20;
 let score;
@@ -134,8 +135,12 @@ let hud = new Object2D({
         })
     ]
 });
+let currentDifficulty;
+let wordBank;
 export let game = new Object2D;
-export function startGame() {
+export function startGame(name, bank) {
+    currentDifficulty = name;
+    wordBank = bank;
     timerColor.setColor(colors.FOREGROUND);
     pauseColor.setColor(colors.BACKGROUND);
     gameState = new GameState;
@@ -171,7 +176,7 @@ export function startGame() {
 let prevHandler;
 let currentGame;
 export async function newGame() {
-    let correct = await startTwist();
+    let correct = await startTwist(wordBank);
     let thisGame = currentGame;
     let currentTime = gameState.time;
     let previousTime;
@@ -206,6 +211,9 @@ export async function newGame() {
     await timeout(500);
     game.updateBound = oldUpdateBound;
     await timeout(500);
+    let high = storage.getItem(currentDifficulty);
+    let currentScore = + score.content;
+    if(high < currentScore) storage.setItem(currentDifficulty, currentScore);
     timer.content = ":(";
     endTwist();
     let message = `
