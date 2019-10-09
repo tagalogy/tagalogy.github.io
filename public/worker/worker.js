@@ -1,4 +1,4 @@
-let cacheName = "tagalogy-cache-03";
+let cacheName = "tagalogy-cache-04";
 let path = `
     /
     /index.html
@@ -30,9 +30,9 @@ self.addEventListener("install", event => {
         return cache.addAll(path);
     }));
 });
-self.addEventListener('activate', event => {
-    event.waitUntil(caches.keys().then((keyList) => {
-        return Promise.all(keyList.map((key) => {
+self.addEventListener("activate", event => {
+    event.waitUntil(caches.keys().then(keyList => {
+        return Promise.all(keyList.map(key => {
             if (cacheName.indexOf(key) === -1) {
                 return caches.delete(key);
             }
