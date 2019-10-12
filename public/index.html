@@ -54,14 +54,10 @@ async function startScript() {
 		await loadScript("src/main.js", "module");
 	}
 }
-let scope = "/";
+let scope = "./";
 async function start() {
-	if(! ("serviceWorker" in navigator)) {
-		await navigator.serviceWorker.register("/worker.js", {scope});
-		startScript();
-	}else{
-		startScript();
-	}
+	if(! ("serviceWorker" in navigator)) await navigator.serviceWorker.register("/worker.js", {scope});
+	await startScript();
 }
 start();
 </script>
