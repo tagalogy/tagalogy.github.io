@@ -1,5 +1,6 @@
-let cacheName = "tagalogy-cache-04";
+let cacheName = "tagalogy-cache-05";
 let path = `
+
     /
     /index.html
     /src_min/main.js
@@ -29,6 +30,7 @@ let path = `
     /icon/256.png
     /icon/1024.png
     /icon/2048.png
+
 `.trim().split(/\s+/);
 async function addAllCache() {
     let cache = await caches.open(cacheName);
