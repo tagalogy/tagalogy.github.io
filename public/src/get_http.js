@@ -16,5 +16,5 @@ export function get(url) {
     });
 }
 export function getAll(urls) {
-	return Promise.all(urls.map(url => get(url)));
+    return Promise.all(urls.map(url => get(url)));
 }

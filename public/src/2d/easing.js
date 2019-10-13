@@ -2,11 +2,11 @@ let sin = Math.sin;
 let sqrt = Math.sqrt;
 const PI = Math.PI;
 export function wrapper(func) {
-	return num => {
-		if(num <= 0) return 0;
-		if(num >= 1) return 1;
-		return func(num);
-	};
+    return num => {
+        if(num <= 0) return 0;
+        if(num >= 1) return 1;
+        return func(num);
+    };
 }
 export let linear = wrapper(x => x);
 export let sine = wrapper(x => (sin((x - 1 / 2) * PI) + 1) / 2);
@@ -19,8 +19,8 @@ export let circ = wrapper(x => x < 1 / 2 ? (sqrt(1 - x ** 2) + 1) / 2 : (sqrt(1 
 export let circIn = wrapper(x => sqrt(1 - x ** 2) + 1);
 export let circOut = wrapper(x => sqrt(1 - (x - 1) ** 2));
 export function alphaToRange(alpha, min, max) {
-	return alpha * (max - min) + min;
+    return alpha * (max - min) + min;
 }
 export function now() {
-	return + new Date;
+    return + new Date;
 }

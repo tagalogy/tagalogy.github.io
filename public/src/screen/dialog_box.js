@@ -44,7 +44,7 @@ let dialog = new Rectangle({
                     baseline: "middle",
                     font: "ComicNueue Angular",
                     size: 1 / 9,
-            		color: colors.FOREGROUND
+                    color: colors.FOREGROUND
                 }),
                 new Object2D({
                     x: 0 / 8,

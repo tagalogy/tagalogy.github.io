@@ -14,7 +14,7 @@ let pauseBox = new Rectangle({
     height: 1,
     fill: colors.BACKGROUND,
     child: new SafeArea({
-    	ratio: 3 / 5,
+        ratio: 3 / 5,
         child: new Text({
             x: 0 / 6,
             y: 4 / 10,

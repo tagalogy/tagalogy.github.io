@@ -1,31 +1,31 @@
 @font-face {
-	font-family: "ComicNueue Angular";
-	src: url(comicnueue_angular/regular.otf);
+    font-family: "ComicNueue Angular";
+    src: url(comicnueue_angular/regular.otf);
 }
 @font-face {
-	font-family: "ComicNueue Angular";
-	src: url(comicnueue_angular/bold.otf);
-	font-weight: 700;
+    font-family: "ComicNueue Angular";
+    src: url(comicnueue_angular/bold.otf);
+    font-weight: 700;
 }
 @font-face {
-	font-family: "ComicNueue Angular";
-	src: url(comicnueue_angular/italic.otf);
-	font-style: oblique;
+    font-family: "ComicNueue Angular";
+    src: url(comicnueue_angular/italic.otf);
+    font-style: oblique;
 }
 @font-face {
-	font-family: "ComicNueue Angular";
-	src: url(comicnueue_angular/bold_italic.otf);
-	font-weight: 700;
-	font-style: oblique;
+    font-family: "ComicNueue Angular";
+    src: url(comicnueue_angular/bold_italic.otf);
+    font-weight: 700;
+    font-style: oblique;
 }
 @font-face {
-	font-family: "ComicNueue Angular";
-	src: url(comicnueue_angular/light.otf);
-	font-weight: 300;
+    font-family: "ComicNueue Angular";
+    src: url(comicnueue_angular/light.otf);
+    font-weight: 300;
 }
 @font-face {
-	font-family: "ComicNueue Angular";
-	src: url(comicnueue_angular/light_italic.otf);
-	font-weight: 300;
-	font-style: oblique;
+    font-family: "ComicNueue Angular";
+    src: url(comicnueue_angular/light_italic.otf);
+    font-weight: 300;
+    font-style: oblique;
 }

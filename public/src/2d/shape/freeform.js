@@ -1,16 +1,16 @@
 import Base from "./base.js";
 export default class FreeForm extends Base {
-	constructor(option = {}) {
-		super(option);
+    constructor(option = {}) {
+        super(option);
         let {
             path = []
         } = option;
         this.path = path;
-		this.coordsAnimID = -1;
-	}
-	draw(context, drawChildren = true) {
-		if(! this.visible) return;
-		super.draw(context, false);
+        this.coordsAnimID = -1;
+    }
+    draw(context, drawChildren = true) {
+        if(! this.visible) return;
+        super.draw(context, false);
         this.updateBound();
         let {
             x,
@@ -19,7 +19,7 @@ export default class FreeForm extends Base {
             height,
             path
         } = this;
-		context.beginPath();
+        context.beginPath();
         let [
             first
         ] = path;
@@ -29,7 +29,7 @@ export default class FreeForm extends Base {
         }
         context.closePath();
         context.fill();
-		context.stroke();
-		if(drawChildren) this.drawChildren(context);
-	}
+        context.stroke();
+        if(drawChildren) this.drawChildren(context);
+    }
 }
