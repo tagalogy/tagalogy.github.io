@@ -46,10 +46,13 @@ export default class GameState extends EventTarget{
             let id = -1;
             let timeStart = this.time;
             let timeLeft = time;
+            let detach = () => {
+                this.off("play", onplay);
+                this.off("pause", onpause);
+            };
             let onplay = () => {
                 id = setTimeout(() => {
-                    this.off("play", onplay);
-                    this.off("pause", onpause);
+                    detach();
                     resolve();
                 }, timeLeft);
             };
@@ -62,6 +65,7 @@ export default class GameState extends EventTarget{
             this.on("play", onplay);
             this.on("pause", onpause);
             this.once("stop", () => {
+                detach();
                 reject();
             });
         });
