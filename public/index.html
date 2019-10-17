@@ -55,7 +55,7 @@ async function startScript() {
     }
 }
 async function start() {
-    if("serviceWorker" in navigator) await navigator.serviceWorker.register("worker.js");
+    if("serviceWorker" in navigator) await navigator.serviceWorker.register("service_worker.js");
     await startScript();
 }
 start();
