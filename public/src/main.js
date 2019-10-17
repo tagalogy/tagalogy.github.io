@@ -37,7 +37,7 @@ export function setTheme(currentTheme) {
     if(currentTheme == "dark") {
         document.body.style.backgroundColor = "black";
         theme = "dark";
-        colors.BACKGROUND.setColor(colors.BLACK);
+        colors.BACKGROUND.setColor("#111");
         colors.FOREGROUND.setColor(colors.WHITE);
         colors.ACCENT.setColor(colors.SKY_BLUE);
     }else{
