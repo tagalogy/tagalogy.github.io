@@ -39,11 +39,13 @@ export function setTheme(currentTheme) {
         theme = "dark";
         colors.BACKGROUND.setColor(colors.BLACK);
         colors.FOREGROUND.setColor(colors.WHITE);
+        colors.ACCENT.setColor(colors.SKY_BLUE);
     }else{
         document.body.style.backgroundColor = "white";
         theme = "light";
         colors.BACKGROUND.setColor(colors.WHITE);
         colors.FOREGROUND.setColor(colors.BLACK);
+        colors.ACCENT.setColor(colors.PH_BLUE);
     }
 }
 storage.setAllDefault({

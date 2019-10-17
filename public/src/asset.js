@@ -39,6 +39,7 @@ export let assets = loadAll();
 export let colors = {
     BACKGROUND: new Color("#fff"),
     FOREGROUND: new Color("#000"),
+    ACCENT: new Color("#0038a8"),
 
     TRANSPARENT: new Color("#0000"),
     WHITE: new Color("#fff"),

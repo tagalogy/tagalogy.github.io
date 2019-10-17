@@ -37,7 +37,7 @@ let raw = [
 ];
 let box = new Object2D;
 let highscore = Object.create(null);
-let fill = colors.PH_BLUE;
+let fill = colors.ACCENT;
 raw.forEach(({name, description, difficultyKey, highscoreKey}, ind) => {
     let highscoreText;
     box.addChild(new Object2D({

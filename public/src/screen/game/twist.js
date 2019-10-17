@@ -121,7 +121,7 @@ export async function start(wordBank) {
     clearFill.setColor(colors.BACKGROUND);
     clearLine.setColor(colors.PH_RED);
     clearColor.setColor(colors.PH_RED);
-    hyphenFill.setColor(colors.PH_BLUE);
+    hyphenFill.setColor(colors.ACCENT);
     hyphenLine.setColor(colors.TRANSPARENT);
     hyphenColor.setColor(colors.WHITE);
     if(prevClearHandler) clearPlace.off("interactup", prevClearHandler);
@@ -166,7 +166,7 @@ export async function start(wordBank) {
         clearFill.setColor(colors.BACKGROUND);
         clearLine.setColor(colors.PH_RED);
         clearColor.setColor(colors.PH_RED);
-        hyphenFill.setColor(colors.PH_BLUE);
+        hyphenFill.setColor(colors.ACCENT);
         hyphenLine.setColor(colors.TRANSPARENT);
         hyphenColor.setColor(colors.WHITE);
     };
@@ -178,15 +178,15 @@ export async function start(wordBank) {
         clearLine.setColor(colors.TRANSPARENT);
         clearColor.setColor(colors.WHITE);
         hyphenFill.setColor(colors.BACKGROUND);
-        hyphenLine.setColor(colors.PH_BLUE);
-        hyphenColor.setColor(colors.PH_BLUE);
+        hyphenLine.setColor(colors.ACCENT);
+        hyphenColor.setColor(colors.ACCENT);
     }
     hyphenPlace.on("interactup", prevHyphenHandler);
     let {length} = word;
     word.forEach((syllable, ind) => {
         syllable = syllable.toLowerCase();
         let lineColor = new Color(colors.TRANSPARENT);
-        let fillColor = new Color(colors.PH_BLUE);
+        let fillColor = new Color(colors.ACCENT);
         let textColor = new Color(colors.WHITE);
         let width = 1;
         let x = 0;
@@ -239,13 +239,13 @@ export async function start(wordBank) {
             },
             async oninteractup() {
                 if(gameState.paused) return;
-                lineColor.setColor(colors.PH_BLUE);
+                lineColor.setColor(colors.ACCENT);
                 fillColor.setColor(colors.BACKGROUND);
-                textColor.setColor(colors.PH_BLUE);
+                textColor.setColor(colors.ACCENT);
                 clearFill.setColor(colors.PH_RED);
                 clearLine.setColor(colors.TRANSPARENT);
                 clearColor.setColor(colors.WHITE);
-                hyphenFill.setColor(colors.PH_BLUE);
+                hyphenFill.setColor(colors.ACCENT);
                 hyphenLine.setColor(colors.TRANSPARENT);
                 hyphenColor.setColor(colors.WHITE);
                 if(this.pressed) return;
@@ -268,7 +268,7 @@ export async function start(wordBank) {
             if(! currentPlace.pressed) return;
             currentPlace.pressed = false;
             lineColor.setColor(colors.TRANSPARENT);
-            fillColor.setColor(colors.PH_BLUE);
+            fillColor.setColor(colors.ACCENT);
             textColor.setColor(colors.WHITE);
         };
         currentPlace.addTo(syllableBox);

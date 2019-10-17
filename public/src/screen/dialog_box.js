@@ -18,7 +18,7 @@ import timeout from "../timeout.js";
 let dialogBox, msgBox, cancelBox, okBox, cancelText, okText;
 let cancelFill = new Color;
 let cancelColor = new Color;
-let okFill = new Color(colors.PH_BLUE);
+let okFill = new Color;
 let okColor = new Color(colors.WHITE);
 let dialog = new Rectangle({
     x: 0,
@@ -100,7 +100,7 @@ let dialog = new Rectangle({
                                 okColor.setColor(colors.FOREGROUND);
                             },
                             oninteractup() {
-                                okFill.setColor(colors.PH_BLUE);
+                                okFill.setColor(colors.ACCENT);
                                 okColor.setColor(colors.WHITE);
                             }
                         })
@@ -111,6 +111,7 @@ let dialog = new Rectangle({
     })
 });
 export default async function popup(msg, ok, cancel) {
+    okFill.setColor(colors.ACCENT);
     cancelFill.setColor(colors.BACKGROUND);
     cancelColor.setColor(colors.FOREGROUND);
     dialog.addTo(scene);
