@@ -2530,7 +2530,7 @@ var main = (function (exports) {
         if(currentTheme == "dark") {
             document.body.style.backgroundColor = "black";
             exports.theme = "dark";
-            colors.BACKGROUND.setColor("#111");
+            colors.BACKGROUND.setColor("#222");
             colors.FOREGROUND.setColor(colors.WHITE);
             colors.ACCENT.setColor(colors.SKY_BLUE);
         }else{
