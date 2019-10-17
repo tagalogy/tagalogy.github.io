@@ -9,7 +9,7 @@ let path = `
     /asset/font.css
     /asset/comicnueue_angular/bold_italic.otf
     /asset/comicnueue_angular/bold.otf
-    /asset/comicnueue_angular/italic.otf0
+    /asset/comicnueue_angular/italic.otf
     /asset/comicnueue_angular/light_italic.otf
     /asset/comicnueue_angular/light.otf
     /asset/comicnueue_angular/regular.otf
@@ -39,16 +39,17 @@ async function preCache() {
 async function deleteUnneededCache() {
     for(let key of await caches.keys()) if(cacheName !== key) await caches.delete(key);
 }
-async function fromCacheAndUpdate(request) {
-    let cached = await caches.match(request);
+async function fetchOrCache(request) {
+    let cache = await caches.open(cacheName);
     let response;
     try{
         response = await fetch(request);
     }catch(error) {
+        let cached = await cache.match(request);
         if(cached) return cached;
         throw error;
     }
-    await allCache.put(request, response);
+    await cache.put(request, response);
     return response;
 }
 self.addEventListener("install", event => {
@@ -58,5 +59,5 @@ self.addEventListener("activate", event => {
     event.waitUntil(deleteUnneededCache());
 });
 self.addEventListener("fetch", event => {
-    event.respondWith(fromCacheAndUpdate(event.request));
+    event.respondWith(fetchOrCache(event.request));
 });
