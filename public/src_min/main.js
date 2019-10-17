@@ -754,6 +754,7 @@ var main = (function (exports) {
     let colors = {
         BACKGROUND: new Color("#fff"),
         FOREGROUND: new Color("#000"),
+        ACCENT: new Color("#0038a8"),
 
         TRANSPARENT: new Color("#0000"),
         WHITE: new Color("#fff"),
@@ -1277,7 +1278,7 @@ var main = (function (exports) {
     let dialogBox, msgBox, cancelBox, okBox, cancelText, okText;
     let cancelFill = new Color;
     let cancelColor = new Color;
-    let okFill = new Color(colors.PH_BLUE);
+    let okFill = new Color;
     let okColor = new Color(colors.WHITE);
     let dialog = new Rectangle({
         x: 0,
@@ -1359,7 +1360,7 @@ var main = (function (exports) {
                                     okColor.setColor(colors.FOREGROUND);
                                 },
                                 oninteractup() {
-                                    okFill.setColor(colors.PH_BLUE);
+                                    okFill.setColor(colors.ACCENT);
                                     okColor.setColor(colors.WHITE);
                                 }
                             })
@@ -1370,6 +1371,7 @@ var main = (function (exports) {
         })
     });
     async function popup(msg, ok, cancel) {
+        okFill.setColor(colors.ACCENT);
         cancelFill.setColor(colors.BACKGROUND);
         cancelColor.setColor(colors.FOREGROUND);
         dialog.addTo(scene);
@@ -1782,7 +1784,7 @@ var main = (function (exports) {
         clearFill.setColor(colors.BACKGROUND);
         clearLine.setColor(colors.PH_RED);
         clearColor.setColor(colors.PH_RED);
-        hyphenFill.setColor(colors.PH_BLUE);
+        hyphenFill.setColor(colors.ACCENT);
         hyphenLine.setColor(colors.TRANSPARENT);
         hyphenColor.setColor(colors.WHITE);
         if(prevClearHandler) clearPlace.off("interactup", prevClearHandler);
@@ -1827,7 +1829,7 @@ var main = (function (exports) {
             clearFill.setColor(colors.BACKGROUND);
             clearLine.setColor(colors.PH_RED);
             clearColor.setColor(colors.PH_RED);
-            hyphenFill.setColor(colors.PH_BLUE);
+            hyphenFill.setColor(colors.ACCENT);
             hyphenLine.setColor(colors.TRANSPARENT);
             hyphenColor.setColor(colors.WHITE);
         };
@@ -1839,15 +1841,15 @@ var main = (function (exports) {
             clearLine.setColor(colors.TRANSPARENT);
             clearColor.setColor(colors.WHITE);
             hyphenFill.setColor(colors.BACKGROUND);
-            hyphenLine.setColor(colors.PH_BLUE);
-            hyphenColor.setColor(colors.PH_BLUE);
+            hyphenLine.setColor(colors.ACCENT);
+            hyphenColor.setColor(colors.ACCENT);
         };
         hyphenPlace.on("interactup", prevHyphenHandler);
         let {length} = word;
         word.forEach((syllable, ind) => {
             syllable = syllable.toLowerCase();
             let lineColor = new Color(colors.TRANSPARENT);
-            let fillColor = new Color(colors.PH_BLUE);
+            let fillColor = new Color(colors.ACCENT);
             let textColor = new Color(colors.WHITE);
             let width = 1;
             let x = 0;
@@ -1900,13 +1902,13 @@ var main = (function (exports) {
                 },
                 async oninteractup() {
                     if(gameState.paused) return;
-                    lineColor.setColor(colors.PH_BLUE);
+                    lineColor.setColor(colors.ACCENT);
                     fillColor.setColor(colors.BACKGROUND);
-                    textColor.setColor(colors.PH_BLUE);
+                    textColor.setColor(colors.ACCENT);
                     clearFill.setColor(colors.PH_RED);
                     clearLine.setColor(colors.TRANSPARENT);
                     clearColor.setColor(colors.WHITE);
-                    hyphenFill.setColor(colors.PH_BLUE);
+                    hyphenFill.setColor(colors.ACCENT);
                     hyphenLine.setColor(colors.TRANSPARENT);
                     hyphenColor.setColor(colors.WHITE);
                     if(this.pressed) return;
@@ -1929,7 +1931,7 @@ var main = (function (exports) {
                 if(! currentPlace.pressed) return;
                 currentPlace.pressed = false;
                 lineColor.setColor(colors.TRANSPARENT);
-                fillColor.setColor(colors.PH_BLUE);
+                fillColor.setColor(colors.ACCENT);
                 textColor.setColor(colors.WHITE);
             };
             currentPlace.addTo(syllableBox);
@@ -2210,7 +2212,7 @@ var main = (function (exports) {
     ];
     let box = new Object2D;
     let highscore = Object.create(null);
-    let fill = colors.PH_BLUE;
+    let fill = colors.ACCENT;
     raw.forEach(({name, description, difficultyKey, highscoreKey}, ind) => {
         let highscoreText;
         box.addChild(new Object2D({
@@ -2530,11 +2532,13 @@ var main = (function (exports) {
             exports.theme = "dark";
             colors.BACKGROUND.setColor(colors.BLACK);
             colors.FOREGROUND.setColor(colors.WHITE);
+            colors.ACCENT.setColor(colors.SKY_BLUE);
         }else{
             document.body.style.backgroundColor = "white";
             exports.theme = "light";
             colors.BACKGROUND.setColor(colors.WHITE);
             colors.FOREGROUND.setColor(colors.BLACK);
+            colors.ACCENT.setColor(colors.PH_BLUE);
         }
     }
     storage$1.setAllDefault({
