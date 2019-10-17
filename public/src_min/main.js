@@ -792,7 +792,7 @@ var main = (function (exports) {
     var storage$1 = storage = {
         weakHasItem(name) {
             if(! supported) return false;
-            return storage.weakHasItem(name) !== null;
+            return storage.weakGetItem(name) !== null;
         },
         weakGetItem(name) {
             if(! supported) return null;
@@ -1248,10 +1248,13 @@ var main = (function (exports) {
                 let id = -1;
                 let timeStart = this.time;
                 let timeLeft = time;
+                let detach = () => {
+                    this.off("play", onplay);
+                    this.off("pause", onpause);
+                };
                 let onplay = () => {
                     id = setTimeout(() => {
-                        this.off("play", onplay);
-                        this.off("pause", onpause);
+                        detach();
                         resolve();
                     }, timeLeft);
                 };
@@ -1264,6 +1267,7 @@ var main = (function (exports) {
                 this.on("play", onplay);
                 this.on("pause", onpause);
                 this.once("stop", () => {
+                    detach();
                     reject();
                 });
             });
