@@ -1,4 +1,4 @@
-let cacheName = "tagalogy-cache-05";
+let cacheName = "tagalogy-cache";
 let path = `
 
     /
@@ -32,27 +32,36 @@ let path = `
     /icon/2048.png
 
 `.trim().split(/\s+/);
-async function addAllCache() {
-    let cache = await caches.open(cacheName);
-    await cache.addAll(path);
+async function preCache() {
+    let allCache = await caches.open(cacheName);
+    await allCache.addAll(path);
 }
-async function deleteOldCache() {
+async function deleteUnneededCache() {
     for(let key of await caches.keys()) if(cacheName !== key) await caches.delete(key);
 }
-async function fetchAndCache(request) {
+async function fromCache(request) {
     let cached = await caches.match(request);
     if(cached) return cached;
-    let response = await fetch(request);
-    let cache = await caches.open(cacheName);
-    cache.put(request, response);
-    return response;
+    throw "no match";
+}
+async function update(request) {
+    let allCache = await caches.open(cacheName);
+    let response;
+    try{
+        response = await fetch(request);
+    }catch(error) {
+        return;
+    }
+    await allCache.put(request, response);
 }
 self.addEventListener("install", event => {
-    event.waitUntil(addAllCache());
+    event.waitUntil(preCache());
 });
 self.addEventListener("activate", event => {
-    event.waitUntil(deleteOldCache());
+    event.waitUntil(deleteUnneededCache());
 });
 self.addEventListener("fetch", event => {
-    event.respondWith(fetchAndCache(event.request));
+    let {request} = event;
+    event.respondWith(fromCache(request));
+    event.waitUntil(update(request));
 });
