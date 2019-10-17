@@ -54,9 +54,8 @@ async function startScript() {
         await loadScript("src/main.js", "module");
     }
 }
-let scope = "./";
 async function start() {
-    if(! ("serviceWorker" in navigator)) await navigator.serviceWorker.register("/worker.js", {scope});
+    if("serviceWorker" in navigator) await navigator.serviceWorker.register("worker.js");
     await startScript();
 }
 start();

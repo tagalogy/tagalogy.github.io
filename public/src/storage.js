@@ -26,7 +26,7 @@ let storage;
 export default storage = {
     weakHasItem(name) {
         if(! supported) return false;
-        return storage.weakHasItem(name) !== null;
+        return storage.weakGetItem(name) !== null;
     },
     weakGetItem(name) {
         if(! supported) return null;
