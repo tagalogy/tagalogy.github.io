@@ -14,7 +14,7 @@ This project is tested on NodeJS v10.16.3+ and NPM v6.9.0+, install it at [nodej
 npm install
 npm start
 ```
-You should be able to play Tagalogy on port 5000.
+You should be able to play Tagalogy on port 4000.
 
 When you made changes to client-side javascript from `/src/` you should update the `/src_min/main.js` before testing. You can use rollup, the config file is already in this project. Run the following command, this assumes you have globally installed rollup.
 ```
