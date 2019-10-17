@@ -9,7 +9,7 @@ let path = `
     /asset/font.css
     /asset/comicnueue_angular/bold_italic.otf
     /asset/comicnueue_angular/bold.otf
-    /asset/comicnueue_angular/italic.otf
+    /asset/comicnueue_angular/italic.otf0
     /asset/comicnueue_angular/light_italic.otf
     /asset/comicnueue_angular/light.otf
     /asset/comicnueue_angular/regular.otf
@@ -33,26 +33,23 @@ let path = `
 
 `.trim().split(/\s+/);
 async function preCache() {
-    let allCache = await caches.open(cacheName);
-    await allCache.addAll(path);
+    let cache = await caches.open(cacheName);
+    await cache.addAll(path);
 }
 async function deleteUnneededCache() {
     for(let key of await caches.keys()) if(cacheName !== key) await caches.delete(key);
 }
-async function fromCache(request) {
+async function fromCacheAndUpdate(request) {
     let cached = await caches.match(request);
-    if(cached) return cached;
-    throw "no match";
-}
-async function update(request) {
-    let allCache = await caches.open(cacheName);
     let response;
     try{
         response = await fetch(request);
     }catch(error) {
-        return;
+        if(cached) return cached;
+        throw error;
     }
     await allCache.put(request, response);
+    return response;
 }
 self.addEventListener("install", event => {
     event.waitUntil(preCache());
@@ -61,7 +58,5 @@ self.addEventListener("activate", event => {
     event.waitUntil(deleteUnneededCache());
 });
 self.addEventListener("fetch", event => {
-    let {request} = event;
-    event.respondWith(fromCache(request));
-    event.waitUntil(update(request));
+    event.respondWith(fromCacheAndUpdate(event.request));
 });
