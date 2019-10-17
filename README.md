@@ -20,7 +20,6 @@ When you made changes to client-side javascript from `/src/` you should update t
 ```
 rollup --config
 ```
-You can delete `/src_min/`, the client will work fine and load `/src/main.js`. However, files in `/src/` aren't cached in service worker.
 
 ## Made for Thesis
 This project is made for Thesis _Tagalogy: Pampagkatutong Aplikasyon_ documented by Bagongon, Emmanuel, and Zorilla. Download and read it [here](about:blank).
