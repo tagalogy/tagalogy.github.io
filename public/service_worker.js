@@ -38,18 +38,22 @@ async function preCache() {
 async function deleteUnneededCache() {
     for(let key of await caches.keys()) if(cacheName !== key) await caches.delete(key);
 }
-async function fetchOrCache(request) {
+async function fromCache(request) {
+    let cached = await caches.match(request);
+    if(cached) return cached;
+    return await fetch(request);
+}
+async function update(request) {
     let cache = await caches.open(cacheName);
+    let cached = await cache.match(request);
+    if(! cached) return;
     let response;
     try{
-        response = await fetch(request);
+        response = await fetch(request)
     }catch(error) {
-        let cached = await cache.match(request);
-        if(cached) return cached;
-        throw error;
+        return;
     }
-    await cache.put(request, response);
-    return response;
+    cache.put(request, response);
 }
 self.addEventListener("install", event => {
     event.waitUntil(preCache());
@@ -58,5 +62,7 @@ self.addEventListener("activate", event => {
     event.waitUntil(deleteUnneededCache());
 });
 self.addEventListener("fetch", event => {
-    event.respondWith(fetchOrCache(event.request));
+    let {request} = event;
+    event.respondWith(fromCache(event.request));
+    event.waitUntil(update(request));
 });
