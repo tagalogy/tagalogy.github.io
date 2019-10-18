@@ -4,7 +4,6 @@ let path = `
     /
     /index.html
     /src_min/main.js
-    /manifest.webmanifest
 
     /asset/font.css
     /asset/comicnueue_angular/bold_italic.otf
