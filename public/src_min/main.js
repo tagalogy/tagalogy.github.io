@@ -805,7 +805,9 @@ var main = (function (exports) {
         },
         weakSetItem(name, value) {
             if(! supported) return;
-            localStorage.setItem(name, JSON.stringify(value));
+            try {
+                localStorage.setItem(name, JSON.stringify(value));
+            }catch(error) {}
         },
         weakRemoveItem(name) {
             if(! supported) return;
