@@ -1,12 +1,12 @@
-export default class EventTarget{
+export default class EventTarget {
     constructor(option = {}) {
         this.listeners = new Map();
-        for(let name in option) if(name.substring(0, 2) == "on") this.on(name.substring(2), option[name]);
+        for (let name in option) if (name.substring(0, 2) == "on") this.on(name.substring(2), option[name]);
     }
     getHandler(name) {
         let listeners = this.listeners;
         let handlers = listeners.get(name);
-        if(! handlers) listeners.set(name, handlers = []);
+        if (!handlers) listeners.set(name, handlers = []);
         return handlers;
     }
     on(name, handler) {
@@ -17,7 +17,7 @@ export default class EventTarget{
         return new Promise((resolve, reject) => {
             let sub = () => {
                 this.off(name, sub);
-                if(handler) handler();
+                if (handler) handler();
                 resolve();
             };
             this.on(name, sub);
@@ -26,11 +26,11 @@ export default class EventTarget{
     off(name, handler) {
         let handlers = this.getHandler(name);
         let index = handlers.indexOf(handler);
-        if(index >= 0) handlers.splice(index, 1);
+        if (index >= 0) handlers.splice(index, 1);
     }
     invoke(name) {
         let handlers = this.getHandler(name);
-        for(let handler of handlers) handler.call(this);
+        for (let handler of handlers) handler.call(this);
     }
 }
 //TODO: bubbling and propagation cancellation

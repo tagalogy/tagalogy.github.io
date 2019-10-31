@@ -30,10 +30,10 @@ async function loadAll() {
         /asset/word_5.txt
         /asset/word_6.txt
     `.trim().split(SPACES))).map(text => text.split(SPACES));
-    difficulties.EASY = [... words.WORD_3].sort();
-    difficulties.MEDIUM = [... words.WORD_3, ... words.WORD_4].sort();
-    difficulties.HARD = [... words.WORD_4, ... words.WORD_5].sort();
-    difficulties.VERY_HARD = [... words.WORD_5, ... words.WORD_6].sort();
+    difficulties.EASY = [...words.WORD_3].sort();
+    difficulties.MEDIUM = [...words.WORD_3, ...words.WORD_4].sort();
+    difficulties.HARD = [...words.WORD_4, ...words.WORD_5].sort();
+    difficulties.VERY_HARD = [...words.WORD_5, ...words.WORD_6].sort();
 }
 export let assets = loadAll();
 export let colors = {

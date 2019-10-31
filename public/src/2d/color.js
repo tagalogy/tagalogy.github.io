@@ -4,7 +4,7 @@ import {
     now
 } from "./easing.js";
 import timeout from "../timeout.js";
-export default class Color{
+export default class Color {
     constructor(option = {}) {
         this.colorAnimID = -1;
         this.setColor(option);
@@ -32,7 +32,7 @@ export default class Color{
         clearTimeout(this.colorAnimID);
         let oldUpdateColor = this.updateColor;
         let startTime = now();
-        this.updateColor = function() {
+        this.updateColor = function () {
             let alpha = easing((now() - startTime) / time);
             oldUpdateColor.call(this);
             let {
@@ -60,13 +60,13 @@ export default class Color{
     }
 }
 export function updateColorWrapper(option) {
-    if(typeof option == "string") {
+    if (typeof option == "string") {
         option = option.trim();
-        if(option[0] == "#") {
+        if (option[0] == "#") {
             let rawString = option.substr(1);
             let raw = parseInt(rawString, 16);
             let red, green, blue, alpha
-            switch(rawString.length) {
+            switch (rawString.length) {
                 case 3:
                     red = ((raw >> 2 * 4) & 0xf) * 0x11;
                     green = ((raw >> 1 * 4) & 0xf) * 0x11;
@@ -92,7 +92,7 @@ export function updateColorWrapper(option) {
                     alpha = ((raw >> 0 * 4) & 0xff) / 0xff;
                     break;
             }
-            return function() {
+            return function () {
                 this.red = red;
                 this.green = green;
                 this.blue = blue;
@@ -103,14 +103,14 @@ export function updateColorWrapper(option) {
     let {
         updateColor
     } = option;
-    if(updateColor) return updateColor;
+    if (updateColor) return updateColor;
     let {
         red = 255,
         green = 255,
         blue = 255,
         alpha = 1
     } = option;
-    return function() {
+    return function () {
         this.red = red;
         this.green = green;
         this.blue = blue;

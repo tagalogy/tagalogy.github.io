@@ -39,9 +39,9 @@ let titleBox = new Object2D({
         }),
         shine = new FreeForm({
             path: [
-                [0    , 1],
+                [0, 1],
                 [3 / 4, 0],
-                [1    , 0],
+                [1, 0],
                 [1 / 4, 1]
             ],
             opacity: 1 / 4,
@@ -106,12 +106,12 @@ let titleBoxPos = updateBoundWrapper({
     height: 14 / 20
 });
 function updateColor() {
-    if(theme === "dark") {
+    if (theme === "dark") {
         buttonLine.setColor(colors.PH_YELLOW);
         buttonFill.setColor(colors.BACKGROUND);
         buttonColor.setColor(colors.PH_YELLOW);
         title.source = images.TITLE_DARK_PNG;
-    }else{
+    } else {
         buttonLine.setColor(colors.FOREGROUND);
         buttonFill.setColor(colors.PH_YELLOW);
         buttonColor.setColor(colors.BLACK);
@@ -130,7 +130,7 @@ export function start() {
     });
     titleBox.addTo(safeArea);
     let startTime = now();
-    titleBox.animateUpdateBound(function() {
+    titleBox.animateUpdateBound(function () {
         titleBoxPos.call(this);
         this.y += Math.sin((now() - startTime) / 2000 * Math.PI) * this.height / 64;
     }, 400, expoOut);

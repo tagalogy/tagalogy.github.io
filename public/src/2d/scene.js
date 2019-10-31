@@ -12,8 +12,8 @@ export default class Scene extends Object2D {
         } = option;
         this.scale = scale;
         this.canvas = canvas;
-        if(option.autoresize) {
-            this.updateBound = function() {
+        if (option.autoresize) {
+            this.updateBound = function () {
                 this.x = 0;
                 this.y = 0;
                 this.width = canvas.clientWidth * scale;
@@ -37,10 +37,10 @@ export default class Scene extends Object2D {
                     pageY: y
                 } = event;
                 this.forEachDescendant(descendant => {
-                    if(descendant.hitTest(x * scale, y * scale)) {
+                    if (descendant.hitTest(x * scale, y * scale)) {
                         descendant.invoke(eventName);
-                        if(eventName == "mousedown") descendant.invoke("interactdown");
-                        if(eventName == "mouseup") descendant.invoke("interactup");
+                        if (eventName == "mousedown") descendant.invoke("interactdown");
+                        if (eventName == "mouseup") descendant.invoke("interactup");
                     }
                 });
             });
@@ -53,16 +53,16 @@ export default class Scene extends Object2D {
                 event.preventDefault();
                 let touches = Array.from(event.changedTouches);
                 this.forEachDescendant(descendant => {
-                    if(touches.some(touch => descendant.hitTest(touch.pageX * scale, touch.pageY * scale))) {
-                        if(eventName == "touchstart") descendant.invoke("interactdown");
-                        if(eventName == "touchend") descendant.invoke("interactup");
+                    if (touches.some(touch => descendant.hitTest(touch.pageX * scale, touch.pageY * scale))) {
+                        if (eventName == "touchstart") descendant.invoke("interactdown");
+                        if (eventName == "touchend") descendant.invoke("interactup");
                     }
                 });
             });
         });
     }
     draw(context, drawChildren = true) {
-        if(! this.visible) return;
+        if (!this.visible) return;
         super.draw(context, false);
         this.updateBound();
         let {
@@ -73,6 +73,6 @@ export default class Scene extends Object2D {
         canvas.width = width;
         canvas.height = height;
         context.clearRect(0, 0, width, height);
-        if(drawChildren) this.drawChildren(context);
+        if (drawChildren) this.drawChildren(context);
     }
 }

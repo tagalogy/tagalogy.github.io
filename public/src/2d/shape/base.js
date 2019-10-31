@@ -38,7 +38,7 @@ export default class Base extends Object2D {
     set dash(dash) {
         this._dash = dash;
         let sum = 0;
-        for(let num of dash) sum += num;
+        for (let num of dash) sum += num;
         this.dashSum = sum;
     }
     /*
@@ -62,7 +62,7 @@ export default class Base extends Object2D {
     draw Method
     */
     draw(context, drawChildren = true) {
-        if(! this.visible) return;
+        if (!this.visible) return;
         super.draw(context, false);
         this.updateThickness();
         let {
@@ -80,19 +80,19 @@ export default class Base extends Object2D {
         context.lineWidth = thickness;
         context.setLineDash(dash.map(num => num * thickness));
         context.lineDashOffset = this.getDashOffset() * thickness;
-        if(drawChildren) this.drawChildren(context);
+        if (drawChildren) this.drawChildren(context);
     }
 }
 export function updateThicknessWrapper(option) {
-    if(typeof option == "number") {
-        return function() {
+    if (typeof option == "number") {
+        return function () {
             return option;
         };
     }
-    let {updateThickness} = option;
-    if(updateThickness) return updateThickness;
-    let {thickness = 2} = option;
-    return function() {
+    let { updateThickness } = option;
+    if (updateThickness) return updateThickness;
+    let { thickness = 2 } = option;
+    return function () {
         this.thickness = thickness;
     }
 }

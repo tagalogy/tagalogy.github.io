@@ -124,8 +124,8 @@ export async function start(wordBank) {
     hyphenFill.setColor(colors.ACCENT);
     hyphenLine.setColor(colors.TRANSPARENT);
     hyphenColor.setColor(colors.WHITE);
-    if(prevClearHandler) clearPlace.off("interactup", prevClearHandler);
-    if(prevHyphenHandler) hyphenPlace.off("interactup", prevHyphenHandler);
+    if (prevClearHandler) clearPlace.off("interactup", prevClearHandler);
+    if (prevHyphenHandler) hyphenPlace.off("interactup", prevHyphenHandler);
     outputBox.content = "";
     outputBox.addTo(game);
     outputBox.setBound({
@@ -159,10 +159,10 @@ export async function start(wordBank) {
     let currentPressed = 0;
     let currentLen = word.length;
     prevClearHandler = () => {
-        if(gameState.paused) return;
+        if (gameState.paused) return;
         outputBox.content = "";
         currentPressed = 0;
-        for(let button of syllableBox.children) button.unpress();
+        for (let button of syllableBox.children) button.unpress();
         clearFill.setColor(colors.BACKGROUND);
         clearLine.setColor(colors.PH_RED);
         clearColor.setColor(colors.PH_RED);
@@ -172,8 +172,8 @@ export async function start(wordBank) {
     };
     clearPlace.on("interactup", prevClearHandler);
     prevHyphenHandler = () => {
-        if(gameState.paused) return;
-        if(! outputBox.content.endsWith("-")) outputBox.content += "-";
+        if (gameState.paused) return;
+        if (!outputBox.content.endsWith("-")) outputBox.content += "-";
         clearFill.setColor(colors.PH_RED);
         clearLine.setColor(colors.TRANSPARENT);
         clearColor.setColor(colors.WHITE);
@@ -182,7 +182,7 @@ export async function start(wordBank) {
         hyphenColor.setColor(colors.ACCENT);
     }
     hyphenPlace.on("interactup", prevHyphenHandler);
-    let {length} = word;
+    let { length } = word;
     word.forEach((syllable, ind) => {
         syllable = syllable.toLowerCase();
         let lineColor = new Color(colors.TRANSPARENT);
@@ -190,21 +190,21 @@ export async function start(wordBank) {
         let textColor = new Color(colors.WHITE);
         let width = 1;
         let x = 0;
-        if(length >= 6 && ind > 3) {
+        if (length >= 6 && ind > 3) {
             width = 2 / 3;
-            if(ind > 4) x = 2 / 3;
+            if (ind > 4) x = 2 / 3;
         }
         let innerWidth;
         let innerX;
-        if(length >= 6 && ind > 4) {
+        if (length >= 6 && ind > 4) {
             innerWidth = 14 / 16;
             innerX = 1 / 16;
-        }else{
+        } else {
             innerWidth = 46 / 48;
             innerX = 1 / 48;
         }
-        let y = (4 - ind)/ 5;
-        if(ind > 4) y = 0;
+        let y = (4 - ind) / 5;
+        if (ind > 4) y = 0;
         let currentPlace = new Object2D({
             x,
             y,
@@ -234,11 +234,11 @@ export async function start(wordBank) {
                 })
             }),
             oninteractdown() {
-                if(gameState.paused) return;
+                if (gameState.paused) return;
                 textColor.setColor(colors.BLACK);
             },
             async oninteractup() {
-                if(gameState.paused) return;
+                if (gameState.paused) return;
                 lineColor.setColor(colors.ACCENT);
                 fillColor.setColor(colors.BACKGROUND);
                 textColor.setColor(colors.ACCENT);
@@ -248,12 +248,12 @@ export async function start(wordBank) {
                 hyphenFill.setColor(colors.ACCENT);
                 hyphenLine.setColor(colors.TRANSPARENT);
                 hyphenColor.setColor(colors.WHITE);
-                if(this.pressed) return;
+                if (this.pressed) return;
                 this.pressed = true;
                 outputBox.content += this.content;
-                currentPressed ++;
-                if(currentPressed < currentLen) return;
-                if(wordBank.indexOf(outputBox.content.toUpperCase()) >= 0) {
+                currentPressed++;
+                if (currentPressed < currentLen) return;
+                if (wordBank.indexOf(outputBox.content.toUpperCase()) >= 0) {
                     nextGame(end());
                     return;
                 }
@@ -265,7 +265,7 @@ export async function start(wordBank) {
         });
         currentPlace.content = syllable;
         currentPlace.unpress = () => {
-            if(! currentPlace.pressed) return;
+            if (!currentPlace.pressed) return;
             currentPlace.pressed = false;
             lineColor.setColor(colors.TRANSPARENT);
             fillColor.setColor(colors.ACCENT);

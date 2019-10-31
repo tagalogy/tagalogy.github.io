@@ -21,7 +21,7 @@ export default class Line extends Base {
         clearTimeout(this.coordsAnimID);
         let oldUpdateCoords = this.updateCoords;
         let startTime = now();
-        this.updateCoords = function() {
+        this.updateCoords = function () {
             let alpha = easing((now() - startTime) / time);
             oldUpdateCoords.call(this);
             let {
@@ -50,7 +50,7 @@ export default class Line extends Base {
         return new timeout(time);
     }
     draw(context, drawChildren = true) {
-        if(! this.visible) return;
+        if (!this.visible) return;
         super.draw(context, false);
         this.updateCoords();
         let {
@@ -63,19 +63,19 @@ export default class Line extends Base {
         context.moveTo(x0, y0);
         context.lineTo(x1, y1);
         context.stroke();
-        if(drawChildren) this.drawChildren(context);
+        if (drawChildren) this.drawChildren(context);
     }
 }
 export function updateCoordsWrapper(option) {
-    let {updateCoords} = option;
-    if(updateCoords) return updateCoords;
+    let { updateCoords } = option;
+    if (updateCoords) return updateCoords;
     let {
         x0 = 0,
         y0 = 0,
         x1 = 0,
         y1 = 0
     } = option;
-    return function() {
+    return function () {
         this.updateBound();
         let {
             x,

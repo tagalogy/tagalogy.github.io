@@ -188,13 +188,13 @@ const SPECIAL = toMap(`
     Ŋ/SW
 `);
 function splitConsonant(consonant) {
-    if(consonant.length <= 0) return ["", ""];
-    if(consonant.length <= 1) return ["", consonant];
-    if(SPECIAL.has(consonant)) return SPECIAL.get(consonant);
-    for(let i = 0, len = consonant.length; i <= len; i ++) {
+    if (consonant.length <= 0) return ["", ""];
+    if (consonant.length <= 1) return ["", consonant];
+    if (SPECIAL.has(consonant)) return SPECIAL.get(consonant);
+    for (let i = 0, len = consonant.length; i <= len; i++) {
         let lastRaw = consonant.slice(0, i);
         let firstRaw = consonant.slice(i);
-        if(FIRST_CONSONANT.has(firstRaw) && LAST_CONSONANT.has(lastRaw)) {
+        if (FIRST_CONSONANT.has(firstRaw) && LAST_CONSONANT.has(lastRaw)) {
             let result = [lastRaw, firstRaw];
             SPECIAL.set(consonant, result);
             return result;
@@ -210,8 +210,8 @@ export function parsePartialWord(word) {
     word = word.toUpperCase().replace(NG, "Ŋ");
     let tokens = word.split(VOWEL);
     let sliced = [tokens[0]];
-    for(let token of tokens.slice(1, -1)) {
-        if(VOWEL.test(token)) {
+    for (let token of tokens.slice(1, -1)) {
+        if (VOWEL.test(token)) {
             sliced.push(token);
             continue;
         }
@@ -221,19 +221,19 @@ export function parsePartialWord(word) {
     }
     sliced.push(tokens[tokens.length - 1]);
     let syllables = [];
-    for(let ind = 0, len = sliced.length; ind < len; ind += 3) {
+    for (let ind = 0, len = sliced.length; ind < len; ind += 3) {
         syllables.push(sliced.slice(ind, ind + 3).join("").replace(ENG, "NG"));
     }
     return syllables;
 }
 export default function parseWord(word) {
     let result = [];
-    for(let partialWord of word.split(HYPHEN)) {
-        if(partialWord === "-") {
+    for (let partialWord of word.split(HYPHEN)) {
+        if (partialWord === "-") {
             result.push("-");
             continue;
         }
-        for(let syllable of parsePartialWord(partialWord)) result.push(syllable);
+        for (let syllable of parsePartialWord(partialWord)) result.push(syllable);
     }
     return result;
 }

@@ -9,7 +9,7 @@ export default class FreeForm extends Base {
         this.coordsAnimID = -1;
     }
     draw(context, drawChildren = true) {
-        if(! this.visible) return;
+        if (!this.visible) return;
         super.draw(context, false);
         this.updateBound();
         let {
@@ -24,12 +24,12 @@ export default class FreeForm extends Base {
             first
         ] = path;
         context.moveTo(x + first[0] * width, y + first[1] * height);
-        for(let ind = 1, len = path.length; ind < len; ind ++) {
+        for (let ind = 1, len = path.length; ind < len; ind++) {
             context.lineTo(x + path[ind][0] * width, y + path[ind][1] * height);
         }
         context.closePath();
         context.fill();
         context.stroke();
-        if(drawChildren) this.drawChildren(context);
+        if (drawChildren) this.drawChildren(context);
     }
 }

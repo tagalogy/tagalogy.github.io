@@ -3,10 +3,10 @@ export function loadImage(src, alt = "") {
         let image = new Image;
         image.src = src;
         image.alt = alt;
-        image.addEventListener("load", function() {
+        image.addEventListener("load", function () {
             resolve(image);
         });
-        image.addEventListener("error", function() {
+        image.addEventListener("error", function () {
             reject(`Unable to load ${alt} from ${src}`);
         });
     });

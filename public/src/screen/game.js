@@ -82,11 +82,11 @@ let hud = new Object2D({
                 ]
             }),
             oninteractdown() {
-                if(gameState.paused) return;
+                if (gameState.paused) return;
                 pauseColor.setColor(colors.SKY_BLUE);
             },
             oninteractup() {
-                if(gameState.paused) return;
+                if (gameState.paused) return;
                 pauseColor.setColor(colors.BACKGROUND);
                 pause();
             }
@@ -123,7 +123,7 @@ let hud = new Object2D({
             height: 1 / 1,
             child: timer = new Text({
                 x: 0,
-                y: 0 ,
+                y: 0,
                 width: 1,
                 height: 1,
                 color: timerColor,
@@ -166,7 +166,7 @@ export function startGame(name, bank) {
         isPositionRelative: true,
         isScaleRelative: true,
         x: 0 / 3,
-        y:  1 / 5,
+        y: 1 / 5,
         width: 3 / 3,
         height: 4 / 5
     });
@@ -181,11 +181,11 @@ export async function newGame() {
     let currentTime = gameState.time;
     let previousTime;
     prevHandler = () => {
-        if(gameState.stopped) return;
+        if (gameState.stopped) return;
         let timeLeft = Math.ceil(time + (currentTime - gameState.time) / 1000);
-        let timeLeftString = `${ timeLeft }`;
-        timer.content = `:${ `00${ timeLeftString }`.substring(timeLeftString.length) }`;
-        if(timeLeft !== previousTime && timeLeft <= 5) {
+        let timeLeftString = `${timeLeft}`;
+        timer.content = `:${`00${timeLeftString}`.substring(timeLeftString.length)}`;
+        if (timeLeft !== previousTime && timeLeft <= 5) {
             timerColor.setColor("#f00");
             timerColor.animateColor(colors.FOREGROUND, 1000);
         }
@@ -193,13 +193,13 @@ export async function newGame() {
     };
     scene.on("frame", prevHandler);
     await gameState.timeout(time * 1000);
-    if(thisGame !== currentGame) return;
+    if (thisGame !== currentGame) return;
     gameState.stop();
     scene.off("frame", prevHandler);
     timer.content = ":O";
     let oldUpdateBound = game.updateBound;
     let startTime = now();
-    game.updateBound = function() {
+    game.updateBound = function () {
         oldUpdateBound.call(this);
         let {
             x,
@@ -213,7 +213,7 @@ export async function newGame() {
     await timeout(500);
     let high = storage.getItem(currentDifficulty);
     let currentScore = + score.content;
-    if(high < currentScore) storage.setItem(currentDifficulty, currentScore);
+    if (high < currentScore) storage.setItem(currentDifficulty, currentScore);
     timer.content = ":(";
     endTwist();
     let message = `
@@ -221,21 +221,21 @@ export async function newGame() {
         Puntos: ${score.content}
         Simulan muli?
     `;
-    if(await dialog(message, "Oo", "Hindi")) {
+    if (await dialog(message, "Oo", "Hindi")) {
         score.content = "0";
         gameState = new GameState;
         newGame();
-    }else{
+    } else {
         score.content = "0";
         exitGame();
     }
 }
 export async function nextGame(promise) {
-    score.content = `${ + score.content + 1 }`;
+    score.content = `${+ score.content + 1}`;
     scene.off("frame", prevHandler);
     timer.content = ":D";
     currentGame = Symbol();
-    if(promise) await promise;
+    if (promise) await promise;
     newGame();
 }
 export async function pause() {

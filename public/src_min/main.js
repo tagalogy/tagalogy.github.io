@@ -1,15 +1,15 @@
 var main = (function (exports) {
     'use strict';
 
-    class EventTarget{
+    class EventTarget {
         constructor(option = {}) {
             this.listeners = new Map();
-            for(let name in option) if(name.substring(0, 2) == "on") this.on(name.substring(2), option[name]);
+            for (let name in option) if (name.substring(0, 2) == "on") this.on(name.substring(2), option[name]);
         }
         getHandler(name) {
             let listeners = this.listeners;
             let handlers = listeners.get(name);
-            if(! handlers) listeners.set(name, handlers = []);
+            if (!handlers) listeners.set(name, handlers = []);
             return handlers;
         }
         on(name, handler) {
@@ -20,7 +20,7 @@ var main = (function (exports) {
             return new Promise((resolve, reject) => {
                 let sub = () => {
                     this.off(name, sub);
-                    if(handler) handler();
+                    if (handler) handler();
                     resolve();
                 };
                 this.on(name, sub);
@@ -29,11 +29,11 @@ var main = (function (exports) {
         off(name, handler) {
             let handlers = this.getHandler(name);
             let index = handlers.indexOf(handler);
-            if(index >= 0) handlers.splice(index, 1);
+            if (index >= 0) handlers.splice(index, 1);
         }
         invoke(name) {
             let handlers = this.getHandler(name);
-            for(let handler of handlers) handler.call(this);
+            for (let handler of handlers) handler.call(this);
         }
     }
     //TODO: bubbling and propagation cancellation
@@ -42,8 +42,8 @@ var main = (function (exports) {
     const PI = Math.PI;
     function wrapper(func) {
         return num => {
-            if(num <= 0) return 0;
-            if(num >= 1) return 1;
+            if (num <= 0) return 0;
+            if (num >= 1) return 1;
             return func(num);
         };
     }
@@ -70,7 +70,7 @@ var main = (function (exports) {
         return + new Date;
     }
 
-    class Object2D extends EventTarget{
+    class Object2D extends EventTarget {
         constructor(option = {}) {
             super(option);
             this.boundAnimID = -1;
@@ -90,9 +90,9 @@ var main = (function (exports) {
                 operation = "source-over"
             } = option;
             this.operation = operation;
-            if(parent) this.addTo(parent);
-            if(child) this.addChild(child);
-            if(children) this.addChildren(children);
+            if (parent) this.addTo(parent);
+            if (child) this.addChild(child);
+            if (children) this.addChildren(children);
             this.z = z;
         }
         /*
@@ -106,7 +106,7 @@ var main = (function (exports) {
             let {
                 parent
             } = this;
-            if(parent) parent.updateDrawOrder();
+            if (parent) parent.updateDrawOrder();
         }
         /*
         Bound Setting and Animating Methods
@@ -121,7 +121,7 @@ var main = (function (exports) {
             clearTimeout(this.boundAnimID);
             let oldUpdateBound = this.updateBound;
             let startTime = now();
-            this.updateBound = function() {
+            this.updateBound = function () {
                 let alpha = easing((now() - startTime) / time);
                 oldUpdateBound.call(this);
                 let {
@@ -160,7 +160,7 @@ var main = (function (exports) {
             clearTimeout(time);
             let oldUpdateOpacity = this.updateOpacity;
             let startTime = now();
-            this.updateOpacity = function() {
+            this.updateOpacity = function () {
                 let alpha = easing((now() - startTime) / time);
                 oldUpdateOpacity.call(this);
                 let {
@@ -192,60 +192,60 @@ var main = (function (exports) {
         forEachDescendant
         */
         forEachDescendant(callback, includeThis = false) {
-            if(includeThis) callback(this);
-            for(let child of this.children) child.forEachDescendant(callback, true);
+            if (includeThis) callback(this);
+            for (let child of this.children) child.forEachDescendant(callback, true);
         }
         /*
         Draw Methods
         */
         updateDrawOrder(deep = false) {
-            let {children} = this;
+            let { children } = this;
             children.sort((a, b) => a.z - b.z);
-            if(deep) for(let child of children) child.updateDrawOrder(true);
+            if (deep) for (let child of children) child.updateDrawOrder(true);
         }
         draw(context, drawChildren = true) {
-            if(! this.visible) return;
+            if (!this.visible) return;
             this.updateOpacity();
             context.globalAlpha = this.opacity;
             context.globalCompositeOperation = this.operation;
-            if(drawChildren) this.drawChildren(context);
+            if (drawChildren) this.drawChildren(context);
         }
         drawChildren(context) {
-            for(let child of this.children) child.draw(context);
+            for (let child of this.children) child.draw(context);
         }
         /*
         setscene Method
         */
         setscene(scene) {
             this.scene = scene;
-            for(let child of this.children) child.setscene(scene);
+            for (let child of this.children) child.setscene(scene);
         }
         /*
         Tree Methods
         */
         addChild(child, updateDrawOrder = true) {
-            if(child instanceof Scene) throw new Error("Unable to add scene as a child");
+            if (child instanceof Scene) throw new Error("Unable to add scene as a child");
             child.invoke("beforeadd");
             child.remove(false);
             child.parent = this;
             child.setscene(this.scene);
             this.children.push(child);
-            if(updateDrawOrder) this.updateDrawOrder();
+            if (updateDrawOrder) this.updateDrawOrder();
             child.invoke("afteradd");
         }
         addChildren(children, updateDrawOrder = true) {
-            for(let child of children) this.addChild(child, false);
-            if(updateDrawOrder) this.updateDrawOrder();
+            for (let child of children) this.addChild(child, false);
+            if (updateDrawOrder) this.updateDrawOrder();
         }
         addTo(parent, updateDrawOrder) {
             parent.addChild(this, updateDrawOrder);
         }
         removeChild(child, setscene = true) {
-            if(child.parent !== this) return;
+            if (child.parent !== this) return;
             child.invoke("beforeremove");
             child.parent = null;
-            if(setscene) child.setscene(null);
-            let {children} = this;
+            if (setscene) child.setscene(null);
+            let { children } = this;
             children.splice(children.indexOf(child), 1);
             child.invoke("afterremove");
         }
@@ -253,10 +253,10 @@ var main = (function (exports) {
             let {
                 parent
             } = this;
-            if(parent) parent.removeChild(this, setscene);
+            if (parent) parent.removeChild(this, setscene);
         }
         removeChildren(children) {
-            for(let child of children) this.removeChild(child);
+            for (let child of children) this.removeChild(child);
         }
         removeAllChildren() {
             this.removeChildren([... this.children]);
@@ -279,7 +279,7 @@ var main = (function (exports) {
         let {
             updateBound
         } = option;
-        if(updateBound) return updateBound;
+        if (updateBound) return updateBound;
         let {
             x = 0,
             y = 0,
@@ -288,18 +288,18 @@ var main = (function (exports) {
             isPositionRelative = true,
             isScaleRelative = true
         } = option;
-        return function() {
+        return function () {
             let {
                 parent
             } = this;
             let offsetX, offsetY, offsetWidth, offsetHeight;
-            if(parent) {
+            if (parent) {
                 parent.updateBound();
                 offsetX = isPositionRelative ? parent.x : 0;
                 offsetY = isPositionRelative ? parent.y : 0;
                 offsetWidth = isScaleRelative ? parent.width : 1;
                 offsetHeight = isScaleRelative ? parent.height : 1;
-            }else{
+            } else {
                 offsetX = 0;
                 offsetY = 0;
                 offsetWidth = 1;
@@ -307,12 +307,12 @@ var main = (function (exports) {
             }
             this.x = offsetX + offsetWidth * x;
             this.y = offsetY + offsetHeight * y,
-            this.width = offsetWidth * width;
+                this.width = offsetWidth * width;
             this.height = offsetHeight * height;
         };
     }
     function updateOpacityWrapper(option) {
-        if(typeof option == "number")  {
+        if (typeof option == "number") {
             option = {
                 opacity: option
             };
@@ -320,32 +320,32 @@ var main = (function (exports) {
         let {
             updateOpacity
         } = option;
-        if(updateOpacity) return updateOpacity;
+        if (updateOpacity) return updateOpacity;
         let {
             opacity = 1,
             isOpacityRelative = true
         } = option;
-        return function() {
+        return function () {
             let {
                 parent
             } = this;
-            if(parent && isOpacityRelative) {
+            if (parent && isOpacityRelative) {
                 parent.updateOpacity();
                 this.opacity = opacity * parent.opacity;
-            }else{
+            } else {
                 this.opacity = opacity;
             }
         }
     }
 
-    class Frame{
+    class Frame {
         constructor(onframe) {
             this.playing = true;
             let callback = () => {
-                if(! this.playing) return;
+                if (!this.playing) return;
                 onframe();
                 requestAnimationFrame(callback);
-            }; 
+            };
             requestAnimationFrame(callback);
         }
         stop() {
@@ -353,7 +353,7 @@ var main = (function (exports) {
         }
     }
 
-    class Color{
+    class Color {
         constructor(option = {}) {
             this.colorAnimID = -1;
             this.setColor(option);
@@ -381,7 +381,7 @@ var main = (function (exports) {
             clearTimeout(this.colorAnimID);
             let oldUpdateColor = this.updateColor;
             let startTime = now();
-            this.updateColor = function() {
+            this.updateColor = function () {
                 let alpha = easing((now() - startTime) / time);
                 oldUpdateColor.call(this);
                 let {
@@ -409,13 +409,13 @@ var main = (function (exports) {
         }
     }
     function updateColorWrapper(option) {
-        if(typeof option == "string") {
+        if (typeof option == "string") {
             option = option.trim();
-            if(option[0] == "#") {
+            if (option[0] == "#") {
                 let rawString = option.substr(1);
                 let raw = parseInt(rawString, 16);
                 let red, green, blue, alpha;
-                switch(rawString.length) {
+                switch (rawString.length) {
                     case 3:
                         red = ((raw >> 2 * 4) & 0xf) * 0x11;
                         green = ((raw >> 1 * 4) & 0xf) * 0x11;
@@ -441,7 +441,7 @@ var main = (function (exports) {
                         alpha = ((raw >> 0 * 4) & 0xff) / 0xff;
                         break;
                 }
-                return function() {
+                return function () {
                     this.red = red;
                     this.green = green;
                     this.blue = blue;
@@ -452,14 +452,14 @@ var main = (function (exports) {
         let {
             updateColor
         } = option;
-        if(updateColor) return updateColor;
+        if (updateColor) return updateColor;
         let {
             red = 255,
             green = 255,
             blue = 255,
             alpha = 1
         } = option;
-        return function() {
+        return function () {
             this.red = red;
             this.green = green;
             this.blue = blue;
@@ -478,8 +478,8 @@ var main = (function (exports) {
             } = option;
             this.scale = scale;
             this.canvas = canvas;
-            if(option.autoresize) {
-                this.updateBound = function() {
+            if (option.autoresize) {
+                this.updateBound = function () {
                     this.x = 0;
                     this.y = 0;
                     this.width = canvas.clientWidth * scale;
@@ -503,10 +503,10 @@ var main = (function (exports) {
                         pageY: y
                     } = event;
                     this.forEachDescendant(descendant => {
-                        if(descendant.hitTest(x * scale, y * scale)) {
+                        if (descendant.hitTest(x * scale, y * scale)) {
                             descendant.invoke(eventName);
-                            if(eventName == "mousedown") descendant.invoke("interactdown");
-                            if(eventName == "mouseup") descendant.invoke("interactup");
+                            if (eventName == "mousedown") descendant.invoke("interactdown");
+                            if (eventName == "mouseup") descendant.invoke("interactup");
                         }
                     });
                 });
@@ -519,16 +519,16 @@ var main = (function (exports) {
                     event.preventDefault();
                     let touches = Array.from(event.changedTouches);
                     this.forEachDescendant(descendant => {
-                        if(touches.some(touch => descendant.hitTest(touch.pageX * scale, touch.pageY * scale))) {
-                            if(eventName == "touchstart") descendant.invoke("interactdown");
-                            if(eventName == "touchend") descendant.invoke("interactup");
+                        if (touches.some(touch => descendant.hitTest(touch.pageX * scale, touch.pageY * scale))) {
+                            if (eventName == "touchstart") descendant.invoke("interactdown");
+                            if (eventName == "touchend") descendant.invoke("interactup");
                         }
                     });
                 });
             });
         }
         draw(context, drawChildren = true) {
-            if(! this.visible) return;
+            if (!this.visible) return;
             super.draw(context, false);
             this.updateBound();
             let {
@@ -539,7 +539,7 @@ var main = (function (exports) {
             canvas.width = width;
             canvas.height = height;
             context.clearRect(0, 0, width, height);
-            if(drawChildren) this.drawChildren(context);
+            if (drawChildren) this.drawChildren(context);
         }
     }
 
@@ -550,7 +550,7 @@ var main = (function (exports) {
             let {
                 ratio
             } = option;
-            this.updateBound = function() {
+            this.updateBound = function () {
                 let {
                     parent
                 } = this;
@@ -606,7 +606,7 @@ var main = (function (exports) {
         set dash(dash) {
             this._dash = dash;
             let sum = 0;
-            for(let num of dash) sum += num;
+            for (let num of dash) sum += num;
             this.dashSum = sum;
         }
         /*
@@ -630,7 +630,7 @@ var main = (function (exports) {
         draw Method
         */
         draw(context, drawChildren = true) {
-            if(! this.visible) return;
+            if (!this.visible) return;
             super.draw(context, false);
             this.updateThickness();
             let {
@@ -648,26 +648,26 @@ var main = (function (exports) {
             context.lineWidth = thickness;
             context.setLineDash(dash.map(num => num * thickness));
             context.lineDashOffset = this.getDashOffset() * thickness;
-            if(drawChildren) this.drawChildren(context);
+            if (drawChildren) this.drawChildren(context);
         }
     }
     function updateThicknessWrapper(option) {
-        if(typeof option == "number") {
-            return function() {
+        if (typeof option == "number") {
+            return function () {
                 return option;
             };
         }
-        let {updateThickness} = option;
-        if(updateThickness) return updateThickness;
-        let {thickness = 2} = option;
-        return function() {
+        let { updateThickness } = option;
+        if (updateThickness) return updateThickness;
+        let { thickness = 2 } = option;
+        return function () {
             this.thickness = thickness;
         }
     }
 
     class Rectangle extends Base {
         draw(context, drawChildren = true) {
-            if(! this.visible) return;
+            if (!this.visible) return;
             super.draw(context, false);
             this.updateBound();
             let {
@@ -678,7 +678,7 @@ var main = (function (exports) {
             } = this;
             context.fillRect(x, y, width, height);
             context.strokeRect(x, y, width, height);
-            if(drawChildren) this.drawChildren(context);
+            if (drawChildren) this.drawChildren(context);
         }
     }
 
@@ -687,10 +687,10 @@ var main = (function (exports) {
             let image = new Image;
             image.src = src;
             image.alt = alt;
-            image.addEventListener("load", function() {
+            image.addEventListener("load", function () {
                 resolve(image);
             });
-            image.addEventListener("error", function() {
+            image.addEventListener("error", function () {
                 reject(`Unable to load ${alt} from ${src}`);
             });
         });
@@ -703,9 +703,9 @@ var main = (function (exports) {
         return new Promise((resolve, reject) => {
             let xhr = new XMLHttpRequest;
             xhr.addEventListener("load", () => {
-                if(xhr.status === 200) {
+                if (xhr.status === 200) {
                     resolve(xhr.responseText);
-                }else{
+                } else {
                     reject(xhr.status);
                 }
             });
@@ -745,10 +745,10 @@ var main = (function (exports) {
         /asset/word_5.txt
         /asset/word_6.txt
     `.trim().split(SPACES))).map(text => text.split(SPACES));
-        difficulties.EASY = [... words.WORD_3].sort();
-        difficulties.MEDIUM = [... words.WORD_3, ... words.WORD_4].sort();
-        difficulties.HARD = [... words.WORD_4, ... words.WORD_5].sort();
-        difficulties.VERY_HARD = [... words.WORD_5, ... words.WORD_6].sort();
+        difficulties.EASY = [...words.WORD_3].sort();
+        difficulties.MEDIUM = [...words.WORD_3, ...words.WORD_4].sort();
+        difficulties.HARD = [...words.WORD_4, ...words.WORD_5].sort();
+        difficulties.VERY_HARD = [...words.WORD_5, ...words.WORD_6].sort();
     }
     let assets = loadAll();
     let colors = {
@@ -774,7 +774,7 @@ var main = (function (exports) {
             storage.setItem(x, x);
             storage.removeItem(x);
             return true;
-        }catch(error) {
+        } catch (error) {
             return error instanceof DOMException && (
                 // everything except Firefox
                 error.code === 22 ||
@@ -792,33 +792,33 @@ var main = (function (exports) {
     let storage;
     var storage$1 = storage = {
         weakHasItem(name) {
-            if(! supported) return false;
+            if (!supported) return false;
             return storage.weakGetItem(name) !== null;
         },
         weakGetItem(name) {
-            if(! supported) return null;
-            try{
+            if (!supported) return null;
+            try {
                 return JSON.parse(localStorage.getItem(name));
-            }catch(error) {
+            } catch (error) {
                 return null;
             }
         },
         weakSetItem(name, value) {
-            if(! supported) return;
+            if (!supported) return;
             try {
                 localStorage.setItem(name, JSON.stringify(value));
-            }catch(error) {}
+            } catch (error) { }
         },
         weakRemoveItem(name) {
-            if(! supported) return;
+            if (!supported) return;
             localStorage.removeItem(name);
         },
         get map() {
-            let {_map: map} = storage;
-            if(map) return map;
+            let { _map: map } = storage;
+            if (map) return map;
             map = storage._map = new Map;
-            if(! supported) return map;
-            for(let ind = 0, len = localStorage.length; ind < len; ind ++) {
+            if (!supported) return map;
+            for (let ind = 0, len = localStorage.length; ind < len; ind++) {
                 let name = localStorage.key(ind);
                 map.set(name, storage.weakGetItem(name));
             }
@@ -832,9 +832,9 @@ var main = (function (exports) {
         },
         setItem(name, value) {
             storage.map.set(name, value);
-            if(value == null) {
+            if (value == null) {
                 storage.weakRemoveItem(name);
-            }else{
+            } else {
                 storage.weakSetItem(name, value);
             }
         },
@@ -842,15 +842,15 @@ var main = (function (exports) {
             storage.setItem(name, null);
         },
         setDefault(name, value) {
-            if(! storage.hasItem(name)) storage.setItem(name, value);
+            if (!storage.hasItem(name)) storage.setItem(name, value);
         },
         setAllDefault(option) {
-            for(let name in option) storage.setDefault(name, option[name]);
+            for (let name in option) storage.setDefault(name, option[name]);
         }
     };
 
     let min$1 = Math.min;
-    class RoundedRectangle extends Base{
+    class RoundedRectangle extends Base {
         constructor(option = {}) {
             super(option);
             this.setRadius(option);
@@ -859,7 +859,7 @@ var main = (function (exports) {
             this.updateRadius = updateRadiusWrapper(option);
         }
         draw(context, drawChildren = true) {
-            if(! this.visible) return;
+            if (!this.visible) return;
             super.draw(context, false);
             this.updateBound();
             this.updateRadius();
@@ -886,35 +886,35 @@ var main = (function (exports) {
             context.closePath();
             context.fill();
             context.stroke();
-            if(drawChildren) this.drawChildren(context);
+            if (drawChildren) this.drawChildren(context);
         }
     }
     function updateRadiusWrapper(option) {
-        if(typeof option == "number")  {
-            return function() {
+        if (typeof option == "number") {
+            return function () {
                 return option;
             };
         }
-        let {updateRadius} = option;
-        if(updateRadius) return updateRadius;
+        let { updateRadius } = option;
+        if (updateRadius) return updateRadius;
         let {
             radius = 0,
             isRadiusRelative = true
         } = option;
-        return function() {
-            if(isRadiusRelative) {
+        return function () {
+            if (isRadiusRelative) {
                 let {
                     width,
                     height
                 } = this;
                 this.radius = min$1(width, height) * radius;
-            }else{
+            } else {
                 this.radius = radius;
             }
         }
     }
 
-    class Text extends Object2D{
+    class Text extends Object2D {
         constructor(option = {}) {
             super(option);
             let {
@@ -941,7 +941,7 @@ var main = (function (exports) {
             this.updateSize = updateSizeWrapper(option);
         }
         draw(context, drawChildren = true) {
-            if(! this.visible) return;
+            if (!this.visible) return;
             super.draw(context, false);
             context.fillStyle = this.color.getString();
             this.updateSize();
@@ -957,7 +957,7 @@ var main = (function (exports) {
             } = this;
             context.textAlign = align;
             context.textBaseline = baseline;
-            if(typeof font == "string") font = [font];
+            if (typeof font == "string") font = [font];
             font = font.map(font => `"${font}"`);
             context.font = `${style} ${weight} ${size}px ${font.join(" ")}`;
             this.updateBound();
@@ -968,7 +968,7 @@ var main = (function (exports) {
                 height
             } = this;
             let finalX;
-            switch(align) {
+            switch (align) {
                 case "left": finalX = x; break;
                 case "center": finalX = x + width / 2; break;
                 case "right": finalX = x + width; break;
@@ -979,36 +979,36 @@ var main = (function (exports) {
                 case "middle": finalY = y + height / 2; break;
                 case "bottom": finalY = y + height; break;
             }
-            if(wrap) {
+            if (wrap) {
                 let lines = getLines(context, content, width);
                 let len = lines.length;
-                switch(baseline) {
+                switch (baseline) {
                     case "middle": finalY -= len * size / 2; break;
                     case "bottom": finalY -= len * size; break;
                 }
-                for(let ind = 0; ind < len; ind ++) context.fillText(lines[ind], finalX, finalY + size * ind);
-            }else{
+                for (let ind = 0; ind < len; ind++) context.fillText(lines[ind], finalX, finalY + size * ind);
+            } else {
                 context.fillText(content, finalX, finalY);
             }
-            if(drawChildren) this.drawChildren(context);
+            if (drawChildren) this.drawChildren(context);
         }
     }
     function updateSizeWrapper(option) {
-        if(typeof option == "number") {
-            return function() {
+        if (typeof option == "number") {
+            return function () {
                 return option;
             };
         }
-        let {updateSize} = option;
-        if(updateSize) return updateSize;
+        let { updateSize } = option;
+        if (updateSize) return updateSize;
         let {
             size = 10,
             isSizeRelative = true
         } = option;
-        return function() {
-            if(isSizeRelative) {
+        return function () {
+            if (isSizeRelative) {
                 this.size = size * this.height;
-            }else {
+            } else {
                 this.size = size;
             }
         }
@@ -1017,15 +1017,15 @@ var main = (function (exports) {
     const SPACES$1 = /\s+/;
     function getLines(context, text, maxWidth) {
         let lines = [];
-        for(let paragraph of text.trim().split(NEWLINES)) {
+        for (let paragraph of text.trim().split(NEWLINES)) {
             let words = paragraph.trim().split(SPACES$1);
             let [currentLine, ...nextLine] = words;
             for (let word of nextLine) {
                 let currentWord = `${currentLine} ${word}`;
-                let {width} = context.measureText(currentWord);
+                let { width } = context.measureText(currentWord);
                 if (width < maxWidth) {
                     currentLine = currentWord;
-                }else{
+                } else {
                     lines.push(currentLine);
                     currentLine = word;
                 }
@@ -1036,7 +1036,7 @@ var main = (function (exports) {
     }
 
     let min$2 = Math.min;
-    class Image$1 extends Object2D{
+    class Image$1 extends Object2D {
         constructor(option = {}) {
             super(option);
             this.source = option.source;
@@ -1046,7 +1046,7 @@ var main = (function (exports) {
             this.imageScaling = imageScaling;
         }
         draw(context, drawChildren = true) {
-            if(! this.visible) return;
+            if (!this.visible) return;
             super.draw(context, false);
             this.updateBound();
             let {
@@ -1063,7 +1063,7 @@ var main = (function (exports) {
                 width: rawDestWidth,
                 height: rawDestHeight
             } = this;
-            if(imageScaling == "fit") {
+            if (imageScaling == "fit") {
                 let scaleX = rawDestWidth / rawSrcWidth;
                 let scaleY = rawDestHeight / rawSrcHeight;
                 let scale = min$2(scaleX, scaleY);
@@ -1071,7 +1071,7 @@ var main = (function (exports) {
                 let height = scale * rawSrcHeight;
                 context.drawImage(source, x + (rawDestWidth - width) / 2, y + (rawDestHeight - height) / 2, width, height);
             }
-            if(drawChildren) this.drawChildren(context);
+            if (drawChildren) this.drawChildren(context);
         }
     }
 
@@ -1085,7 +1085,7 @@ var main = (function (exports) {
             this.coordsAnimID = -1;
         }
         draw(context, drawChildren = true) {
-            if(! this.visible) return;
+            if (!this.visible) return;
             super.draw(context, false);
             this.updateBound();
             let {
@@ -1100,13 +1100,13 @@ var main = (function (exports) {
                 first
             ] = path;
             context.moveTo(x + first[0] * width, y + first[1] * height);
-            for(let ind = 1, len = path.length; ind < len; ind ++) {
+            for (let ind = 1, len = path.length; ind < len; ind++) {
                 context.lineTo(x + path[ind][0] * width, y + path[ind][1] * height);
             }
             context.closePath();
             context.fill();
             context.stroke();
-            if(drawChildren) this.drawChildren(context);
+            if (drawChildren) this.drawChildren(context);
         }
     }
 
@@ -1126,7 +1126,7 @@ var main = (function (exports) {
             clearTimeout(this.coordsAnimID);
             let oldUpdateCoords = this.updateCoords;
             let startTime = now();
-            this.updateCoords = function() {
+            this.updateCoords = function () {
                 let alpha = easing((now() - startTime) / time);
                 oldUpdateCoords.call(this);
                 let {
@@ -1155,7 +1155,7 @@ var main = (function (exports) {
             return new timeout(time);
         }
         draw(context, drawChildren = true) {
-            if(! this.visible) return;
+            if (!this.visible) return;
             super.draw(context, false);
             this.updateCoords();
             let {
@@ -1168,19 +1168,19 @@ var main = (function (exports) {
             context.moveTo(x0, y0);
             context.lineTo(x1, y1);
             context.stroke();
-            if(drawChildren) this.drawChildren(context);
+            if (drawChildren) this.drawChildren(context);
         }
     }
     function updateCoordsWrapper(option) {
-        let {updateCoords} = option;
-        if(updateCoords) return updateCoords;
+        let { updateCoords } = option;
+        if (updateCoords) return updateCoords;
         let {
             x0 = 0,
             y0 = 0,
             x1 = 0,
             y1 = 0
         } = option;
-        return function() {
+        return function () {
             this.updateBound();
             let {
                 x,
@@ -1207,7 +1207,7 @@ var main = (function (exports) {
         }
     }
 
-    class GameState extends EventTarget{
+    class GameState extends EventTarget {
         constructor(option = {}) {
             super(option);
             this.stopped = false;
@@ -1218,26 +1218,26 @@ var main = (function (exports) {
             this.timeWhenPaused = 0;
         }
         get time() {
-            if(this.paused) return this.timeWhenPaused;
+            if (this.paused) return this.timeWhenPaused;
             return now() - this.startTime - this.pauseTime;
         }
         pause() {
-            if(this.paused) return;
+            if (this.paused) return;
             this.timeWhenPaused = this.time;
             this.pauseStartTime = now();
             this.paused = true;
             this.invoke("pause");
         }
         play() {
-            if(this.stopped || ! this.paused) return;
+            if (this.stopped || !this.paused) return;
             this.pauseTime += now() - this.pauseStartTime;
             this.paused = false;
             this.invoke("play");
         }
         toggle() {
-            if(this.paused) {
+            if (this.paused) {
                 this.play();
-            }else{
+            } else {
                 this.pause();
             }
         }
@@ -1266,7 +1266,7 @@ var main = (function (exports) {
                     timeStart = this.time;
                     clearTimeout(id);
                 };
-                if(! this.paused) onplay();
+                if (!this.paused) onplay();
                 this.on("play", onplay);
                 this.on("pause", onpause);
                 this.once("stop", () => {
@@ -1634,13 +1634,13 @@ var main = (function (exports) {
     Ŋ/SW
 `);
     function splitConsonant(consonant) {
-        if(consonant.length <= 0) return ["", ""];
-        if(consonant.length <= 1) return ["", consonant];
-        if(SPECIAL.has(consonant)) return SPECIAL.get(consonant);
-        for(let i = 0, len = consonant.length; i <= len; i ++) {
+        if (consonant.length <= 0) return ["", ""];
+        if (consonant.length <= 1) return ["", consonant];
+        if (SPECIAL.has(consonant)) return SPECIAL.get(consonant);
+        for (let i = 0, len = consonant.length; i <= len; i++) {
             let lastRaw = consonant.slice(0, i);
             let firstRaw = consonant.slice(i);
-            if(FIRST_CONSONANT.has(firstRaw) && LAST_CONSONANT.has(lastRaw)) {
+            if (FIRST_CONSONANT.has(firstRaw) && LAST_CONSONANT.has(lastRaw)) {
                 let result = [lastRaw, firstRaw];
                 SPECIAL.set(consonant, result);
                 return result;
@@ -1656,8 +1656,8 @@ var main = (function (exports) {
         word = word.toUpperCase().replace(NG, "Ŋ");
         let tokens = word.split(VOWEL);
         let sliced = [tokens[0]];
-        for(let token of tokens.slice(1, -1)) {
-            if(VOWEL.test(token)) {
+        for (let token of tokens.slice(1, -1)) {
+            if (VOWEL.test(token)) {
                 sliced.push(token);
                 continue;
             }
@@ -1667,19 +1667,19 @@ var main = (function (exports) {
         }
         sliced.push(tokens[tokens.length - 1]);
         let syllables = [];
-        for(let ind = 0, len = sliced.length; ind < len; ind += 3) {
+        for (let ind = 0, len = sliced.length; ind < len; ind += 3) {
             syllables.push(sliced.slice(ind, ind + 3).join("").replace(ENG, "NG"));
         }
         return syllables;
     }
     function parseWord(word) {
         let result = [];
-        for(let partialWord of word.split(HYPHEN)) {
-            if(partialWord === "-") {
+        for (let partialWord of word.split(HYPHEN)) {
+            if (partialWord === "-") {
                 result.push("-");
                 continue;
             }
-            for(let syllable of parsePartialWord(partialWord)) result.push(syllable);
+            for (let syllable of parsePartialWord(partialWord)) result.push(syllable);
         }
         return result;
     }
@@ -1789,8 +1789,8 @@ var main = (function (exports) {
         hyphenFill.setColor(colors.ACCENT);
         hyphenLine.setColor(colors.TRANSPARENT);
         hyphenColor.setColor(colors.WHITE);
-        if(prevClearHandler) clearPlace.off("interactup", prevClearHandler);
-        if(prevHyphenHandler) hyphenPlace.off("interactup", prevHyphenHandler);
+        if (prevClearHandler) clearPlace.off("interactup", prevClearHandler);
+        if (prevHyphenHandler) hyphenPlace.off("interactup", prevHyphenHandler);
         outputBox.content = "";
         outputBox.addTo(game);
         outputBox.setBound({
@@ -1824,10 +1824,10 @@ var main = (function (exports) {
         let currentPressed = 0;
         let currentLen = word.length;
         prevClearHandler = () => {
-            if(gameState.paused) return;
+            if (gameState.paused) return;
             outputBox.content = "";
             currentPressed = 0;
-            for(let button of syllableBox.children) button.unpress();
+            for (let button of syllableBox.children) button.unpress();
             clearFill.setColor(colors.BACKGROUND);
             clearLine.setColor(colors.PH_RED);
             clearColor.setColor(colors.PH_RED);
@@ -1837,8 +1837,8 @@ var main = (function (exports) {
         };
         clearPlace.on("interactup", prevClearHandler);
         prevHyphenHandler = () => {
-            if(gameState.paused) return;
-            if(! outputBox.content.endsWith("-")) outputBox.content += "-";
+            if (gameState.paused) return;
+            if (!outputBox.content.endsWith("-")) outputBox.content += "-";
             clearFill.setColor(colors.PH_RED);
             clearLine.setColor(colors.TRANSPARENT);
             clearColor.setColor(colors.WHITE);
@@ -1847,7 +1847,7 @@ var main = (function (exports) {
             hyphenColor.setColor(colors.ACCENT);
         };
         hyphenPlace.on("interactup", prevHyphenHandler);
-        let {length} = word;
+        let { length } = word;
         word.forEach((syllable, ind) => {
             syllable = syllable.toLowerCase();
             let lineColor = new Color(colors.TRANSPARENT);
@@ -1855,21 +1855,21 @@ var main = (function (exports) {
             let textColor = new Color(colors.WHITE);
             let width = 1;
             let x = 0;
-            if(length >= 6 && ind > 3) {
+            if (length >= 6 && ind > 3) {
                 width = 2 / 3;
-                if(ind > 4) x = 2 / 3;
+                if (ind > 4) x = 2 / 3;
             }
             let innerWidth;
             let innerX;
-            if(length >= 6 && ind > 4) {
+            if (length >= 6 && ind > 4) {
                 innerWidth = 14 / 16;
                 innerX = 1 / 16;
-            }else{
+            } else {
                 innerWidth = 46 / 48;
                 innerX = 1 / 48;
             }
-            let y = (4 - ind)/ 5;
-            if(ind > 4) y = 0;
+            let y = (4 - ind) / 5;
+            if (ind > 4) y = 0;
             let currentPlace = new Object2D({
                 x,
                 y,
@@ -1899,11 +1899,11 @@ var main = (function (exports) {
                     })
                 }),
                 oninteractdown() {
-                    if(gameState.paused) return;
+                    if (gameState.paused) return;
                     textColor.setColor(colors.BLACK);
                 },
                 async oninteractup() {
-                    if(gameState.paused) return;
+                    if (gameState.paused) return;
                     lineColor.setColor(colors.ACCENT);
                     fillColor.setColor(colors.BACKGROUND);
                     textColor.setColor(colors.ACCENT);
@@ -1913,12 +1913,12 @@ var main = (function (exports) {
                     hyphenFill.setColor(colors.ACCENT);
                     hyphenLine.setColor(colors.TRANSPARENT);
                     hyphenColor.setColor(colors.WHITE);
-                    if(this.pressed) return;
+                    if (this.pressed) return;
                     this.pressed = true;
                     outputBox.content += this.content;
-                    currentPressed ++;
-                    if(currentPressed < currentLen) return;
-                    if(wordBank.indexOf(outputBox.content.toUpperCase()) >= 0) {
+                    currentPressed++;
+                    if (currentPressed < currentLen) return;
+                    if (wordBank.indexOf(outputBox.content.toUpperCase()) >= 0) {
                         nextGame(end());
                         return;
                     }
@@ -1930,7 +1930,7 @@ var main = (function (exports) {
             });
             currentPlace.content = syllable;
             currentPlace.unpress = () => {
-                if(! currentPlace.pressed) return;
+                if (!currentPlace.pressed) return;
                 currentPlace.pressed = false;
                 lineColor.setColor(colors.TRANSPARENT);
                 fillColor.setColor(colors.ACCENT);
@@ -2011,11 +2011,11 @@ var main = (function (exports) {
                     ]
                 }),
                 oninteractdown() {
-                    if(gameState.paused) return;
+                    if (gameState.paused) return;
                     pauseColor.setColor(colors.SKY_BLUE);
                 },
                 oninteractup() {
-                    if(gameState.paused) return;
+                    if (gameState.paused) return;
                     pauseColor.setColor(colors.BACKGROUND);
                     pause();
                 }
@@ -2052,7 +2052,7 @@ var main = (function (exports) {
                 height: 1 / 1,
                 child: timer = new Text({
                     x: 0,
-                    y: 0 ,
+                    y: 0,
                     width: 1,
                     height: 1,
                     color: timerColor,
@@ -2095,7 +2095,7 @@ var main = (function (exports) {
             isPositionRelative: true,
             isScaleRelative: true,
             x: 0 / 3,
-            y:  1 / 5,
+            y: 1 / 5,
             width: 3 / 3,
             height: 4 / 5
         });
@@ -2110,11 +2110,11 @@ var main = (function (exports) {
         let currentTime = gameState.time;
         let previousTime;
         prevHandler = () => {
-            if(gameState.stopped) return;
+            if (gameState.stopped) return;
             let timeLeft = Math.ceil(time + (currentTime - gameState.time) / 1000);
-            let timeLeftString = `${ timeLeft }`;
-            timer.content = `:${ `00${ timeLeftString }`.substring(timeLeftString.length) }`;
-            if(timeLeft !== previousTime && timeLeft <= 5) {
+            let timeLeftString = `${timeLeft}`;
+            timer.content = `:${`00${timeLeftString}`.substring(timeLeftString.length)}`;
+            if (timeLeft !== previousTime && timeLeft <= 5) {
                 timerColor.setColor("#f00");
                 timerColor.animateColor(colors.FOREGROUND, 1000);
             }
@@ -2122,13 +2122,13 @@ var main = (function (exports) {
         };
         scene.on("frame", prevHandler);
         await gameState.timeout(time * 1000);
-        if(thisGame !== currentGame) return;
+        if (thisGame !== currentGame) return;
         gameState.stop();
         scene.off("frame", prevHandler);
         timer.content = ":O";
         let oldUpdateBound = game.updateBound;
         let startTime = now$1();
-        game.updateBound = function() {
+        game.updateBound = function () {
             oldUpdateBound.call(this);
             let {
                 x,
@@ -2142,7 +2142,7 @@ var main = (function (exports) {
         await timeout(500);
         let high = storage$1.getItem(currentDifficulty);
         let currentScore = + score.content;
-        if(high < currentScore) storage$1.setItem(currentDifficulty, currentScore);
+        if (high < currentScore) storage$1.setItem(currentDifficulty, currentScore);
         timer.content = ":(";
         end();
         let message = `
@@ -2150,21 +2150,21 @@ var main = (function (exports) {
         Puntos: ${score.content}
         Simulan muli?
     `;
-        if(await popup(message, "Oo", "Hindi")) {
+        if (await popup(message, "Oo", "Hindi")) {
             score.content = "0";
             gameState = new GameState;
             newGame();
-        }else{
+        } else {
             score.content = "0";
             exitGame();
         }
     }
     async function nextGame(promise) {
-        score.content = `${ + score.content + 1 }`;
+        score.content = `${+ score.content + 1}`;
         scene.off("frame", prevHandler);
         timer.content = ":D";
         currentGame = Symbol();
-        if(promise) await promise;
+        if (promise) await promise;
         newGame();
     }
     async function pause() {
@@ -2215,7 +2215,7 @@ var main = (function (exports) {
     let box = new Object2D;
     let highscore = Object.create(null);
     let fill = colors.ACCENT;
-    raw.forEach(({name, description, difficultyKey, highscoreKey}, ind) => {
+    raw.forEach(({ name, description, difficultyKey, highscoreKey }, ind) => {
         let highscoreText;
         box.addChild(new Object2D({
             x: 0,
@@ -2223,19 +2223,19 @@ var main = (function (exports) {
             width: 1,
             height: 1 / 4,
             child: new RoundedRectangle({
-                x: 1/16,
-                y: 1/16,
-                width: 14/16,
-                height: 14/16,
-                radius: 1/8,
+                x: 1 / 16,
+                y: 1 / 16,
+                width: 14 / 16,
+                height: 14 / 16,
+                radius: 1 / 8,
                 fill,
                 children: [
                     new Text({
-                        x: 1/16,
-                        y: 0/2,
-                        width: 14/16,
-                        height: 1/2,
-                        size: 5/10,
+                        x: 1 / 16,
+                        y: 0 / 2,
+                        width: 14 / 16,
+                        height: 1 / 2,
+                        size: 5 / 10,
                         color: colors.WHITE,
                         align: "left",
                         baseline: "bottom",
@@ -2244,11 +2244,11 @@ var main = (function (exports) {
                         content: name
                     }),
                     new Text({
-                        x: 1/16,
-                        y: 1/2,
-                        width: 14/16,
-                        height: 1/2,
-                        size: 6/20,
+                        x: 1 / 16,
+                        y: 1 / 2,
+                        width: 14 / 16,
+                        height: 1 / 2,
+                        size: 6 / 20,
                         color: colors.WHITE,
                         align: "left",
                         baseline: "top",
@@ -2256,11 +2256,11 @@ var main = (function (exports) {
                         content: description
                     }),
                     highscoreText = new Text({
-                        x: 1/16,
+                        x: 1 / 16,
                         y: 0,
-                        width: 14/16,
+                        width: 14 / 16,
                         height: 1,
-                        size: 4/10,
+                        size: 4 / 10,
                         color: colors.WHITE,
                         align: "right",
                         weight: "bold",
@@ -2277,26 +2277,26 @@ var main = (function (exports) {
     });
     function start$2() {
         box.addTo(safeArea);
-        for(let name in highscore) highscore[name].content = `${storage$1.getItem(name)}`;
+        for (let name in highscore) highscore[name].content = `${storage$1.getItem(name)}`;
         box.setBound({
             x: 1,
-            y: 1/5,
+            y: 1 / 5,
             width: 1,
-            height: 4/5
+            height: 4 / 5
         });
         box.animateBound({
             x: 0,
-            y: 1/5,
+            y: 1 / 5,
             width: 1,
-            height: 4/5
+            height: 4 / 5
         }, 400, expoOut);
     }
     async function end$1() {
         await box.animateBound({
             x: -1,
-            y: 1/5,
+            y: 1 / 5,
             width: 1,
-            height: 4/5
+            height: 4 / 5
         }, 200, sineIn);
         box.remove();
     }
@@ -2313,9 +2313,9 @@ var main = (function (exports) {
             }),
             shine = new FreeForm({
                 path: [
-                    [0    , 1],
+                    [0, 1],
                     [3 / 4, 0],
-                    [1    , 0],
+                    [1, 0],
                     [1 / 4, 1]
                 ],
                 opacity: 1 / 4,
@@ -2380,12 +2380,12 @@ var main = (function (exports) {
         height: 14 / 20
     });
     function updateColor() {
-        if(exports.theme === "dark") {
+        if (exports.theme === "dark") {
             buttonLine.setColor(colors.PH_YELLOW);
             buttonFill.setColor(colors.BACKGROUND);
             buttonColor.setColor(colors.PH_YELLOW);
             title.source = images.TITLE_DARK_PNG;
-        }else{
+        } else {
             buttonLine.setColor(colors.FOREGROUND);
             buttonFill.setColor(colors.PH_YELLOW);
             buttonColor.setColor(colors.BLACK);
@@ -2404,7 +2404,7 @@ var main = (function (exports) {
         });
         titleBox.addTo(safeArea);
         let startTime = now$1();
-        titleBox.animateUpdateBound(function() {
+        titleBox.animateUpdateBound(function () {
             titleBoxPos.call(this);
             this.y += Math.sin((now$1() - startTime) / 2000 * Math.PI) * this.height / 64;
         }, 400, expoOut);
@@ -2529,13 +2529,13 @@ var main = (function (exports) {
         this.thickness = safeArea.width / 100;
     }function setTheme(currentTheme) {
         storage$1.setItem("theme", currentTheme);
-        if(currentTheme == "dark") {
+        if (currentTheme == "dark") {
             document.body.style.backgroundColor = "black";
             exports.theme = "dark";
             colors.BACKGROUND.setColor("#222");
             colors.FOREGROUND.setColor(colors.WHITE);
             colors.ACCENT.setColor(colors.SKY_BLUE);
-        }else{
+        } else {
             document.body.style.backgroundColor = "white";
             exports.theme = "light";
             colors.BACKGROUND.setColor(colors.WHITE);

@@ -1,11 +1,11 @@
-export default class Frame{
+export default class Frame {
     constructor(onframe) {
         this.playing = true;
         let callback = () => {
-            if(! this.playing) return;
+            if (!this.playing) return;
             onframe();
             requestAnimationFrame(callback);
-        } 
+        }
         requestAnimationFrame(callback)
     }
     stop() {

@@ -34,13 +34,13 @@ export function updateThickness() {
 export let theme;
 export function setTheme(currentTheme) {
     storage.setItem("theme", currentTheme);
-    if(currentTheme == "dark") {
+    if (currentTheme == "dark") {
         document.body.style.backgroundColor = "black";
         theme = "dark";
         colors.BACKGROUND.setColor("#222");
         colors.FOREGROUND.setColor(colors.WHITE);
         colors.ACCENT.setColor(colors.SKY_BLUE);
-    }else{
+    } else {
         document.body.style.backgroundColor = "white";
         theme = "light";
         colors.BACKGROUND.setColor(colors.WHITE);

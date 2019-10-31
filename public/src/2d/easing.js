@@ -3,8 +3,8 @@ let sqrt = Math.sqrt;
 const PI = Math.PI;
 export function wrapper(func) {
     return num => {
-        if(num <= 0) return 0;
-        if(num >= 1) return 1;
+        if (num <= 0) return 0;
+        if (num >= 1) return 1;
         return func(num);
     };
 }

@@ -1,7 +1,7 @@
 import Base from "./base.js";
 export default class Circle extends Base {
     draw(context, drawChildren = true) {
-        if(! this.visible) return;
+        if (!this.visible) return;
         super.draw(context, false);
         this.updateBound();
         let {
@@ -16,6 +16,6 @@ export default class Circle extends Base {
         context.closePath();
         context.fill();
         context.stroke();
-        if(drawChildren) this.drawChildren();
+        if (drawChildren) this.drawChildren();
     }
 }

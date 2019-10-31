@@ -2,9 +2,9 @@ export function get(url) {
     return new Promise((resolve, reject) => {
         let xhr = new XMLHttpRequest;
         xhr.addEventListener("load", () => {
-            if(xhr.status === 200) {
+            if (xhr.status === 200) {
                 resolve(xhr.responseText);
-            }else{
+            } else {
                 reject(xhr.status);
             }
         });

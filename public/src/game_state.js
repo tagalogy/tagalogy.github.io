@@ -2,7 +2,7 @@ import EventTarget from "./event.js";
 import {
     now
 } from "./2d/easing.js";
-export default class GameState extends EventTarget{
+export default class GameState extends EventTarget {
     constructor(option = {}) {
         super(option);
         this.stopped = false;
@@ -13,26 +13,26 @@ export default class GameState extends EventTarget{
         this.timeWhenPaused = 0;
     }
     get time() {
-        if(this.paused) return this.timeWhenPaused;
+        if (this.paused) return this.timeWhenPaused;
         return now() - this.startTime - this.pauseTime;
     }
     pause() {
-        if(this.paused) return;
+        if (this.paused) return;
         this.timeWhenPaused = this.time;
         this.pauseStartTime = now();
         this.paused = true;
         this.invoke("pause");
     }
     play() {
-        if(this.stopped || ! this.paused) return;
+        if (this.stopped || !this.paused) return;
         this.pauseTime += now() - this.pauseStartTime;
         this.paused = false;
         this.invoke("play");
     }
     toggle() {
-        if(this.paused) {
+        if (this.paused) {
             this.play();
-        }else{
+        } else {
             this.pause();
         }
     }
@@ -61,7 +61,7 @@ export default class GameState extends EventTarget{
                 timeStart = this.time;
                 clearTimeout(id);
             };
-            if(! this.paused) onplay();
+            if (!this.paused) onplay();
             this.on("play", onplay);
             this.on("pause", onpause);
             this.once("stop", () => {

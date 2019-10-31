@@ -6,7 +6,7 @@ export default class SafeArea extends Object2D {
         let {
             ratio
         } = option;
-        this.updateBound = function() {
+        this.updateBound = function () {
             let {
                 parent
             } = this;

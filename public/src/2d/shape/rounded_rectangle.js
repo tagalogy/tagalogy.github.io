@@ -1,6 +1,6 @@
 import Base from "./base.js";
 let min = Math.min;
-export default class RoundedRectangle extends Base{
+export default class RoundedRectangle extends Base {
     constructor(option = {}) {
         super(option);
         this.setRadius(option);
@@ -9,7 +9,7 @@ export default class RoundedRectangle extends Base{
         this.updateRadius = updateRadiusWrapper(option);
     }
     draw(context, drawChildren = true) {
-        if(! this.visible) return;
+        if (!this.visible) return;
         super.draw(context, false);
         this.updateBound();
         this.updateRadius();
@@ -36,29 +36,29 @@ export default class RoundedRectangle extends Base{
         context.closePath();
         context.fill();
         context.stroke();
-        if(drawChildren) this.drawChildren(context);
+        if (drawChildren) this.drawChildren(context);
     }
 }
 export function updateRadiusWrapper(option) {
-    if(typeof option == "number")  {
-        return function() {
+    if (typeof option == "number") {
+        return function () {
             return option;
         };
     }
-    let {updateRadius} = option;
-    if(updateRadius) return updateRadius;
+    let { updateRadius } = option;
+    if (updateRadius) return updateRadius;
     let {
         radius = 0,
         isRadiusRelative = true
     } = option;
-    return function() {
-        if(isRadiusRelative) {
+    return function () {
+        if (isRadiusRelative) {
             let {
                 width,
                 height
             } = this;
             this.radius = min(width, height) * radius;
-        }else{
+        } else {
             this.radius = radius;
         }
     }

@@ -7,7 +7,7 @@ export let supported = (() => {
         storage.setItem(x, x);
         storage.removeItem(x);
         return true;
-    }catch(error) {
+    } catch (error) {
         return error instanceof DOMException && (
             // everything except Firefox
             error.code === 22 ||
@@ -25,33 +25,33 @@ export let supported = (() => {
 let storage;
 export default storage = {
     weakHasItem(name) {
-        if(! supported) return false;
+        if (!supported) return false;
         return storage.weakGetItem(name) !== null;
     },
     weakGetItem(name) {
-        if(! supported) return null;
-        try{
+        if (!supported) return null;
+        try {
             return JSON.parse(localStorage.getItem(name));
-        }catch(error) {
+        } catch (error) {
             return null;
         }
     },
     weakSetItem(name, value) {
-        if(! supported) return;
+        if (!supported) return;
         try {
             localStorage.setItem(name, JSON.stringify(value));
-        }catch(error) {}
+        } catch (error) { }
     },
     weakRemoveItem(name) {
-        if(! supported) return;
+        if (!supported) return;
         localStorage.removeItem(name);
     },
     get map() {
-        let {_map: map} = storage;
-        if(map) return map;
+        let { _map: map } = storage;
+        if (map) return map;
         map = storage._map = new Map;
-        if(! supported) return map;
-        for(let ind = 0, len = localStorage.length; ind < len; ind ++) {
+        if (!supported) return map;
+        for (let ind = 0, len = localStorage.length; ind < len; ind++) {
             let name = localStorage.key(ind);
             map.set(name, storage.weakGetItem(name));
         }
@@ -65,9 +65,9 @@ export default storage = {
     },
     setItem(name, value) {
         storage.map.set(name, value);
-        if(value == null) {
+        if (value == null) {
             storage.weakRemoveItem(name);
-        }else{
+        } else {
             storage.weakSetItem(name, value);
         }
     },
@@ -75,9 +75,9 @@ export default storage = {
         storage.setItem(name, null);
     },
     setDefault(name, value) {
-        if(! storage.hasItem(name)) storage.setItem(name, value);
+        if (!storage.hasItem(name)) storage.setItem(name, value);
     },
     setAllDefault(option) {
-        for(let name in option) storage.setDefault(name, option[name]);
+        for (let name in option) storage.setDefault(name, option[name]);
     }
 }

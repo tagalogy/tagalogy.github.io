@@ -33,21 +33,21 @@ async function preCache() {
     await cache.addAll(path);
 }
 async function deleteUnneededCache() {
-    for(let key of await caches.keys()) if(cacheName !== key) await caches.delete(key);
+    for (let key of await caches.keys()) if (cacheName !== key) await caches.delete(key);
 }
 async function fromCache(request) {
     let cached = await caches.match(request);
-    if(cached) return cached;
+    if (cached) return cached;
     return await fetch(request);
 }
 async function update(request) {
     let cache = await caches.open(cacheName);
     let cached = await cache.match(request);
-    if(! cached) return;
+    if (!cached) return;
     let response;
-    try{
-        response = await fetch(request)
-    }catch(error) {
+    try {
+        response = await fetch(request);
+    } catch (error) {
         return;
     }
     cache.put(request, response);
@@ -59,7 +59,7 @@ self.addEventListener("activate", event => {
     event.waitUntil(deleteUnneededCache());
 });
 self.addEventListener("fetch", event => {
-    let {request} = event;
+    let { request } = event;
     event.respondWith(fromCache(event.request));
     event.waitUntil(update(request));
 });
