@@ -21,6 +21,11 @@ let path = `
     /asset/word_4.txt
     /asset/word_5.txt
     /asset/word_6.txt
+    
+    /asset/sfx/advance.mp3
+    /asset/sfx/click.mp3
+    /asset/sfx/fail.mp3
+    /asset/sfx/game_over.mp3
 
     /icon/16.png
     /icon/32.png
