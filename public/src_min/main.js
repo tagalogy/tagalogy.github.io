@@ -2155,7 +2155,6 @@ var main = (function (exports) {
         scene.on("frame", prevHandler);
         await gameState.timeout(time * 1000);
         if (thisGame !== currentGame) return;
-        sfx.FAIL.play();
         gameState.stop();
         scene.off("frame", prevHandler);
         timer.content = ":O";
