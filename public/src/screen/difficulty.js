@@ -4,7 +4,8 @@ import RoundedRectangle from "../2d/shape/rounded_rectangle.js";
 import storage from "../storage.js";
 import {
     difficulties,
-    colors
+    colors,
+    sfx
 } from "../asset.js";
 import { startGame } from "./game.js";
 import Text from "../2d/shape/text.js";
@@ -92,6 +93,7 @@ raw.forEach(({ name, description, difficultyKey, highscoreKey }, ind) => {
             ]
         }),
         async oninteractup() {
+            sfx.CLICK.play();
             await end();
             startGame(highscoreKey, difficulties[difficultyKey]);
         }

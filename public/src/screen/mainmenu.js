@@ -13,6 +13,7 @@ import Object2D, {
     updateBoundWrapper
 } from "../2d/object2d.js";
 import {
+    sfx,
     images,
     colors
 } from "../asset.js";
@@ -74,6 +75,7 @@ let startButton = new RoundedRectangle({
         content: "simulan"
     }),
     async oninteractup() {
+        sfx.CLICK.play();
         await end();
         startGame();
     }

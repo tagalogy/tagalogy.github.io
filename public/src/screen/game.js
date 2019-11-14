@@ -13,7 +13,7 @@ import timeout, {
     now
 } from "../timeout.js";
 import {
-    colors
+    colors, sfx
 } from "../asset.js";
 import {
     scene,
@@ -87,6 +87,7 @@ let hud = new Object2D({
             },
             oninteractup() {
                 if (gameState.paused) return;
+                sfx.CLICK.play();
                 pauseColor.setColor(colors.BACKGROUND);
                 pause();
             }
@@ -194,6 +195,7 @@ export async function newGame() {
     scene.on("frame", prevHandler);
     await gameState.timeout(time * 1000);
     if (thisGame !== currentGame) return;
+    sfx.FAIL.play();
     gameState.stop();
     scene.off("frame", prevHandler);
     timer.content = ":O";
@@ -221,6 +223,7 @@ export async function newGame() {
         Puntos: ${score.content}
         Simulan muli?
     `;
+    sfx.GAME_OVER.play();
     if (await dialog(message, "Oo", "Hindi")) {
         score.content = "0";
         gameState = new GameState;

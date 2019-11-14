@@ -8,7 +8,7 @@ import {
     sineIn
 } from "../../2d/easing.js";
 import {
-    colors
+    colors, sfx
 } from "../../asset.js";
 import {
     updateThickness
@@ -158,8 +158,9 @@ export async function start(wordBank) {
     word.sort(() => Math.random() - Math.random());
     let currentPressed = 0;
     let currentLen = word.length;
-    prevClearHandler = () => {
+    prevClearHandler = (bool) => {
         if (gameState.paused) return;
+        if (! bool) sfx.CLICK.play();
         outputBox.content = "";
         currentPressed = 0;
         for (let button of syllableBox.children) button.unpress();
@@ -173,6 +174,7 @@ export async function start(wordBank) {
     clearPlace.on("interactup", prevClearHandler);
     prevHyphenHandler = () => {
         if (gameState.paused) return;
+        sfx.CLICK.play();
         if (!outputBox.content.endsWith("-")) outputBox.content += "-";
         clearFill.setColor(colors.PH_RED);
         clearLine.setColor(colors.TRANSPARENT);
@@ -254,12 +256,14 @@ export async function start(wordBank) {
                 currentPressed++;
                 if (currentPressed < currentLen) return;
                 if (wordBank.indexOf(outputBox.content.toUpperCase()) >= 0) {
+                    sfx.ADVANCE.play();
                     nextGame(end());
                     return;
                 }
+                sfx.CLICK.play();
                 outputColor.setColor("#f00");
                 await outputColor.animateColor("#f000", 200);
-                prevClearHandler();
+                prevClearHandler(true);
                 outputColor.setColor(colors.FOREGROUND);
             }
         });

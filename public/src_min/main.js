@@ -720,6 +720,22 @@ var main = (function (exports) {
         return Promise.all(urls.map(url => get(url)));
     }
 
+    function loadAudio(src) {
+        return new Promise((resolve, reject) => {
+            let audio = new Audio(src);
+            audio.addEventListener("canplaythrough", () => {
+                resolve(audio);
+            });
+            audio.addEventListener("error", () => {
+                reject(`Unable to load Audio from ${src}`);
+            });
+        });
+    }
+    function loadAllAudio(srcs) {
+        return Promise.all(srcs.map(src => loadAudio(src)));
+    }
+
+    let sfx = {};
     let words = {};
     let images = {};
     let difficulties = {};
@@ -749,6 +765,17 @@ var main = (function (exports) {
         difficulties.MEDIUM = [...words.WORD_3, ...words.WORD_4].sort();
         difficulties.HARD = [...words.WORD_4, ...words.WORD_5].sort();
         difficulties.VERY_HARD = [...words.WORD_5, ...words.WORD_6].sort();
+        [
+            sfx.ADVANCE,
+            sfx.CLICK,
+            sfx.FAIL,
+            sfx.GAME_OVER
+        ] = await loadAllAudio(`
+        /asset/sfx/advance.mp3
+        /asset/sfx/click.mp3
+        /asset/sfx/fail.mp3
+        /asset/sfx/game_over.mp3
+    `.trim().split(SPACES));
     }
     let assets = loadAll();
     let colors = {
@@ -1823,8 +1850,9 @@ var main = (function (exports) {
         word.sort(() => Math.random() - Math.random());
         let currentPressed = 0;
         let currentLen = word.length;
-        prevClearHandler = () => {
+        prevClearHandler = (bool) => {
             if (gameState.paused) return;
+            if (! bool) sfx.CLICK.play();
             outputBox.content = "";
             currentPressed = 0;
             for (let button of syllableBox.children) button.unpress();
@@ -1838,6 +1866,7 @@ var main = (function (exports) {
         clearPlace.on("interactup", prevClearHandler);
         prevHyphenHandler = () => {
             if (gameState.paused) return;
+            sfx.CLICK.play();
             if (!outputBox.content.endsWith("-")) outputBox.content += "-";
             clearFill.setColor(colors.PH_RED);
             clearLine.setColor(colors.TRANSPARENT);
@@ -1919,12 +1948,14 @@ var main = (function (exports) {
                     currentPressed++;
                     if (currentPressed < currentLen) return;
                     if (wordBank.indexOf(outputBox.content.toUpperCase()) >= 0) {
+                        sfx.ADVANCE.play();
                         nextGame(end());
                         return;
                     }
+                    sfx.CLICK.play();
                     outputColor.setColor("#f00");
                     await outputColor.animateColor("#f000", 200);
-                    prevClearHandler();
+                    prevClearHandler(true);
                     outputColor.setColor(colors.FOREGROUND);
                 }
             });
@@ -2016,6 +2047,7 @@ var main = (function (exports) {
                 },
                 oninteractup() {
                     if (gameState.paused) return;
+                    sfx.CLICK.play();
                     pauseColor.setColor(colors.BACKGROUND);
                     pause();
                 }
@@ -2123,6 +2155,7 @@ var main = (function (exports) {
         scene.on("frame", prevHandler);
         await gameState.timeout(time * 1000);
         if (thisGame !== currentGame) return;
+        sfx.FAIL.play();
         gameState.stop();
         scene.off("frame", prevHandler);
         timer.content = ":O";
@@ -2150,6 +2183,7 @@ var main = (function (exports) {
         Puntos: ${score.content}
         Simulan muli?
     `;
+        sfx.GAME_OVER.play();
         if (await popup(message, "Oo", "Hindi")) {
             score.content = "0";
             gameState = new GameState;
@@ -2269,6 +2303,7 @@ var main = (function (exports) {
                 ]
             }),
             async oninteractup() {
+                sfx.CLICK.play();
                 await end$1();
                 startGame(highscoreKey, difficulties[difficultyKey]);
             }
@@ -2348,6 +2383,7 @@ var main = (function (exports) {
             content: "simulan"
         }),
         async oninteractup() {
+            sfx.CLICK.play();
             await end$2();
             start$2();
         }
