@@ -5,6 +5,8 @@ import {
     getAll
 } from "./get_http.js";
 import Color from "./2d/color.js";
+import { loadAllAudio } from "./load_audio.js";
+export let sfx = {};
 export let words = {};
 export let images = {};
 export let difficulties = {};
@@ -34,6 +36,17 @@ async function loadAll() {
     difficulties.MEDIUM = [...words.WORD_3, ...words.WORD_4].sort();
     difficulties.HARD = [...words.WORD_4, ...words.WORD_5].sort();
     difficulties.VERY_HARD = [...words.WORD_5, ...words.WORD_6].sort();
+    [
+        sfx.ADVANCE,
+        sfx.CLICK,
+        sfx.FAIL,
+        sfx.GAME_OVER
+    ] = await loadAllAudio(`
+        /asset/sfx/advance.mp3
+        /asset/sfx/click.mp3
+        /asset/sfx/fail.mp3
+        /asset/sfx/game_over.mp3
+    `.trim().split(SPACES));
 }
 export let assets = loadAll();
 export let colors = {
