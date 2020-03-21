@@ -1,24 +1,18 @@
 {
-    "name": "tagalogy",
-    "version": "0.0.1",
-    "description": "Mobile-first web game aimed to help players understand Tagalog more",
-    "main": "start.js",
+    "private": true,
     "scripts": {
-        "start": "node start.js"
+        "build": "rollup -c build.config.js",
+        "test": "rollup -c test.config.js -w",
+        "start": "node start.js",
+        "prepare": "npm run build"
     },
     "dependencies": {
-        "express": "^4.13.3"
+        "express": "^4.17.1"
     },
-    "engines": {
-        "node": "10.16.3"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/azertray/tagalogy"
-    },
-    "keywords": [
-        "education",
-        "game"
-    ],
-    "author": "Sean Bagongon"
+    "devDependencies": {
+        "rollup": "^1.31.1",
+        "rollup-plugin-terser": "^5.2.0",
+        "rollup-plugin-typescript2": "^0.25.3",
+        "typescript": "^3.7.5"
+    }
 }
