@@ -3,11 +3,10 @@ let express = require("express");
 let app = express();
 let port = process.env.PORT || 4000;
 
-// Start hosting static files
 console.log("Starting server");
 app.set("port", port);
 app.use(express.static("public", {
-    maxAge: "0"
+    maxAge: "0",
 }));
 app.listen(app.get("port"), error => {
     if(error) throw error;

@@ -1,53 +1,52 @@
-let cacheName = "tagalogy-cache";
-let path = `
+const cacheName = "tagalogy-cache-1";
+const path = `\
+/
+/index.html
+/dist/main.js
 
-    /
-    /index.html
-    /src_min/main.js
+/asset/main.css
+/asset/font.css
 
-    /asset/font.css
-    /asset/comicnueue_angular/bold_italic.otf
-    /asset/comicnueue_angular/bold.otf
-    /asset/comicnueue_angular/italic.otf
-    /asset/comicnueue_angular/light_italic.otf
-    /asset/comicnueue_angular/light.otf
-    /asset/comicnueue_angular/regular.otf
+/asset/comicneue_angular/bold_italic.otf
+/asset/comicneue_angular/bold.otf
+/asset/comicneue_angular/italic.otf
+/asset/comicneue_angular/light_italic.otf
+/asset/comicneue_angular/light.otf
+/asset/comicneue_angular/regular.otf
 
-    /asset/bulb.png
-    /asset/title.png
-    /asset/title_dark.png
+/asset/bulb.png
+/asset/title.png
+/asset/title_dark.png
 
-    /asset/word_3.txt
-    /asset/word_4.txt
-    /asset/word_5.txt
-    /asset/word_6.txt
-    
-    /asset/sfx/advance.mp3
-    /asset/sfx/click.mp3
-    /asset/sfx/fail.mp3
-    /asset/sfx/game_over.mp3
+/asset/word_3.txt
+/asset/word_4.txt
+/asset/word_5.txt
+/asset/word_6.txt
 
-    /icon/16.png
-    /icon/32.png
-    /icon/192.png
-    /icon/512.png
+/asset/sfx/advance.mp3
+/asset/sfx/click.mp3
+/asset/sfx/fail.mp3
+/asset/sfx/game_over.mp3
 
-`.trim().split(/\s+/);
+/icon/16.png
+/icon/32.png
+/icon/192.png
+/icon/512.png`.trim().split(/\s+/);
 async function preCache() {
-    let cache = await caches.open(cacheName);
+    const cache = await caches.open(cacheName);
     await cache.addAll(path);
 }
 async function deleteUnneededCache() {
-    for (let key of await caches.keys()) if (cacheName !== key) await caches.delete(key);
+    for (const key of await caches.keys()) if (cacheName !== key) await caches.delete(key);
 }
 async function fromCache(request) {
-    let cached = await caches.match(request);
+    const cached = await caches.match(request);
     if (cached) return cached;
     return await fetch(request);
 }
 async function update(request) {
-    let cache = await caches.open(cacheName);
-    let cached = await cache.match(request);
+    const cache = await caches.open(cacheName);
+    const cached = await cache.match(request);
     if (!cached) return;
     let response;
     try {
@@ -64,7 +63,7 @@ self.addEventListener("activate", event => {
     event.waitUntil(deleteUnneededCache());
 });
 self.addEventListener("fetch", event => {
-    let { request } = event;
+    const {request} = event;
     event.respondWith(fromCache(event.request));
     event.waitUntil(update(request));
 });
