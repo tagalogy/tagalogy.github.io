@@ -21,26 +21,6 @@
 
 </html>
 <script>
-    let head = document.head;
-    function loadScript(src, type = "text/javascript") {
-        return new Promise((resolve, reject) => {
-            let script = document.createElement("script");
-            script.src = src;
-            script.type = type;
-            script.async = true;
-            script.addEventListener("load", () => {
-                head.removeChild(script);
-                resolve(script);
-            });
-            script.addEventListener("error", () => {
-                reject(script);
-            });
-            head.appendChild(script);
-        });
-    }
-    async function start() {
-        if ("serviceWorker" in navigator) await navigator.serviceWorker.register("service_worker.js");
-        await loadScript("dist/main.js");
-    }
-    start();
+    navigator.serviceWorker.register("service_worker.js");
 </script>
+<script src="dist/main.js"></script>
