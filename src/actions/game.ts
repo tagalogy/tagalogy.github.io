@@ -69,10 +69,18 @@ export async function nextGame(promise?: Promise<void>): Promise<void> {
 }
 export async function pause(): Promise<void> {
     gameState.pause();
-    await pauseStart();
-    gameState.play();
+    const willContinue = await pauseStart();
+    if(willContinue) {
+        gameState.play();
+    }else{
+        gameState.stop();
+        saveHighscore();
+        endTwist();
+        exitGame();
+    }
 }
 export async function exitGame(): Promise<void> {
+    resetScore();
     await hudBox.exit();
     await timeout(200);
     gameBox.remove();
@@ -84,9 +92,7 @@ export async function endGame(correct: string): Promise<void> {
     timerText.content = ":O";
     await shakeEffect();
     await timeout(500);
-    const high = storage.getItem(currentDifficulty) as number;
-    const currentScore = score;
-    if (high < currentScore) storage.setItem(currentDifficulty, currentScore);
+    saveHighscore();
     timerText.content = ":(";
     endTwist();
     const message = `\
@@ -94,14 +100,17 @@ Tamang Sagot: ${correct}
 Puntos: ${score}
 Simulan muli?`;
     const response = await popup(message, "Oo", "Hindi");
-    score = 0;
-    scoreText.content = "0";
     if (response) {
         gameState = new PlayState;
+        resetScore();
         newGame();
     } else {
         exitGame();
     }
+}
+function saveHighscore():void {
+    const high = storage.getItem(currentDifficulty) as number;
+    if (high < score) storage.setItem(currentDifficulty, score);
 }
 export async function shakeEffect(): Promise<void> {
     const oldUpdateBound = gameBox.updateBound;
@@ -115,3 +124,8 @@ export async function shakeEffect(): Promise<void> {
     await timeout(500);
     gameBox.updateBound = oldUpdateBound;
 }
+function resetScore(): void {
+    score = 0;
+    scoreText.content = "0";
+}
+window.addEventListener("beforeunload", saveHighscore);
