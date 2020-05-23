@@ -1,12 +1,20 @@
-import {NEWLINE} from "../utils/regex";
-import {toSet} from "../utils/collection";
+import { NEWLINE } from "../utils/regex";
+import { toSet } from "../utils/collection";
 
 function parseSpecial(source: string): Map<string, [string, string]> {
-    return new Map<string, [string, string]>(source.trim().split(NEWLINE).map(line => {
-        const value = line.trim().split("/").map(string => string.trim());
-        if (value.length < 2) throw new Error("invalid source");
-        return [value.join(""), value] as [string, [string, string]];
-    }));
+    return new Map<string, [string, string]>(
+        source
+            .trim()
+            .split(NEWLINE)
+            .map(line => {
+                const value = line
+                    .trim()
+                    .split("/")
+                    .map(string => string.trim());
+                if (value.length < 2) throw new Error("invalid source");
+                return [value.join(""), value] as [string, [string, string]];
+            }),
+    );
 }
 const FIRST_CONSONANT = toSet(`\
 B BL BR BW BY
@@ -218,7 +226,12 @@ export function parsePartialWord(word: string): string[] {
     sliced.push(tokens[tokens.length - 1]);
     const syllables: string[] = [];
     for (let ind = 0; ind < sliced.length; ind += 3) {
-        syllables.push(sliced.slice(ind, ind + 3).join("").replace(ENG, "NG"));
+        syllables.push(
+            sliced
+                .slice(ind, ind + 3)
+                .join("")
+                .replace(ENG, "NG"),
+        );
     }
     return syllables;
 }
@@ -229,7 +242,8 @@ export function parseWord(word: string): string[] {
             result.push("-");
             continue;
         }
-        for (const syllable of parsePartialWord(partialWord)) result.push(syllable);
+        for (const syllable of parsePartialWord(partialWord))
+            result.push(syllable);
     }
     return result;
 }

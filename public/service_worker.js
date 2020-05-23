@@ -31,13 +31,16 @@ const path = `\
 /icon/16.png
 /icon/32.png
 /icon/192.png
-/icon/512.png`.trim().split(/\s+/);
+/icon/512.png`
+    .trim()
+    .split(/\s+/);
 async function preCache() {
     const cache = await caches.open(cacheName);
     await cache.addAll(path);
 }
 async function deleteUnneededCache() {
-    for (const key of await caches.keys()) if (cacheName !== key) await caches.delete(key);
+    for (const key of await caches.keys())
+        if (cacheName !== key) await caches.delete(key);
 }
 async function fromCache(request) {
     const cached = await caches.match(request);
@@ -63,7 +66,7 @@ self.addEventListener("activate", event => {
     event.waitUntil(deleteUnneededCache());
 });
 self.addEventListener("fetch", event => {
-    const {request} = event;
+    const { request } = event;
     event.respondWith(fromCache(event.request));
     event.waitUntil(update(request));
 });

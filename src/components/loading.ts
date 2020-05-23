@@ -1,7 +1,7 @@
-import {Horizontal} from "../graphics/shape/horizontal";
-import {safeArea} from "./master";
-import {updateThickness} from "./update_thickness";
-import {foreground} from "../asset/color";
+import { Horizontal } from "../graphics/shape/horizontal";
+import { safeArea } from "./master";
+import { updateThickness } from "./update_thickness";
+import { foreground } from "../asset/color";
 
 export const loadingLine = new Horizontal({
     cap: "butt",

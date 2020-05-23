@@ -1,16 +1,16 @@
-import {theme} from "../actions/theme";
-import {imageLoader} from "../asset/asset";
-import {background, black, foreground, white, yellowPH} from "../asset/color";
-import {Color} from "../graphics/color";
-import {linear} from "../graphics/easing";
-import {Object2d, updateBoundWrapper} from "../graphics/object_2d";
-import {FreeForm} from "../graphics/shape/freeform";
-import {Image} from "../graphics/shape/image";
-import {RoundedRectangle} from "../graphics/shape/rounded_rectangle";
-import {Text} from "../graphics/shape/text";
-import {now} from "../utils/time";
-import {safeArea} from "./master";
-import {updateThickness} from "./update_thickness";
+import { theme } from "../actions/theme";
+import { imageLoader } from "../asset/asset";
+import { background, black, foreground, white, yellowPH } from "../asset/color";
+import { Color } from "../graphics/color";
+import { linear } from "../graphics/easing";
+import { Object2d, updateBoundWrapper } from "../graphics/object_2d";
+import { FreeForm } from "../graphics/shape/freeform";
+import { Image } from "../graphics/shape/image";
+import { RoundedRectangle } from "../graphics/shape/rounded_rectangle";
+import { Text } from "../graphics/shape/text";
+import { now } from "../utils/time";
+import { safeArea } from "./master";
+import { updateThickness } from "./update_thickness";
 
 const startTime = now();
 
@@ -19,7 +19,10 @@ export const titleBox = new Object2d({
     enterOption: {
         updateBound: function (this: Object2d) {
             titleBoxPos.call(this);
-            this.y += Math.sin((now() - startTime) / 2000 * Math.PI) * this.height / 64;
+            this.y +=
+                (Math.sin(((now() - startTime) / 2000) * Math.PI) *
+                    this.height) /
+                64;
         },
     },
     exitOption: {
@@ -41,7 +44,7 @@ export const shineShape = new FreeForm({
         [0, 1],
         [3 / 4, 0],
         [1, 0],
-        [1 / 4, 1]
+        [1 / 4, 1],
     ],
     opacity: 1 / 4,
     fill: white,
@@ -55,16 +58,20 @@ setInterval(() => {
         width: 1,
         height: 1,
     });
-    shineShape.animateBound({
-        x: 1,
-        y: 0,
-        width: 1,
-        height: 1,
-    }, 700, linear);
+    shineShape.animateBound(
+        {
+            x: 1,
+            y: 0,
+            width: 1,
+            height: 1,
+        },
+        700,
+        linear,
+    );
 }, 4000);
-const buttonLine = new Color;
-const buttonFill = new Color;
-const buttonColor = new Color;
+const buttonLine = new Color();
+const buttonFill = new Color();
+const buttonColor = new Color();
 export const startButton = new RoundedRectangle({
     fill: buttonFill,
     line: buttonLine,

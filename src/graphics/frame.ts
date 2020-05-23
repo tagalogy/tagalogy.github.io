@@ -5,8 +5,8 @@ export class Frame {
             if (!this.playing) return;
             onframe();
             requestAnimationFrame(callback);
-        }
-        requestAnimationFrame(callback)
+        };
+        requestAnimationFrame(callback);
     }
     stop(): void {
         this.playing = false;

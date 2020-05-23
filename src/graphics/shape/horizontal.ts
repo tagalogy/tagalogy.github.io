@@ -1,4 +1,4 @@
-import {Line, LineOption} from "./line";
+import { Line, LineOption } from "./line";
 
 export class Horizontal extends Line {
     constructor(option: LineOption = {}) {

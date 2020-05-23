@@ -1,4 +1,4 @@
-import {SPACE} from "./regex";
+import { SPACE } from "./regex";
 
 export function toSet(source: string): Set<string> {
     return new Set(toArray(source));

@@ -1,7 +1,7 @@
-import {SafeArea} from "../graphics/safearea";
-import {Scene} from "../graphics/scene";
-import {Rectangle} from "../graphics/shape/rectangle";
-import {background} from "../asset/color";
+import { SafeArea } from "../graphics/safearea";
+import { Scene } from "../graphics/scene";
+import { Rectangle } from "../graphics/shape/rectangle";
+import { background } from "../asset/color";
 
 export const canvas = document.querySelector("canvas")!;
 export const scene = new Scene({
@@ -17,7 +17,7 @@ new Rectangle({
     fill: background,
     operation: "destination-over",
     parent: scene,
-})
+});
 export const safeArea = new SafeArea({
     ratio: 3 / 5,
     parent: scene,

@@ -1,10 +1,10 @@
-import {background, foreground, accent, white} from "../asset/color";
-import {SafeArea} from "../graphics/safearea";
-import {Rectangle} from "../graphics/shape/rectangle";
-import {Text} from "../graphics/shape/text";
-import {scene} from "./master";
-import {Object2d} from "../graphics/object_2d";
-import {RoundedRectangle} from "../graphics/shape/rounded_rectangle";
+import { background, foreground, accent, white } from "../asset/color";
+import { SafeArea } from "../graphics/safearea";
+import { Rectangle } from "../graphics/shape/rectangle";
+import { Text } from "../graphics/shape/text";
+import { scene } from "./master";
+import { Object2d } from "../graphics/object_2d";
+import { RoundedRectangle } from "../graphics/shape/rounded_rectangle";
 
 export const pauseScreen = new Rectangle({
     x: 0,

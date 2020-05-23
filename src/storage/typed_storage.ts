@@ -14,16 +14,27 @@ function getTakenKey(storage: Storage): Set<string> {
 }
 function getStorageName(storage: Storage): string {
     switch (storage) {
-        case localStorage: return "localStorage";
-        case sessionStorage: return "sessionStorage";
-        default: return "<unknown Storage>";
+        case localStorage:
+            return "localStorage";
+        case sessionStorage:
+            return "sessionStorage";
+        default:
+            return "<unknown Storage>";
     }
 }
 export class TypedStorage<Body extends object> {
-    constructor(private storage: Storage, private converters: Converters<Body>) {
+    constructor(
+        private storage: Storage,
+        private converters: Converters<Body>,
+    ) {
         const takenField = getTakenKey(storage);
         for (const key of Object.keys(converters)) {
-            if (takenField.has(key)) throw new Error(`the key "${key}" from ${getStorageName(storage)} is already taken.`);
+            if (takenField.has(key))
+                throw new Error(
+                    `the key "${key}" from ${getStorageName(
+                        storage,
+                    )} is already taken.`,
+                );
             takenField.add(key);
         }
     }
@@ -53,7 +64,9 @@ export const stringConverter: Converter<string> = {
     parse: value => value,
     stringify: value => value,
 };
-export function enumConverterFactory<Enum extends string>(enumTuple: Enum[]): Converter<Enum> {
+export function enumConverterFactory<Enum extends string>(
+    enumTuple: Enum[],
+): Converter<Enum> {
     return {
         parse: value => {
             if ((enumTuple as string[]).includes(value)) return value as Enum;
@@ -81,7 +94,7 @@ export const floatConverter: Converter<number> = {
 export const isoDateConverter: Converter<Date> = {
     parse: value => {
         const date = new Date(value);
-        if (Number.isNaN(+ date)) return null;
+        if (Number.isNaN(+date)) return null;
         return date;
     },
     stringify: value => value.toISOString(),

@@ -1,4 +1,4 @@
-import {Base, BaseOption} from "./base";
+import { Base, BaseOption } from "./base";
 
 export interface FreeFormOption extends BaseOption {
     path?: [number, number][];
@@ -14,7 +14,7 @@ export class FreeForm extends Base {
         if (!this.visible) return;
         super.draw(context, false);
         this.updateBound();
-        const {x, y, width, height, path} = this;
+        const { x, y, width, height, path } = this;
         context.beginPath();
         if (path.length > 0) {
             const [first, ...rest] = path;

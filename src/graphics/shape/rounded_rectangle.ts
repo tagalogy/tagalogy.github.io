@@ -1,5 +1,5 @@
-import {noop} from "../../utils/noop";
-import {Base, BaseOption} from "./base";
+import { noop } from "../../utils/noop";
+import { Base, BaseOption } from "./base";
 
 export interface RoundedRectangleUpdater {
     (this: RoundedRectangle): void;
@@ -24,13 +24,7 @@ export class RoundedRectangle extends Base {
         super.draw(context, false);
         this.updateBound();
         this.updateRadius();
-        const {
-            radius,
-            x: minX,
-            y: minY,
-            width,
-            height,
-        } = this;
+        const { radius, x: minX, y: minY, width, height } = this;
         const midX = minX + width / 2;
         const midY = minY + height / 2;
         const maxX = minX + width;
@@ -50,21 +44,20 @@ export class RoundedRectangle extends Base {
         if (drawChildren) this.drawChildren(context);
     }
 }
-export function updateRadiusWrapper(option: number | RoundedRectangleOption): RoundedRectangleUpdater {
+export function updateRadiusWrapper(
+    option: number | RoundedRectangleOption,
+): RoundedRectangleUpdater {
     if (typeof option === "number") {
         return function () {
             this.radius = option;
         };
     }
-    const {updateRadius} = option;
+    const { updateRadius } = option;
     if (updateRadius) return updateRadius;
-    const {
-        radius = 0,
-        isRadiusRelative = true,
-    } = option;
+    const { radius = 0, isRadiusRelative = true } = option;
     return function () {
         if (isRadiusRelative) {
-            const {width, height} = this;
+            const { width, height } = this;
             this.radius = Math.min(width, height) * radius;
         } else {
             this.radius = radius;

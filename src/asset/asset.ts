@@ -1,6 +1,6 @@
-import {memoize} from "../utils/memo";
-import {voidifyPromise} from "../utils/promise";
-import {AudioLoader, ImageLoader, WordLoader} from "./loader";
+import { memoize } from "../utils/memo";
+import { voidifyPromise } from "../utils/promise";
+import { AudioLoader, ImageLoader, WordLoader } from "./loader";
 
 export const imagePaths = [
     "/asset/title.png",
@@ -26,22 +26,31 @@ export const imageLoader = new ImageLoader(imagePaths.slice());
 export const wordLoader = new WordLoader(wordPaths.slice());
 export const audioLoader = new AudioLoader(audioPaths.slice());
 
-export const getDifficulty = memoize<"easy" | "medium" | "hard" | "very_hard", string[]>(param => {
+export const getDifficulty = memoize<
+    "easy" | "medium" | "hard" | "very_hard",
+    string[]
+>(param => {
     switch (param) {
-        case "easy": return wordLoader.get("/asset/word_3.txt");
-        case "medium": return [
-            ...wordLoader.get("/asset/word_3.txt"),
-            ...wordLoader.get("/asset/word_4.txt"),
-        ].sort();
-        case "hard": return [
-            ...wordLoader.get("/asset/word_4.txt"),
-            ...wordLoader.get("/asset/word_5.txt"),
-        ].sort();
-        case "very_hard": return [
-            ...wordLoader.get("/asset/word_5.txt"),
-            ...wordLoader.get("/asset/word_6.txt"),
-        ].sort();
+        case "easy":
+            return wordLoader.get("/asset/word_3.txt");
+        case "medium":
+            return [
+                ...wordLoader.get("/asset/word_3.txt"),
+                ...wordLoader.get("/asset/word_4.txt"),
+            ].sort();
+        case "hard":
+            return [
+                ...wordLoader.get("/asset/word_4.txt"),
+                ...wordLoader.get("/asset/word_5.txt"),
+            ].sort();
+        case "very_hard":
+            return [
+                ...wordLoader.get("/asset/word_5.txt"),
+                ...wordLoader.get("/asset/word_6.txt"),
+            ].sort();
     }
 });
 
-export const assetsLoaded = voidifyPromise(Promise.all([imageLoader.promise, wordLoader.promise, audioLoader.promise]));
+export const assetsLoaded = voidifyPromise(
+    Promise.all([imageLoader.promise, wordLoader.promise, audioLoader.promise]),
+);

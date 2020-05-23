@@ -1,12 +1,12 @@
-import {Color} from "../graphics/color";
-import {Object2d} from "../graphics/object_2d";
-import {Horizontal} from "../graphics/shape/horizontal";
-import {Rectangle} from "../graphics/shape/rectangle";
-import {RoundedRectangle} from "../graphics/shape/rounded_rectangle";
-import {Text} from "../graphics/shape/text";
-import {safeArea} from "./master";
-import {updateThickness} from "./update_thickness";
-import {foreground, yellowPH, black} from "../asset/color";
+import { Color } from "../graphics/color";
+import { Object2d } from "../graphics/object_2d";
+import { Horizontal } from "../graphics/shape/horizontal";
+import { Rectangle } from "../graphics/shape/rectangle";
+import { RoundedRectangle } from "../graphics/shape/rounded_rectangle";
+import { Text } from "../graphics/shape/text";
+import { safeArea } from "./master";
+import { updateThickness } from "./update_thickness";
+import { foreground, yellowPH, black } from "../asset/color";
 
 export const hudBox = new Object2d({
     entranceParent: safeArea,
@@ -18,13 +18,13 @@ export const hudBox = new Object2d({
     },
     exitOption: {
         x: 0 / 3,
-        y: - 1 / 5,
+        y: -1 / 5,
         width: 3 / 3,
         height: 1 / 5,
     },
 });
-export const timerColor = new Color;
-export const pauseColor = new Color;
+export const timerColor = new Color();
+export const pauseColor = new Color();
 export const horizontalLine = new Horizontal({
     x: 0,
     y: 1,
@@ -132,7 +132,7 @@ export const gameBox = new Object2d({
         height: 4 / 5,
     },
 });
-export const inputBox = new Object2d;
+export const inputBox = new Object2d();
 const sideBox = new Object2d({
     x: 3 / 4,
     y: 0 / 5,
@@ -154,12 +154,12 @@ export const syllableBox = new Object2d({
     height: 5 / 5,
     parent: inputBox,
 });
-export const clearFill = new Color;
-export const clearLine = new Color;
-export const clearColor = new Color;
-export const hyphenFill = new Color;
-export const hyphenLine = new Color;
-export const hyphenColor = new Color;
+export const clearFill = new Color();
+export const clearLine = new Color();
+export const clearColor = new Color();
+export const hyphenFill = new Color();
+export const hyphenLine = new Color();
+export const hyphenColor = new Color();
 export const clearPlace = new Object2d({
     x: 0,
     y: 3 / 5,

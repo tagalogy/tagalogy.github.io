@@ -7,7 +7,8 @@ export class EventTarget {
     private getHandler(name: string): EventHandler[] {
         const listeners = this.handlers;
         let handlers = listeners.get(name);
-        if (typeof handlers === "undefined") listeners.set(name, handlers = []);
+        if (typeof handlers === "undefined")
+            listeners.set(name, (handlers = []));
         return handlers;
     }
     on(name: string, handler: EventHandler): void {

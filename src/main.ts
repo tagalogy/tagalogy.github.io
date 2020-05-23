@@ -1,7 +1,7 @@
-import {load} from "./actions/loading";
-import {start} from "./actions/mainmenu";
-import {assetsLoaded} from "./asset/asset";
-import {storage} from "./storage/storage";
+import { load } from "./actions/loading";
+import { start } from "./actions/mainmenu";
+import { assetsLoaded } from "./asset/asset";
+import { storage } from "./storage/storage";
 
 storage.setDefaults({
     theme: "light",

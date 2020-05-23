@@ -1,5 +1,13 @@
-import {background, foreground, white, accent, skyblue, black, bluePH} from "../asset/color";
-import {storage} from "../storage/storage";
+import {
+    background,
+    foreground,
+    white,
+    accent,
+    skyblue,
+    black,
+    bluePH,
+} from "../asset/color";
+import { storage } from "../storage/storage";
 
 export let theme: "dark" | "light";
 export function setTheme(currentTheme: "dark" | "light"): void {

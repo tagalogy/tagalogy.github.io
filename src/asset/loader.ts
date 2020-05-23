@@ -1,5 +1,5 @@
-import {toArray} from "../utils/collection";
-import {voidifyPromise} from "../utils/promise";
+import { toArray } from "../utils/collection";
+import { voidifyPromise } from "../utils/promise";
 
 abstract class Loader<Paths extends string, Asset> {
     private assets = new Map<Paths, Asset>();
@@ -22,20 +22,25 @@ abstract class Loader<Paths extends string, Asset> {
     }
     protected abstract load(path: Paths): Promise<Asset>;
     get(path: Paths): Asset {
-        if (! this.allLoaded) {
+        if (!this.allLoaded) {
             throw new Error("Assets not yet loaded");
         }
         const asset = this.assets.get(path);
         if (asset == null) {
-            throw new Error(`Reached supposedly unreachable code: ${path} isn't preloaded.`);
+            throw new Error(
+                `Reached supposedly unreachable code: ${path} isn't preloaded.`,
+            );
         }
         return asset;
     }
 }
-export class ImageLoader<Paths extends string> extends Loader<Paths, HTMLImageElement> {
+export class ImageLoader<Paths extends string> extends Loader<
+    Paths,
+    HTMLImageElement
+> {
     protected load(path: Paths): Promise<HTMLImageElement> {
         return new Promise((resolve, reject) => {
-            const image = new Image;
+            const image = new Image();
             image.src = path;
             image.addEventListener("load", () => {
                 resolve(image);
@@ -46,7 +51,10 @@ export class ImageLoader<Paths extends string> extends Loader<Paths, HTMLImageEl
         });
     }
 }
-export class AudioLoader<Paths extends string> extends Loader<Paths, HTMLAudioElement> {
+export class AudioLoader<Paths extends string> extends Loader<
+    Paths,
+    HTMLAudioElement
+> {
     protected load(path: Paths): Promise<HTMLAudioElement> {
         return new Promise<HTMLAudioElement>((resolve, reject) => {
             const audio = new Audio(path);
@@ -61,7 +69,7 @@ export class AudioLoader<Paths extends string> extends Loader<Paths, HTMLAudioEl
 }
 async function getHttp(path: string): Promise<string> {
     return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest;
+        const xhr = new XMLHttpRequest();
         xhr.addEventListener("load", () => {
             if (xhr.status === 200) {
                 resolve(xhr.responseText);

@@ -1,8 +1,15 @@
-import {imageLoader} from "../asset/asset";
-import {bulbImage, settings, startButton, themeButton, titleBox, updateColor} from "../components/mainmenu";
-import {timeout} from "../utils/time";
-import {start as startGame} from "./difficulty";
-import {setTheme, theme} from "./theme";
+import { imageLoader } from "../asset/asset";
+import {
+    bulbImage,
+    settings,
+    startButton,
+    themeButton,
+    titleBox,
+    updateColor,
+} from "../components/mainmenu";
+import { timeout } from "../utils/time";
+import { start as startGame } from "./difficulty";
+import { setTheme, theme } from "./theme";
 
 startButton.on("interactup", async () => {
     await end();

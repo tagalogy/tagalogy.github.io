@@ -1,4 +1,4 @@
-import {Color} from "../graphics/color";
+import { Color } from "../graphics/color";
 
 export const background = new Color("#fff");
 export const foreground = new Color("#000");

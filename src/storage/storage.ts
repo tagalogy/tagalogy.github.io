@@ -1,4 +1,8 @@
-import {TypedStorage, enumConverterFactory, intConverter} from "./typed_storage";
+import {
+    TypedStorage,
+    enumConverterFactory,
+    intConverter,
+} from "./typed_storage";
 
 interface StorageBody {
     theme: "dark" | "light";

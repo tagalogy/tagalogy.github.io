@@ -1,11 +1,11 @@
-import {Color} from "../graphics/color";
-import {Object2d} from "../graphics/object_2d";
-import {SafeArea} from "../graphics/safearea";
-import {Rectangle} from "../graphics/shape/rectangle";
-import {RoundedRectangle} from "../graphics/shape/rounded_rectangle";
-import {Text} from "../graphics/shape/text";
-import {scene} from "./master";
-import {background, white, foreground} from "../asset/color";
+import { Color } from "../graphics/color";
+import { Object2d } from "../graphics/object_2d";
+import { SafeArea } from "../graphics/safearea";
+import { Rectangle } from "../graphics/shape/rectangle";
+import { RoundedRectangle } from "../graphics/shape/rounded_rectangle";
+import { Text } from "../graphics/shape/text";
+import { scene } from "./master";
+import { background, white, foreground } from "../asset/color";
 
 export const dialogScreen = new Rectangle({
     x: 0,
@@ -49,9 +49,9 @@ export let buttonPlace = new Object2d({
     height: 2 / 8,
     parent: dialogBox,
 });
-export const cancelFill = new Color;
-export const cancelColor = new Color;
-export const okFill = new Color;
+export const cancelFill = new Color();
+export const cancelColor = new Color();
+export const okFill = new Color();
 export const okColor = new Color(white);
 export const msgText = new Text({
     x: 1 / 8,

@@ -1,8 +1,8 @@
-import {EventTarget} from "../event/event";
-import {noop} from "../utils/noop";
-import {now, timeout} from "../utils/time";
-import {alphaToRange, EasingFunction, expoOut, sine, sineIn} from "./easing";
-import {Scene} from "./scene";
+import { EventTarget } from "../event/event";
+import { noop } from "../utils/noop";
+import { now, timeout } from "../utils/time";
+import { alphaToRange, EasingFunction, expoOut, sine, sineIn } from "./easing";
+import { Scene } from "./scene";
 
 declare function setTimeout(callback: () => void, delay: number): number;
 declare function clearTimeout(id: number): void;
@@ -26,11 +26,33 @@ export interface Object2dOption {
 
     parent?: Object2d;
 
-    operation?: "source-over" | "source-in" | "source-out" | "source-atop" |
-    "destination-over" | "destination-in" | "destination-out" | "destination-atop" |
-    "lighter" | "copy" | "xor" | "multiply" | "screen" | "overlay" | "darken" | "lighten" |
-    "color-dodge" | "color-burn" | "hard-light" | "soft-light" | "difference" | "exclusion" |
-    "hue" | "saturation" | "color" | "luminousity";
+    operation?:
+        | "source-over"
+        | "source-in"
+        | "source-out"
+        | "source-atop"
+        | "destination-over"
+        | "destination-in"
+        | "destination-out"
+        | "destination-atop"
+        | "lighter"
+        | "copy"
+        | "xor"
+        | "multiply"
+        | "screen"
+        | "overlay"
+        | "darken"
+        | "lighten"
+        | "color-dodge"
+        | "color-burn"
+        | "hard-light"
+        | "soft-light"
+        | "difference"
+        | "exclusion"
+        | "hue"
+        | "saturation"
+        | "color"
+        | "luminousity";
 
     entranceParent?: Object2d;
 
@@ -74,7 +96,7 @@ export class Object2d extends EventTarget {
         this.entranceParent = option.entranceParent ?? null;
         this.enterOption = option.enterOption ?? null;
         this.exitOption = option.exitOption ?? null;
-        const {parent} = option;
+        const { parent } = option;
         if (parent) this.addTo(parent);
     }
     get z(): number {
@@ -82,16 +104,24 @@ export class Object2d extends EventTarget {
     }
     set z(num) {
         this._z = num;
-        const {parent} = this;
+        const { parent } = this;
         if (parent) parent.updateDrawOrder();
     }
     setBound(option: Object2dOption): void {
         this.updateBound = updateBoundWrapper(option);
     }
-    async animateBound(option: Object2dOption, time?: number, easing?: EasingFunction): Promise<void> {
+    async animateBound(
+        option: Object2dOption,
+        time?: number,
+        easing?: EasingFunction,
+    ): Promise<void> {
         await this.animateUpdateBound(updateBoundWrapper(option), time, easing);
     }
-    async animateUpdateBound(updateBound: Object2dUpdater, time = 400, easing = sine): Promise<void> {
+    async animateUpdateBound(
+        updateBound: Object2dUpdater,
+        time = 400,
+        easing = sine,
+    ): Promise<void> {
         clearTimeout(this.boundAnimId);
         const oldUpdateBound = this.updateBound;
         const startTime = now();
@@ -124,19 +154,31 @@ export class Object2d extends EventTarget {
     setOpacity(option: number | Object2dOption): void {
         this.updateOpacity = updateOpacityWrapper(option);
     }
-    async animateOpacity(option: number | Object2dOption, time?: number, easing?: EasingFunction): Promise<void> {
-        await this.animateUpdateOpacity(updateOpacityWrapper(option), time, easing);
+    async animateOpacity(
+        option: number | Object2dOption,
+        time?: number,
+        easing?: EasingFunction,
+    ): Promise<void> {
+        await this.animateUpdateOpacity(
+            updateOpacityWrapper(option),
+            time,
+            easing,
+        );
     }
-    async animateUpdateOpacity(updateOpacity: Object2dUpdater, time = 400, easing = sine): Promise<void> {
+    async animateUpdateOpacity(
+        updateOpacity: Object2dUpdater,
+        time = 400,
+        easing = sine,
+    ): Promise<void> {
         clearTimeout(this.opacityAnimId);
         const oldUpdateOpacity = this.updateOpacity;
         const startTime = now();
         this.updateOpacity = function () {
             const alpha = easing((now() - startTime) / time);
             oldUpdateOpacity.call(this);
-            const {opacity: oldOpacity} = this;
+            const { opacity: oldOpacity } = this;
             updateOpacity.call(this);
-            const {opacity: newOpacity} = this;
+            const { opacity: newOpacity } = this;
             this.opacity = alphaToRange(alpha, oldOpacity, newOpacity);
         };
         this.opacityAnimId = setTimeout(() => {
@@ -145,7 +187,7 @@ export class Object2d extends EventTarget {
         await timeout(time);
     }
     async fadeIn(): Promise<void> {
-        const {entranceParent} = this;
+        const { entranceParent } = this;
         if (!entranceParent) return;
         this.addTo(entranceParent);
         this.setOpacity(0);
@@ -156,24 +198,28 @@ export class Object2d extends EventTarget {
         this.remove();
     }
     async enter(): Promise<void> {
-        const {entranceParent, enterOption, exitOption} = this;
+        const { entranceParent, enterOption, exitOption } = this;
         if (!(entranceParent && enterOption && exitOption)) return;
         this.addTo(entranceParent);
         this.setBound(exitOption);
         await this.animateBound(enterOption, 400, expoOut);
     }
     async exit(): Promise<void> {
-        const {exitOption} = this;
+        const { exitOption } = this;
         if (!exitOption) return;
         await this.animateBound(exitOption, 200, sineIn);
         this.remove();
     }
-    forEachDescendant(callback: (object2D: Object2d) => void, includeThis = false): void {
+    forEachDescendant(
+        callback: (object2D: Object2d) => void,
+        includeThis = false,
+    ): void {
         if (includeThis) callback(this);
-        for (const child of this.children) child.forEachDescendant(callback, true);
+        for (const child of this.children)
+            child.forEachDescendant(callback, true);
     }
     updateDrawOrder(deep = false): void {
-        const {children} = this;
+        const { children } = this;
         children.sort((a, b) => a.z - b.z);
         if (deep) for (const child of children) child.updateDrawOrder(true);
     }
@@ -212,12 +258,12 @@ export class Object2d extends EventTarget {
         child.invoke("beforeremove");
         child.parent = null;
         if (setscene) child.setscene(null);
-        const {children} = this;
+        const { children } = this;
         children.splice(children.indexOf(child), 1);
         child.invoke("afterremove");
     }
     remove(setscene = true): void {
-        const {parent} = this;
+        const { parent } = this;
         if (parent) parent.removeChild(this, setscene);
     }
     removeChildren(children: Object2d[]): void {
@@ -228,12 +274,14 @@ export class Object2d extends EventTarget {
     }
     hitTest(testX: number, testY: number): boolean {
         this.updateBound();
-        const {x, y, width, height} = this;
-        return testX > x && testY > y && testX < x + width && testY < y + height;
+        const { x, y, width, height } = this;
+        return (
+            testX > x && testY > y && testX < x + width && testY < y + height
+        );
     }
 }
 export function updateBoundWrapper(option: Object2dOption): Object2dUpdater {
-    const {updateBound} = option;
+    const { updateBound } = option;
     if (updateBound) return updateBound;
     const {
         x = 0,
@@ -244,7 +292,7 @@ export function updateBoundWrapper(option: Object2dOption): Object2dUpdater {
         isScaleRelative = true,
     } = option;
     return function () {
-        const {parent} = this;
+        const { parent } = this;
         let offsetX, offsetY, offsetWidth, offsetHeight;
         if (parent) {
             parent.updateBound();
@@ -264,18 +312,17 @@ export function updateBoundWrapper(option: Object2dOption): Object2dUpdater {
         this.height = offsetHeight * height;
     };
 }
-export function updateOpacityWrapper(option: number | Object2dOption): Object2dUpdater {
+export function updateOpacityWrapper(
+    option: number | Object2dOption,
+): Object2dUpdater {
     if (typeof option === "number") {
-        option = {opacity: option};
+        option = { opacity: option };
     }
-    const {updateOpacity} = option;
+    const { updateOpacity } = option;
     if (updateOpacity) return updateOpacity;
-    const {
-        opacity = 1,
-        isOpacityRelative = true,
-    } = option;
+    const { opacity = 1, isOpacityRelative = true } = option;
     return function () {
-        const {parent} = this;
+        const { parent } = this;
         if (parent && isOpacityRelative) {
             parent.updateOpacity();
             this.opacity = opacity * parent.opacity;

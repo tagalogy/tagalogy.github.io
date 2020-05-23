@@ -1,5 +1,5 @@
-import {EventTarget} from "../event/event";
-import {now} from "../utils/time";
+import { EventTarget } from "../event/event";
+import { now } from "../utils/time";
 
 declare function setTimeout(callback: () => void, delay: number): number;
 declare function clearTimeout(id: number): void;

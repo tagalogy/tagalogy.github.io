@@ -1,17 +1,37 @@
-import {gameBox, clearColor, clearFill, clearLine, clearPlace, hyphenColor, hyphenFill, hyphenLine, hyphenPlace, inputBox, outputBox, outputColor, syllableBox} from "../components/game";
-import {updateThickness} from "../components/update_thickness";
-import {Twist} from "../gameplay/twist";
-import {Color} from "../graphics/color";
-import {expoOut, sineIn} from "../graphics/easing";
-import {Object2d} from "../graphics/object_2d";
-import {RoundedRectangle} from "../graphics/shape/rounded_rectangle";
-import {Text} from "../graphics/shape/text";
-import {timeout} from "../utils/time";
-import {black, foreground, background, redPH, accent, transparent, white} from "../asset/color";
+import {
+    gameBox,
+    clearColor,
+    clearFill,
+    clearLine,
+    clearPlace,
+    hyphenColor,
+    hyphenFill,
+    hyphenLine,
+    hyphenPlace,
+    inputBox,
+    outputBox,
+    outputColor,
+    syllableBox,
+} from "../components/game";
+import { updateThickness } from "../components/update_thickness";
+import { Twist } from "../gameplay/twist";
+import { Color } from "../graphics/color";
+import { expoOut, sineIn } from "../graphics/easing";
+import { Object2d } from "../graphics/object_2d";
+import { RoundedRectangle } from "../graphics/shape/rounded_rectangle";
+import { Text } from "../graphics/shape/text";
+import { timeout } from "../utils/time";
+import {
+    black,
+    foreground,
+    background,
+    redPH,
+    accent,
+    transparent,
+    white,
+} from "../asset/color";
 
-function setButtons(twist: Twist) {
-
-}
+function setButtons(twist: Twist) {}
 clearPlace.on("interactdown", () => {
     clearColor.setColor(black);
 });
@@ -39,12 +59,16 @@ function init(): void {
         width: 3 / 3,
         height: 1 / 4,
     });
-    outputBox.animateBound({
-        x: 0,
-        y: 0,
-        width: 3 / 3,
-        height: 1 / 4,
-    }, 400, expoOut);
+    outputBox.animateBound(
+        {
+            x: 0,
+            y: 0,
+            width: 3 / 3,
+            height: 1 / 4,
+        },
+        400,
+        expoOut,
+    );
     inputBox.addTo(gameBox);
     inputBox.setBound({
         x: 1,
@@ -52,12 +76,16 @@ function init(): void {
         width: 8 / 10,
         height: 3 / 4,
     });
-    inputBox.animateBound({
-        x: 1 / 10,
-        y: 1 / 4,
-        width: 8 / 10,
-        height: 3 / 4,
-    }, 400, expoOut);
+    inputBox.animateBound(
+        {
+            x: 1 / 10,
+            y: 1 / 4,
+            width: 8 / 10,
+            height: 3 / 4,
+        },
+        400,
+        expoOut,
+    );
 }
 // TODO: fix this mess
 export async function start(twist: Twist): Promise<void> {
@@ -92,10 +120,10 @@ export async function start(twist: Twist): Promise<void> {
         hyphenColor.setColor(accent);
     };
     hyphenPlace.on("interactup", prevHyphenHandler);
-    const {blocks} = twist;
+    const { blocks } = twist;
     for (let ind = 0; ind < blocks.length; ind++) {
         const block = blocks[ind];
-        const {syllable} = block;
+        const { syllable } = block;
         const lineColor = new Color(transparent);
         const fillColor = new Color(accent);
         const textColor = new Color(white);
@@ -152,7 +180,6 @@ export async function start(twist: Twist): Promise<void> {
                 prevClearHandler?.();
                 outputColor.setColor(foreground);
             }
-
         });
         const currentShape = new RoundedRectangle({
             x: innerX,
@@ -182,18 +209,26 @@ export async function start(twist: Twist): Promise<void> {
     }
 }
 export async function end(): Promise<void> {
-    outputBox.animateBound({
-        x: -1,
-        y: 0,
-        width: 3 / 3,
-        height: 1 / 4,
-    }, 200, sineIn);
-    inputBox.animateBound({
-        x: -1,
-        y: 1 / 4,
-        width: 3 / 3,
-        height: 3 / 4,
-    }, 200, sineIn);
+    outputBox.animateBound(
+        {
+            x: -1,
+            y: 0,
+            width: 3 / 3,
+            height: 1 / 4,
+        },
+        200,
+        sineIn,
+    );
+    inputBox.animateBound(
+        {
+            x: -1,
+            y: 1 / 4,
+            width: 3 / 3,
+            height: 3 / 4,
+        },
+        200,
+        sineIn,
+    );
     await timeout(200);
     syllableBox.removeAllChildren();
     outputBox.remove();

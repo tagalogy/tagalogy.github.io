@@ -1,6 +1,6 @@
-import {backPlace, continuePlace, pauseScreen} from "../components/pause";
-import {overridePromise} from "../utils/promise";
-import {popup} from "./dialog_box";
+import { backPlace, continuePlace, pauseScreen } from "../components/pause";
+import { overridePromise } from "../utils/promise";
+import { popup } from "./dialog_box";
 
 export async function pause(): Promise<boolean> {
     await pauseScreen.fadeIn();
@@ -13,8 +13,12 @@ export async function pause(): Promise<boolean> {
             await pauseScreen.fadeOut();
             return true;
         }
-        const confirmContinue = await popup("Sigurado kang gusto mong itigil ang laro at bumalik?", "Ituloy", "Itigil");
-        if (! confirmContinue) {
+        const confirmContinue = await popup(
+            "Sigurado kang gusto mong itigil ang laro at bumalik?",
+            "Ituloy",
+            "Itigil",
+        );
+        if (!confirmContinue) {
             await pauseScreen.fadeOut();
             return false;
         }

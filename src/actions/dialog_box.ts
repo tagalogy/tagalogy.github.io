@@ -1,7 +1,19 @@
-import {accent, background, foreground, redPH, white} from "../asset/color";
-import {cancelBox, cancelColor, cancelFill, cancelText, dialogBox, dialogScreen, msgText, okBox, okColor, okFill, okText} from "../components/dialog_box";
-import {overridePromise} from "../utils/promise";
-import {timeout} from "../utils/time";
+import { accent, background, foreground, redPH, white } from "../asset/color";
+import {
+    cancelBox,
+    cancelColor,
+    cancelFill,
+    cancelText,
+    dialogBox,
+    dialogScreen,
+    msgText,
+    okBox,
+    okColor,
+    okFill,
+    okText,
+} from "../components/dialog_box";
+import { overridePromise } from "../utils/promise";
+import { timeout } from "../utils/time";
 
 okBox.on("interactdown", () => {
     okFill.setColor(background);
@@ -19,7 +31,11 @@ cancelBox.on("interactup", () => {
     cancelFill.setColor(background);
     cancelColor.setColor(foreground);
 });
-export async function popup(msg: string, ok: string, cancel: string): Promise<boolean> {
+export async function popup(
+    msg: string,
+    ok: string,
+    cancel: string,
+): Promise<boolean> {
     okFill.setColor(accent);
     cancelFill.setColor(background);
     cancelColor.setColor(foreground);

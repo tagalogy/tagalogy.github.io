@@ -1,16 +1,22 @@
-import {parseWord} from "../tagalog/parser";
+import { parseWord } from "../tagalog/parser";
 
 class SyllableBlock {
     private pressed = false;
 
     constructor(private parentTwist: Twist, public syllable: string) {}
     unpress(): void {
-        let {parentTwist: {formed}, pressed} = this;
+        let {
+            parentTwist: { formed },
+            pressed,
+        } = this;
         this.pressed = false;
         if (pressed) formed.splice(formed.indexOf(this), 1);
     }
     press(): void {
-        let {parentTwist: {formed}, pressed} = this;
+        let {
+            parentTwist: { formed },
+            pressed,
+        } = this;
         this.pressed = true;
         if (!pressed) formed.push(this);
     }
@@ -20,7 +26,9 @@ class HyphenBlock {
 
     constructor(private parentTwist: Twist) {}
     unpress(): void {
-        const {parentTwist: {formed}} = this;
+        const {
+            parentTwist: { formed },
+        } = this;
         formed.splice(formed.indexOf(this), 1);
     }
 }
@@ -49,17 +57,26 @@ export class Twist {
         this.formed.push(new HyphenBlock(this));
     }
     get isFilled(): boolean {
-        return this.blocks.length - this.formed.filter(block => block instanceof SyllableBlock).length <= 0;
+        return (
+            this.blocks.length -
+                this.formed.filter(block => block instanceof SyllableBlock)
+                    .length <=
+            0
+        );
     }
     get formedWord(): string {
         return this.formed.map(block => block.syllable).join("");
     }
     get isValid(): boolean {
-        const {isFilled, formedWord, sourceWord, sourceBank} = this;
-        return isFilled && (formedWord === sourceWord || sourceBank.includes(formedWord.toUpperCase()));
+        const { isFilled, formedWord, sourceWord, sourceBank } = this;
+        return (
+            isFilled &&
+            (formedWord === sourceWord ||
+                sourceBank.includes(formedWord.toUpperCase()))
+        );
     }
     get lastBlock(): SyllableBlock | HyphenBlock {
-        let {formed} = this;
+        let { formed } = this;
         return formed[formed.length - 1];
     }
 }

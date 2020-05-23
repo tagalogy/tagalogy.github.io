@@ -6,5 +6,5 @@ export function timeout(delay: number): Promise<void> {
     });
 }
 export function now(): number {
-    return + new Date;
+    return +new Date();
 }

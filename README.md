@@ -22,7 +22,7 @@ This section also assumes that the current directory of your terminal is in the 
 
 ### TODOS
 
-- [ ] Migrate to Prettier
+- [x] Migrate to Prettier
 - [ ] Migrate to WebPack
 
 ### Dependencies

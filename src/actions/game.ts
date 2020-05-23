@@ -1,14 +1,22 @@
-import {gameBox, hudBox, pauseButton, pauseColor, scoreText, timerColor, timerText} from "../components/game";
-import {scene} from "../components/master";
-import {PlayState} from "../gameplay/play_state";
-import {Twist} from "../gameplay/twist";
-import {now, timeout} from "../utils/time";
-import {popup} from "./dialog_box";
-import {start as startMainMenu} from "./mainmenu";
-import {pause as pauseStart} from "./pause";
-import {end as endTwist, start as startTwist} from "./twist";
-import {skyblue, background, foreground} from "../asset/color";
-import {storage} from "../storage/storage";
+import {
+    gameBox,
+    hudBox,
+    pauseButton,
+    pauseColor,
+    scoreText,
+    timerColor,
+    timerText,
+} from "../components/game";
+import { scene } from "../components/master";
+import { PlayState } from "../gameplay/play_state";
+import { Twist } from "../gameplay/twist";
+import { now, timeout } from "../utils/time";
+import { popup } from "./dialog_box";
+import { start as startMainMenu } from "./mainmenu";
+import { pause as pauseStart } from "./pause";
+import { end as endTwist, start as startTwist } from "./twist";
+import { skyblue, background, foreground } from "../asset/color";
+import { storage } from "../storage/storage";
 
 export let gameState: PlayState;
 pauseButton.on("interactdown", () => {
@@ -24,14 +32,25 @@ export let score = 0;
 export const time = 20;
 export let prevHandler: () => void;
 export let currentGame: symbol;
-export let currentDifficulty: "highscore_easy" | "highscore_medium" | "highscore_hard" | "highscore_veryHard";
+export let currentDifficulty:
+    | "highscore_easy"
+    | "highscore_medium"
+    | "highscore_hard"
+    | "highscore_veryHard";
 export let wordBank: string[];
-export function startGame(difficulty: "highscore_easy" | "highscore_medium" | "highscore_hard" | "highscore_veryHard", bank: string[]): void {
+export function startGame(
+    difficulty:
+        | "highscore_easy"
+        | "highscore_medium"
+        | "highscore_hard"
+        | "highscore_veryHard",
+    bank: string[],
+): void {
     currentDifficulty = difficulty;
     wordBank = bank;
     timerColor.setColor(foreground);
     pauseColor.setColor(background);
-    gameState = new PlayState;
+    gameState = new PlayState();
     hudBox.enter();
     gameBox.enter();
     timerText.content = `:${time}`;
@@ -46,7 +65,9 @@ export async function newGame(): Promise<void> {
     let previousTime: number;
     prevHandler = () => {
         if (gameState.stopped) return;
-        const timeLeft = Math.ceil(time + (currentTime - gameState.time) / 1000);
+        const timeLeft = Math.ceil(
+            time + (currentTime - gameState.time) / 1000,
+        );
         timerText.content = ":" + timeLeft.toString().padStart(2, "0");
         if (timeLeft !== previousTime && timeLeft <= 5) {
             timerColor.setColor("#f00");
@@ -70,9 +91,9 @@ export async function nextGame(promise?: Promise<void>): Promise<void> {
 export async function pause(): Promise<void> {
     gameState.pause();
     const willContinue = await pauseStart();
-    if(willContinue) {
+    if (willContinue) {
         gameState.play();
-    }else{
+    } else {
         gameState.stop();
         saveHighscore();
         endTwist();
@@ -101,14 +122,14 @@ Puntos: ${score}
 Simulan muli?`;
     const response = await popup(message, "Oo", "Hindi");
     if (response) {
-        gameState = new PlayState;
+        gameState = new PlayState();
         resetScore();
         newGame();
     } else {
         exitGame();
     }
 }
-function saveHighscore():void {
+function saveHighscore(): void {
     const high = storage.getItem(currentDifficulty) ?? 0;
     if (high < score) storage.setItem(currentDifficulty, score);
 }
@@ -117,9 +138,10 @@ export async function shakeEffect(): Promise<void> {
     const startTime = now();
     gameBox.updateBound = function () {
         oldUpdateBound.call(this);
-        const {x, width} = this;
-        const alphaTime = ((now() - startTime) / 500) - 1;
-        this.x = x + (Math.sin(alphaTime * 8 * Math.PI) * alphaTime * width / 8);
+        const { x, width } = this;
+        const alphaTime = (now() - startTime) / 500 - 1;
+        this.x =
+            x + (Math.sin(alphaTime * 8 * Math.PI) * alphaTime * width) / 8;
     };
     await timeout(500);
     gameBox.updateBound = oldUpdateBound;
