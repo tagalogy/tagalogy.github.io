@@ -1,7 +1,7 @@
+import {accent, background, foreground, redPH, white} from "../asset/color";
 import {cancelBox, cancelColor, cancelFill, cancelText, dialogBox, dialogScreen, msgText, okBox, okColor, okFill, okText} from "../components/dialog_box";
-import {overridePromise} from "../utils/override_promise";
+import {overridePromise} from "../utils/promise";
 import {timeout} from "../utils/time";
-import {background, foreground, accent, white, redPH} from "../asset/color";
 
 okBox.on("interactdown", () => {
     okFill.setColor(background);

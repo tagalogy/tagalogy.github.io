@@ -1,13 +1,13 @@
-import {Object2D, Object2DOption} from "./object2d";
+import {Object2d, Object2dOption} from "./object_2d";
 import {Frame} from "./frame";
 
-export interface SceneOption extends Object2DOption {
+export interface SceneOption extends Object2dOption {
     autoresize?: boolean;
     canvas: HTMLCanvasElement;
     alpha?: boolean;
     scale?: number;
 }
-export class Scene extends Object2D {
+export class Scene extends Object2d {
     scale: number;
     canvas: HTMLCanvasElement;
     context: CanvasRenderingContext2D;

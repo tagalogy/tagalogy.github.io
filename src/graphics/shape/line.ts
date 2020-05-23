@@ -18,7 +18,7 @@ export interface LineOption extends BaseOption {
     updateCoords?: LineUpdater;
 }
 export class Line extends Base {
-    coordsAnimID = -1;
+    coordsAnimId = -1;
     x0 = 0;
     y0 = 0;
     x1 = 0;
@@ -37,7 +37,7 @@ export class Line extends Base {
         await this.animateUpdateCoords(updateCoordsWrapper(option), time, easing);
     }
     async animateUpdateCoords(updateCoords: LineUpdater, time = 400, easing = sine): Promise<void> {
-        clearTimeout(this.coordsAnimID);
+        clearTimeout(this.coordsAnimId);
         const oldUpdateCoords = this.updateCoords;
         const startTime = now();
         this.updateCoords = function () {
@@ -61,7 +61,7 @@ export class Line extends Base {
             this.x1 = alphaToRange(alpha, oldX1, newX1)
             this.y1 = alphaToRange(alpha, oldY1, newY1)
         };
-        this.coordsAnimID = setTimeout(() => {
+        this.coordsAnimId = setTimeout(() => {
             this.updateCoords = updateCoords;
         }, time);
         await timeout(time);

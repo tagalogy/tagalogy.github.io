@@ -20,6 +20,11 @@ Tagalogy is a web game that uses PWA technology. The main source code is written
 
 This section also assumes that the current directory of your terminal is in the copy of Tagalogy.
 
+### TODOS
+
+- [ ] Migrate to Prettier
+- [ ] Migrate to WebPack
+
 ### Dependencies
 
 - [Node.JS](https://nodejs.org/)
@@ -45,7 +50,9 @@ Run the following command.
 npm start
 ```
 
-You should be able to play Tagalogy at port 4000. You can configure the port with the `PORT` environment variable or just simply modify the `start.js`.
+You should be able to play Tagalogy at port 4000 (at url `http://localhost:4000/`). You can configure the port with the `PORT` environment variable or just simply modify the `start.js`.
+
+You could alternatively directly open `public/index.html`. Due to restriction with local html files, service worker and local storage is disabled for this setup.
 
 ### Testing
 
@@ -61,7 +68,7 @@ You need to [start Tagalogy](#starting) as well so you can play the modified Tag
 
 ### Building
 
-Upon installation, the distribution code is built with optimized size. However, when you use the [testing functionality](#testing), these codes have no longer optimized size, which is necessary for debugging reasons. You can rebuild again with optimized size with the following command.
+Upon installation, the distribution code is built with optimized size. However, when you use the [testing functionality](#testing), these codes have no longer optimized size, which is necessary for debugging. You can rebuild again with optimized size with the following command.
 
 ```shell
 npm run build

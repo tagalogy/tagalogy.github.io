@@ -1,11 +1,11 @@
 import {noop} from "../../utils/noop";
 import {Color} from "../color";
-import {Object2D, Object2DOption} from "../object2d";
+import {Object2d, Object2dOption} from "../object_2d";
 
 export interface TextUpdater {
     (this: Text): void;
 }
-export interface TextOption extends Object2DOption {
+export interface TextOption extends Object2dOption {
     updateSize?: TextUpdater;
     size?: number;
     isSizeRelative?: boolean;
@@ -18,7 +18,7 @@ export interface TextOption extends Object2DOption {
     baseline?: "top" | "middle" | "bottom";
     content?: string;
 }
-export class Text extends Object2D {
+export class Text extends Object2d {
     content: string;
     style: "" | "italics";
     weight: "" | "bold";

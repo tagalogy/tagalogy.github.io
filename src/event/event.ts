@@ -1,18 +1,9 @@
 export interface EventHandler {
     (this: EventTarget): void;
 }
-export interface EventTargetOption {
-    events?: Record<string, EventHandler>;
-}
 export class EventTarget {
     private handlers = new Map<string, EventHandler[]>();
-    constructor(option: EventTargetOption = {}) {
-        const {events} = option;
-        if (typeof events === "undefined") return;
-        for (const eventName of Object.keys(events)) {
-            this.on(eventName, events[eventName]);
-        }
-    }
+
     private getHandler(name: string): EventHandler[] {
         const listeners = this.handlers;
         let handlers = listeners.get(name);
@@ -20,8 +11,7 @@ export class EventTarget {
         return handlers;
     }
     on(name: string, handler: EventHandler): void {
-        const handlers = this.getHandler(name);
-        handlers.push(handler);
+        this.getHandler(name).push(handler);
     }
     once(name: string, handler?: EventHandler): Promise<void> {
         return new Promise(resolve => {

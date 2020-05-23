@@ -1,9 +1,9 @@
 import {load} from "./actions/loading";
 import {start} from "./actions/mainmenu";
 import {assetsLoaded} from "./asset/asset";
-import {storage} from "./utils/storage";
+import {storage} from "./storage/storage";
 
-storage.setAllDefault({
+storage.setDefaults({
     theme: "light",
     highscore_easy: 0,
     highscore_medium: 0,

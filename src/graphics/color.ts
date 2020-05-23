@@ -16,7 +16,7 @@ export interface ColorOption {
     updateColor?: ColorUpdater;
 }
 export class Color {
-    private colorAnimID = -1;
+    private colorAnimId = -1;
 
     red = 0;
     green = 0;
@@ -43,7 +43,7 @@ export class Color {
         await this.animateUpdateColor(updateColorWrapper(option), time, easing);
     }
     async animateUpdateColor(updateColor: ColorUpdater, time = 400, easing = sine): Promise<void> {
-        clearTimeout(this.colorAnimID);
+        clearTimeout(this.colorAnimId);
         const oldUpdateColor = this.updateColor;
         const startTime = now();
         this.updateColor = function () {
@@ -67,7 +67,7 @@ export class Color {
             this.blue = alphaToRange(alpha, oldBlue, newBlue);
             this.alpha = alphaToRange(alpha, oldAlpha, newAlpha);
         };
-        this.colorAnimID = setTimeout(() => {
+        this.colorAnimId = setTimeout(() => {
             this.updateColor = updateColor;
         }, time);
         await timeout(time);

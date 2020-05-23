@@ -1,65 +1,47 @@
-import {toArray} from "../utils/collection";
-import {getAll} from "../utils/get_http";
-import {loadAllAudio} from "../utils/load_audio";
-import {loadImages} from "../utils/load_image";
-import {SPACE} from "../utils/regex";
+import {memoize} from "../utils/memo";
+import {voidifyPromise} from "../utils/promise";
+import {AudioLoader, ImageLoader, WordLoader} from "./loader";
 
-// TODO: get rid of these namespaces
-export namespace Sfx {
-    export let ADVANCE: HTMLAudioElement;
-    export let CLICK: HTMLAudioElement;
-    export let FAIL: HTMLAudioElement;
-    export let GAME_OVER: HTMLAudioElement;
-}
-export namespace Words {
-    export let WORD_3: string[];
-    export let WORD_4: string[];
-    export let WORD_5: string[];
-    export let WORD_6: string[];
-}
-export namespace Images {
-    export let TITLE_PNG: HTMLImageElement;
-    export let TITLE_DARK_PNG: HTMLImageElement;
-    export let BULB_PNG: HTMLImageElement;
-}
-export namespace Difficulties {
-    export let EASY: string[];
-    export let MEDIUM: string[];
-    export let HARD: string[];
-    export let VERY_HARD: string[];
-}
-async function loadAll() {
-    [
-        Images.TITLE_PNG,
-        Images.TITLE_DARK_PNG,
-        Images.BULB_PNG,
-    ] = await loadImages(toArray(`\
-/asset/title.png
-/asset/title_dark.png
-/asset/bulb.png`));
-    [
-        Words.WORD_3,
-        Words.WORD_4,
-        Words.WORD_5,
-        Words.WORD_6,
-    ] = (await getAll(toArray(`\
-/asset/word_3.txt
-/asset/word_4.txt
-/asset/word_5.txt
-/asset/word_6.txt`))).map(text => text.split(SPACE));
-    Difficulties.EASY = [...Words.WORD_3].sort();
-    Difficulties.MEDIUM = [...Words.WORD_3, ...Words.WORD_4].sort();
-    Difficulties.HARD = [...Words.WORD_4, ...Words.WORD_5].sort();
-    Difficulties.VERY_HARD = [...Words.WORD_5, ...Words.WORD_6].sort();
-    [
-        Sfx.ADVANCE,
-        Sfx.CLICK,
-        Sfx.FAIL,
-        Sfx.GAME_OVER
-    ] = await loadAllAudio(toArray(`\
-/asset/sfx/advance.mp3
-/asset/sfx/click.mp3
-/asset/sfx/fail.mp3
-/asset/sfx/game_over.mp3`));
-}
-export const assetsLoaded = loadAll();
+export const imagePaths = [
+    "/asset/title.png",
+    "/asset/title_dark.png",
+    "/asset/bulb.png",
+] as const;
+
+export const wordPaths = [
+    "/asset/word_3.txt",
+    "/asset/word_4.txt",
+    "/asset/word_5.txt",
+    "/asset/word_6.txt",
+] as const;
+
+export const audioPaths = [
+    "/asset/sfx/advance.mp3",
+    "/asset/sfx/click.mp3",
+    "/asset/sfx/fail.mp3",
+    "/asset/sfx/game_over.mp3",
+] as const;
+
+export const imageLoader = new ImageLoader(imagePaths.slice());
+export const wordLoader = new WordLoader(wordPaths.slice());
+export const audioLoader = new AudioLoader(audioPaths.slice());
+
+export const getDifficulty = memoize<"easy" | "medium" | "hard" | "very_hard", string[]>(param => {
+    switch (param) {
+        case "easy": return wordLoader.get("/asset/word_3.txt");
+        case "medium": return [
+            ...wordLoader.get("/asset/word_3.txt"),
+            ...wordLoader.get("/asset/word_4.txt"),
+        ].sort();
+        case "hard": return [
+            ...wordLoader.get("/asset/word_4.txt"),
+            ...wordLoader.get("/asset/word_5.txt"),
+        ].sort();
+        case "very_hard": return [
+            ...wordLoader.get("/asset/word_5.txt"),
+            ...wordLoader.get("/asset/word_6.txt"),
+        ].sort();
+    }
+});
+
+export const assetsLoaded = voidifyPromise(Promise.all([imageLoader.promise, wordLoader.promise, audioLoader.promise]));

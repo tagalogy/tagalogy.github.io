@@ -1,10 +1,10 @@
-import {Object2D} from "../graphics/object2d";
+import {accent, white} from "../asset/color";
+import {Object2d} from "../graphics/object_2d";
 import {RoundedRectangle} from "../graphics/shape/rounded_rectangle";
 import {Text} from "../graphics/shape/text";
 import {safeArea} from "./master";
-import {accent, white} from "../asset/color";
 
-export const box = new Object2D({
+export const box = new Object2d({
     entranceParent: safeArea,
     enterOption: {
         x: 0,
@@ -19,43 +19,37 @@ export const box = new Object2D({
         height: 4 / 5,
     },
 });
-interface Raw {
-    name: string;
-    description: string;
-    difficultyKey: "EASY" | "MEDIUM" | "HARD" | "VERY_HARD";
-    highscoreKey: string;
-}
-export const raw: Raw[] = [
+export const raw = [
     {
         name: "madali",
         description: "3 pantig",
-        difficultyKey: "EASY",
+        difficultyKey: "easy",
         highscoreKey: "highscore_easy",
     },
     {
         name: "katamtaman",
         description: "3-4 pantig",
-        difficultyKey: "MEDIUM",
+        difficultyKey: "medium",
         highscoreKey: "highscore_medium",
     },
     {
         name: "mahirap",
         description: "4-5 pantig",
-        difficultyKey: "HARD",
+        difficultyKey: "hard",
         highscoreKey: "highscore_hard",
     },
     {
         name: "mas mahirap",
         description: "5-6 pantig",
-        difficultyKey: "VERY_HARD",
+        difficultyKey: "very_hard",
         highscoreKey: "highscore_veryHard",
     },
-];
-export const texts: Record<string, Text> = Object.create(null);
-export const buttons: Record<Raw["difficultyKey"], Object2D> = Object.create(null);
+] as const;
+export const texts = new Map<"highscore_easy" | "highscore_medium" | "highscore_hard" | "highscore_veryHard", Text>();
+export const buttons = new Map<"easy" | "medium" | "hard" | "very_hard", Object2d>();
 for(let ind = 0; ind < raw.length; ind++) {
     const {name, description, difficultyKey, highscoreKey} = raw[ind];
-    const button = new Object2D({
+    const button = new Object2d({
         x: 0,
         y: ind / 4,
         width: 1,
@@ -110,6 +104,6 @@ for(let ind = 0; ind < raw.length; ind++) {
         parent: buttonBox,
     });
     box.addChild(button);
-    texts[highscoreKey] = highscoreBox;
-    buttons[difficultyKey] = button;
+    texts.set(highscoreKey, highscoreBox);
+    buttons.set(difficultyKey, button);
 }

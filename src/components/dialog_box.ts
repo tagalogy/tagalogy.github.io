@@ -1,5 +1,5 @@
 import {Color} from "../graphics/color";
-import {Object2D} from "../graphics/object2d";
+import {Object2d} from "../graphics/object_2d";
 import {SafeArea} from "../graphics/safearea";
 import {Rectangle} from "../graphics/shape/rectangle";
 import {RoundedRectangle} from "../graphics/shape/rounded_rectangle";
@@ -42,7 +42,7 @@ export const dialogBox = new RoundedRectangle({
         height: 4 / 10,
     },
 });
-export let buttonPlace = new Object2D({
+export let buttonPlace = new Object2d({
     x: 0 / 8,
     y: 6 / 8,
     width: 8 / 8,

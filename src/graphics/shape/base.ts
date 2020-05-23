@@ -1,12 +1,12 @@
 import {noop} from "../../utils/noop";
 import {now} from "../../utils/time";
 import {Color} from "../color";
-import {Object2D, Object2DOption} from "../object2d";
+import {Object2d, Object2dOption} from "../object_2d";
 
 export interface BaseUpdater {
     (this: Base): void;
 }
-export interface BaseOption extends Object2DOption {
+export interface BaseOption extends Object2dOption {
     fill?: string | Color;
     line?: string | Color;
 
@@ -18,7 +18,7 @@ export interface BaseOption extends Object2DOption {
     thickness?: number;
     updateThickness?: BaseUpdater;
 }
-export class Base extends Object2D {
+export class Base extends Object2d {
     private _dashSpeed = 0;
     private _dash: number[] = [];
 
@@ -44,7 +44,7 @@ export class Base extends Object2D {
         this.dashSpeed = dashSpeed ?? 0;
         this.setThickness(option);
     }
-    setThickness(option: number | Object2DOption): void {
+    setThickness(option: number | Object2dOption): void {
         this.updateThickness = updateThicknessWrapper(option);
     }
     get dash(): number[] {

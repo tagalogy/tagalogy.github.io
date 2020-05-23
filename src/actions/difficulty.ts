@@ -1,19 +1,19 @@
-import {Difficulties} from "../asset/asset";
-import {box, buttons, texts, raw} from "../components/difficulty";
-import {storage} from "../utils/storage";
+import {getDifficulty} from "../asset/asset";
+import {box, buttons, raw, texts} from "../components/difficulty";
 import {startGame} from "./game";
+import {storage} from "../storage/storage";
 
 for (const diffItem of raw) {
     const {difficultyKey, highscoreKey} = diffItem;
-    const button = buttons[difficultyKey];
+    const button = buttons.get(difficultyKey)!;
     button.on("interactup", async () => {
         await end();
-        startGame(highscoreKey, Difficulties[difficultyKey]);
+        startGame(highscoreKey, getDifficulty(difficultyKey));
     });
 }
 export function start(): void {
-    for (const name of Object.keys(texts)) {
-        texts[name].content = storage.getItem(name)?.toString() ?? "";
+    for (const [name, value] of texts) {
+        value.content = "" + storage.getItem(name);
     }
     box.enter();
 }

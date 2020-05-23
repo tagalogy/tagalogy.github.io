@@ -2,13 +2,13 @@ import {gameBox, hudBox, pauseButton, pauseColor, scoreText, timerColor, timerTe
 import {scene} from "../components/master";
 import {PlayState} from "../gameplay/play_state";
 import {Twist} from "../gameplay/twist";
-import {storage} from "../utils/storage";
 import {now, timeout} from "../utils/time";
 import {popup} from "./dialog_box";
 import {start as startMainMenu} from "./mainmenu";
 import {pause as pauseStart} from "./pause";
 import {end as endTwist, start as startTwist} from "./twist";
 import {skyblue, background, foreground} from "../asset/color";
+import {storage} from "../storage/storage";
 
 export let gameState: PlayState;
 pauseButton.on("interactdown", () => {
@@ -24,9 +24,9 @@ export let score = 0;
 export const time = 20;
 export let prevHandler: () => void;
 export let currentGame: symbol;
-export let currentDifficulty: string;
+export let currentDifficulty: "highscore_easy" | "highscore_medium" | "highscore_hard" | "highscore_veryHard";
 export let wordBank: string[];
-export function startGame(difficulty: string, bank: string[]): void {
+export function startGame(difficulty: "highscore_easy" | "highscore_medium" | "highscore_hard" | "highscore_veryHard", bank: string[]): void {
     currentDifficulty = difficulty;
     wordBank = bank;
     timerColor.setColor(foreground);
@@ -109,7 +109,7 @@ Simulan muli?`;
     }
 }
 function saveHighscore():void {
-    const high = storage.getItem(currentDifficulty) as number;
+    const high = storage.getItem(currentDifficulty) ?? 0;
     if (high < score) storage.setItem(currentDifficulty, score);
 }
 export async function shakeEffect(): Promise<void> {
