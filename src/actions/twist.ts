@@ -1,16 +1,17 @@
-import {gameBox} from "../components/game";
-import {clearColor, clearFill, clearLine, clearPlace, hyphenColor, hyphenFill, hyphenLine, hyphenPlace, inputBox, outputBox, outputColor, syllableBox} from "../components/twist";
+import {gameBox, clearColor, clearFill, clearLine, clearPlace, hyphenColor, hyphenFill, hyphenLine, hyphenPlace, inputBox, outputBox, outputColor, syllableBox} from "../components/game";
 import {updateThickness} from "../components/update_thickness";
 import {Twist} from "../gameplay/twist";
 import {Color} from "../graphics/color";
 import {expoOut, sineIn} from "../graphics/easing";
-import {Object2D} from "../graphics/object2d";
+import {Object2d} from "../graphics/object_2d";
 import {RoundedRectangle} from "../graphics/shape/rounded_rectangle";
 import {Text} from "../graphics/shape/text";
 import {timeout} from "../utils/time";
-import {gameState, nextGame} from "./game";  // TODO: make independent from this module
 import {black, foreground, background, redPH, accent, transparent, white} from "../asset/color";
 
+function setButtons(twist: Twist) {
+
+}
 clearPlace.on("interactdown", () => {
     clearColor.setColor(black);
 });
@@ -20,7 +21,7 @@ hyphenPlace.on("interactdown", () => {
 let prevClearHandler: null | (() => void) = null;
 let prevHyphenHandler: null | (() => void) = null;
 
-export function init(): void {
+function init(): void {
     outputColor.setColor(foreground);
     clearFill.setColor(background);
     clearLine.setColor(redPH);
@@ -59,7 +60,7 @@ export function init(): void {
     }, 400, expoOut);
 }
 // TODO: fix this mess
-export async function start(twist: Twist) {
+export async function start(twist: Twist): Promise<void> {
     init();
     const lineColors: Color[] = [];
     const fillColors: Color[] = [];
@@ -118,40 +119,40 @@ export async function start(twist: Twist) {
         }
         let y = (4 - ind) / 5;
         if (ind > 4) y = 0;
-        const currentPlace = new Object2D({
+        const currentPlace = new Object2d({
             x,
             y,
             width,
             height: 1 / 5,
-            events: {
-                interactdown() {
-                    if (gameState.paused) return;
-                    textColor.setColor(black);
-                },
-                async interactup() {
-                    if (gameState.paused) return;
-                    lineColor.setColor(accent);
-                    fillColor.setColor(background);
-                    textColor.setColor(accent);
-                    clearFill.setColor(redPH);
-                    clearLine.setColor(transparent);
-                    clearColor.setColor(white);
-                    hyphenFill.setColor(accent);
-                    hyphenLine.setColor(transparent);
-                    hyphenColor.setColor(white);
-                    twist.press(ind);
-                    outputBox.content = twist.formedWord;
-                    if (!twist.isFilled) return;
-                    if (twist.isValid) {
-                        nextGame(end());
-                    } else {
-                        outputColor.setColor("#f00");
-                        await outputColor.animateColor("#f000", 200);
-                        prevClearHandler?.();
-                        outputColor.setColor(foreground);
-                    }
-                },
-            },
+            parent: syllableBox,
+        });
+        currentPlace.on("interactdown", () => {
+            if (gameState.paused) return;
+            textColor.setColor(black);
+        });
+        currentPlace.on("interactup", async () => {
+            if (gameState.paused) return;
+            lineColor.setColor(accent);
+            fillColor.setColor(background);
+            textColor.setColor(accent);
+            clearFill.setColor(redPH);
+            clearLine.setColor(transparent);
+            clearColor.setColor(white);
+            hyphenFill.setColor(accent);
+            hyphenLine.setColor(transparent);
+            hyphenColor.setColor(white);
+            twist.press(ind);
+            outputBox.content = twist.formedWord;
+            if (!twist.isFilled) return;
+            if (twist.isValid) {
+                nextGame(end());
+            } else {
+                outputColor.setColor("#f00");
+                await outputColor.animateColor("#f000", 200);
+                prevClearHandler?.();
+                outputColor.setColor(foreground);
+            }
+
         });
         const currentShape = new RoundedRectangle({
             x: innerX,
@@ -178,9 +179,7 @@ export async function start(twist: Twist) {
             content: syllable,
             parent: currentShape,
         });
-        currentPlace.addTo(syllableBox);
     }
-    // await timeout(400);
 }
 export async function end(): Promise<void> {
     outputBox.animateBound({

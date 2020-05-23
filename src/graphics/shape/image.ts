@@ -1,10 +1,10 @@
-import {Object2D, Object2DOption} from "../object2d";
+import {Object2d, Object2dOption} from "../object_2d";
 
-export interface ImageOption extends Object2DOption {
+export interface ImageOption extends Object2dOption {
     source?: HTMLImageElement;
     imageScaling?: "fit" | "fill";
 }
-export class Image extends Object2D {
+export class Image extends Object2d {
     source?: HTMLImageElement;
     imageScaling: "fit" | "fill";
     constructor(option: ImageOption = {}) {

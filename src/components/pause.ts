@@ -3,7 +3,7 @@ import {SafeArea} from "../graphics/safearea";
 import {Rectangle} from "../graphics/shape/rectangle";
 import {Text} from "../graphics/shape/text";
 import {scene} from "./master";
-import {Object2D} from "../graphics/object2d";
+import {Object2d} from "../graphics/object_2d";
 import {RoundedRectangle} from "../graphics/shape/rounded_rectangle";
 
 export const pauseScreen = new Rectangle({
@@ -30,14 +30,14 @@ new Text({
     color: foreground,
     parent: pauseBody,
 });
-const buttonsPlace = new Object2D({
+const buttonsPlace = new Object2d({
     x: 0 / 6,
     y: 8 / 10,
     width: 6 / 6,
     height: 2 / 10,
     parent: pauseBody,
 });
-export const continuePlace = new Object2D({
+export const continuePlace = new Object2d({
     x: 0 / 1,
     y: 1 / 2,
     width: 1 / 1,
@@ -65,7 +65,7 @@ new Text({
     color: white,
     parent: continuePlace,
 });
-export const backPlace = new Object2D({
+export const backPlace = new Object2d({
     x: 0 / 1,
     y: 0 / 2,
     width: 1 / 1,

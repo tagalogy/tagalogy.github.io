@@ -1,4 +1,4 @@
-import {EventTarget, EventTargetOption} from "../event/event";
+import {EventTarget} from "../event/event";
 import {noop} from "../utils/noop";
 import {now, timeout} from "../utils/time";
 import {alphaToRange, EasingFunction, expoOut, sine, sineIn} from "./easing";
@@ -7,10 +7,10 @@ import {Scene} from "./scene";
 declare function setTimeout(callback: () => void, delay: number): number;
 declare function clearTimeout(id: number): void;
 
-export interface Object2DUpdater {
-    (this: Object2D): void;
+export interface Object2dUpdater {
+    (this: Object2d): void;
 }
-export interface Object2DOption extends EventTargetOption {
+export interface Object2dOption {
     z?: number;
 
     x?: number;
@@ -24,7 +24,7 @@ export interface Object2DOption extends EventTargetOption {
     opacity?: number;
     isOpacityRelative?: boolean;
 
-    parent?: Object2D;
+    parent?: Object2d;
 
     operation?: "source-over" | "source-in" | "source-out" | "source-atop" |
     "destination-over" | "destination-in" | "destination-out" | "destination-atop" |
@@ -32,18 +32,18 @@ export interface Object2DOption extends EventTargetOption {
     "color-dodge" | "color-burn" | "hard-light" | "soft-light" | "difference" | "exclusion" |
     "hue" | "saturation" | "color" | "luminousity";
 
-    entranceParent?: Object2D;
+    entranceParent?: Object2d;
 
-    exitOption?: Object2DOption;
-    enterOption?: Object2DOption;
+    exitOption?: Object2dOption;
+    enterOption?: Object2dOption;
 
-    updateBound?: Object2DUpdater;
-    updateOpacity?: Object2DUpdater;
+    updateBound?: Object2dUpdater;
+    updateOpacity?: Object2dUpdater;
 }
-export class Object2D extends EventTarget {
+export class Object2d extends EventTarget {
     private _z = 0;
-    private boundAnimID = -1;
-    private opacityAnimID = -1;
+    private boundAnimId = -1;
+    private opacityAnimId = -1;
 
     visible = true;
     opacity = 1;
@@ -53,20 +53,20 @@ export class Object2D extends EventTarget {
     width = 0;
     height = 0;
 
-    children: Object2D[] = [];
-    parent: null | Object2D = null;
+    children: Object2d[] = [];
+    parent: null | Object2d = null;
     scene: null | Scene = null;
     operation: string;
-    updateBound: Object2DUpdater = noop;
-    updateOpacity: Object2DUpdater = noop;
+    updateBound: Object2dUpdater = noop;
+    updateOpacity: Object2dUpdater = noop;
 
-    entranceParent: null | Object2D;
+    entranceParent: null | Object2d;
 
-    enterOption: null | Object2DOption;
-    exitOption: null | Object2DOption;
+    enterOption: null | Object2dOption;
+    exitOption: null | Object2dOption;
 
-    constructor(option: Object2DOption = {}) {
-        super(option);
+    constructor(option: Object2dOption = {}) {
+        super();
         this.setOpacity(option);
         this.setBound(option);
         this.z = option.z ?? 0;
@@ -76,10 +76,6 @@ export class Object2D extends EventTarget {
         this.exitOption = option.exitOption ?? null;
         const {parent} = option;
         if (parent) this.addTo(parent);
-        /*
-        if (child) this.addChild(child);
-        if (children) this.addChildren(children);
-        */
     }
     get z(): number {
         return this._z;
@@ -89,14 +85,14 @@ export class Object2D extends EventTarget {
         const {parent} = this;
         if (parent) parent.updateDrawOrder();
     }
-    setBound(option: Object2DOption): void {
+    setBound(option: Object2dOption): void {
         this.updateBound = updateBoundWrapper(option);
     }
-    async animateBound(option: Object2DOption, time?: number, easing?: EasingFunction): Promise<void> {
+    async animateBound(option: Object2dOption, time?: number, easing?: EasingFunction): Promise<void> {
         await this.animateUpdateBound(updateBoundWrapper(option), time, easing);
     }
-    async animateUpdateBound(updateBound: Object2DUpdater, time = 400, easing = sine): Promise<void> {
-        clearTimeout(this.boundAnimID);
+    async animateUpdateBound(updateBound: Object2dUpdater, time = 400, easing = sine): Promise<void> {
+        clearTimeout(this.boundAnimId);
         const oldUpdateBound = this.updateBound;
         const startTime = now();
         this.updateBound = function () {
@@ -120,19 +116,19 @@ export class Object2D extends EventTarget {
             this.width = alphaToRange(alpha, oldWidth, newWidth);
             this.height = alphaToRange(alpha, oldHeight, newHeight);
         };
-        this.boundAnimID = setTimeout(() => {
+        this.boundAnimId = setTimeout(() => {
             this.updateBound = updateBound;
         }, time);
         await timeout(time);
     }
-    setOpacity(option: number | Object2DOption): void {
+    setOpacity(option: number | Object2dOption): void {
         this.updateOpacity = updateOpacityWrapper(option);
     }
-    async animateOpacity(option: number | Object2DOption, time?: number, easing?: EasingFunction): Promise<void> {
+    async animateOpacity(option: number | Object2dOption, time?: number, easing?: EasingFunction): Promise<void> {
         await this.animateUpdateOpacity(updateOpacityWrapper(option), time, easing);
     }
-    async animateUpdateOpacity(updateOpacity: Object2DUpdater, time = 400, easing = sine): Promise<void> {
-        clearTimeout(this.opacityAnimID);
+    async animateUpdateOpacity(updateOpacity: Object2dUpdater, time = 400, easing = sine): Promise<void> {
+        clearTimeout(this.opacityAnimId);
         const oldUpdateOpacity = this.updateOpacity;
         const startTime = now();
         this.updateOpacity = function () {
@@ -143,7 +139,7 @@ export class Object2D extends EventTarget {
             const {opacity: newOpacity} = this;
             this.opacity = alphaToRange(alpha, oldOpacity, newOpacity);
         };
-        this.opacityAnimID = setTimeout(() => {
+        this.opacityAnimId = setTimeout(() => {
             this.updateOpacity = updateOpacity;
         }, time);
         await timeout(time);
@@ -172,7 +168,7 @@ export class Object2D extends EventTarget {
         await this.animateBound(exitOption, 200, sineIn);
         this.remove();
     }
-    forEachDescendant(callback: (object2D: Object2D) => void, includeThis = false): void {
+    forEachDescendant(callback: (object2D: Object2d) => void, includeThis = false): void {
         if (includeThis) callback(this);
         for (const child of this.children) child.forEachDescendant(callback, true);
     }
@@ -195,8 +191,7 @@ export class Object2D extends EventTarget {
         this.scene = scene;
         for (const child of this.children) child.setscene(scene);
     }
-    addChild(child: Object2D, updateDrawOrder = true): void {
-        // if (child instanceof Scene) throw new Error("Unable to add scene as a child");
+    addChild(child: Object2d, updateDrawOrder = true): void {
         child.invoke("beforeadd");
         child.remove(false);
         child.parent = this;
@@ -205,14 +200,14 @@ export class Object2D extends EventTarget {
         if (updateDrawOrder) this.updateDrawOrder();
         child.invoke("afteradd");
     }
-    addChildren(children: Object2D[], updateDrawOrder = true): void {
+    addChildren(children: Object2d[], updateDrawOrder = true): void {
         for (const child of children) this.addChild(child, false);
         if (updateDrawOrder) this.updateDrawOrder();
     }
-    addTo(parent: Object2D, updateDrawOrder = true): void {
+    addTo(parent: Object2d, updateDrawOrder = true): void {
         parent.addChild(this, updateDrawOrder);
     }
-    removeChild(child: Object2D, setscene = true): void {
+    removeChild(child: Object2d, setscene = true): void {
         if (child.parent !== this) return;
         child.invoke("beforeremove");
         child.parent = null;
@@ -225,7 +220,7 @@ export class Object2D extends EventTarget {
         const {parent} = this;
         if (parent) parent.removeChild(this, setscene);
     }
-    removeChildren(children: Object2D[]): void {
+    removeChildren(children: Object2d[]): void {
         for (const child of children) this.removeChild(child);
     }
     removeAllChildren(): void {
@@ -237,7 +232,7 @@ export class Object2D extends EventTarget {
         return testX > x && testY > y && testX < x + width && testY < y + height;
     }
 }
-export function updateBoundWrapper(option: Object2DOption): Object2DUpdater {
+export function updateBoundWrapper(option: Object2dOption): Object2dUpdater {
     const {updateBound} = option;
     if (updateBound) return updateBound;
     const {
@@ -269,7 +264,7 @@ export function updateBoundWrapper(option: Object2DOption): Object2DUpdater {
         this.height = offsetHeight * height;
     };
 }
-export function updateOpacityWrapper(option: number | Object2DOption): Object2DUpdater {
+export function updateOpacityWrapper(option: number | Object2dOption): Object2dUpdater {
     if (typeof option === "number") {
         option = {opacity: option};
     }

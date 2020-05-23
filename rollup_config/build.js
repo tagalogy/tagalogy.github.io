@@ -1,3 +1,4 @@
+import {terser} from "rollup-plugin-terser";
 import typescript from 'rollup-plugin-typescript2';
 
 export default {
@@ -6,18 +7,14 @@ export default {
         file: "public/dist/main.js",
         format: "iife",
         name: "main",
-        sourcemap: "inline",
     },
     plugins: [
-        typescript({
-            tsconfigOverride: {
-                compilerOptions: {
-                    sourceMap: true,
-                },
+        typescript(),
+        terser({
+            output: {
+                comments: false,
+                ecma: "2015",
             },
         }),
     ],
-    watch: {
-        include: "src/**",
-    },
 };

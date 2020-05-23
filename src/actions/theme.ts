@@ -1,8 +1,8 @@
-import {storage} from "../utils/storage";
 import {background, foreground, white, accent, skyblue, black, bluePH} from "../asset/color";
+import {storage} from "../storage/storage";
 
-export let theme: string;
-export function setTheme(currentTheme: string): void {
+export let theme: "dark" | "light";
+export function setTheme(currentTheme: "dark" | "light"): void {
     storage.setItem("theme", currentTheme);
     if (currentTheme === "dark") {
         document.body.style.backgroundColor = "black";
@@ -18,4 +18,4 @@ export function setTheme(currentTheme: string): void {
         accent.setColor(bluePH);
     }
 }
-setTheme(storage.getItem("theme") as string);
+setTheme(storage.getItem("theme") ?? "light");

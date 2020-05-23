@@ -1,7 +1,7 @@
-export function timeout(delay: number): Promise<number> {
+export function timeout(delay: number): Promise<void> {
     return new Promise(resolve => {
         setTimeout(() => {
-            resolve(delay);
+            resolve();
         }, delay);
     });
 }

@@ -1,9 +1,9 @@
-import {Object2D, Object2DOption} from "./object2d";
+import {Object2d, Object2dOption} from "./object_2d";
 
-interface SafeAreaOption extends Object2DOption {
+interface SafeAreaOption extends Object2dOption {
     ratio: number;
 }
-export class SafeArea extends Object2D {
+export class SafeArea extends Object2d {
     constructor(option: SafeAreaOption) {
         super(option);
         const {ratio} = option;

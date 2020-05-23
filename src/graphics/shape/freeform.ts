@@ -4,7 +4,7 @@ export interface FreeFormOption extends BaseOption {
     path?: [number, number][];
 }
 export class FreeForm extends Base {
-    // private coordsAnimID = -1;
+    // private coordsAnimId = -1;
     path: [number, number][];
     constructor(option: FreeFormOption = {}) {
         super(option);
