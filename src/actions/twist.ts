@@ -31,7 +31,6 @@ import {
     white,
 } from "../asset/color";
 
-function setButtons(twist: Twist) {}
 clearPlace.on("interactdown", () => {
     clearColor.setColor(black);
 });
