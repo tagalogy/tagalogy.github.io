@@ -41,7 +41,7 @@ import { Text } from "../graphics/shape/text";
 import { storage } from "../storage/storage";
 import { now, timeout } from "../utils/time";
 import { popup } from "./dialog_box";
-import { startDifficulty } from "./mainmenu";
+import { startMainMenu } from "./mainmenu";
 import { pause } from "./pause";
 
 clearPlace.on("interactdown", () => {
@@ -137,7 +137,7 @@ async function exitGame(): Promise<void> {
     await hudBox.exit();
     await timeout(200);
     gameBox.remove();
-    startDifficulty();
+    startMainMenu();
 }
 async function endGame(correct: string): Promise<void> {
     gameState.stop();

@@ -19,7 +19,7 @@ themeButton.on("interactup", () => {
     setTheme(theme === "dark" ? "light" : "dark");
     updateColor();
 });
-export function startDifficulty(): void {
+export function startMainMenu(): void {
     updateColor();
     bulbImage.source = imageLoader.get("/asset/bulb.png");
     titleBox.enter();

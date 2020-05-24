@@ -1,5 +1,5 @@
 import { load } from "./actions/loading";
-import { startDifficulty } from "./actions/mainmenu";
+import { startMainMenu } from "./actions/mainmenu";
 import { assetsLoaded } from "./asset/asset";
 import { storage } from "./storage/storage";
 
@@ -11,5 +11,5 @@ storage.setDefaults({
     highscore_veryHard: 0,
 });
 load(assetsLoaded).then(() => {
-    startDifficulty();
+    startMainMenu();
 });
