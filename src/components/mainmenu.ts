@@ -32,14 +32,14 @@ export const titleBox = new Object2d({
         height: 14 / 20,
     },
 });
-export const titleImage = new Image({
+const titleImage = new Image({
     x: 0,
     y: 0,
     width: 1,
     height: 1,
     parent: titleBox,
 });
-export const shineShape = new FreeForm({
+const shineShape = new FreeForm({
     path: [
         [0, 1],
         [3 / 4, 0],
@@ -128,7 +128,7 @@ export const bulbImage = new Image({
     height: 4 / 6,
     parent: themeButton,
 });
-export const titleBoxPos = updateBoundWrapper({
+const titleBoxPos = updateBoundWrapper({
     x: 1 / 12,
     y: 0 / 20,
     width: 10 / 12,

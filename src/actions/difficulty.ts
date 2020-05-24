@@ -17,6 +17,6 @@ export function start(): void {
     }
     box.enter();
 }
-export async function end(): Promise<void> {
+async function end(): Promise<void> {
     await box.exit();
 }

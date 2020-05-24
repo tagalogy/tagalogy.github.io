@@ -1,6 +1,6 @@
 import { Object2d, Object2dOption } from "../object_2d";
 
-export interface ImageOption extends Object2dOption {
+interface ImageOption extends Object2dOption {
     source?: HTMLImageElement;
     imageScaling?: "fit" | "fill";
 }

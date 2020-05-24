@@ -1,8 +1,8 @@
-export interface Converter<Value> {
+interface Converter<Value> {
     parse: (value: string) => null | Value;
     stringify: (value: Value) => string;
 }
-export type Converters<Body extends object> = {
+type Converters<Body extends object> = {
     [Key in keyof Body]: Converter<Body[Key]>;
 };
 const takenKeys = new WeakMap<Storage, Set<string>>();
@@ -60,10 +60,12 @@ export class TypedStorage<Body extends object> {
         }
     }
 }
-export const stringConverter: Converter<string> = {
+/*
+const stringConverter: Converter<string> = {
     parse: value => value,
     stringify: value => value,
 };
+*/
 export function enumConverterFactory<Enum extends string>(
     enumTuple: Enum[],
 ): Converter<Enum> {
@@ -83,7 +85,8 @@ export const intConverter: Converter<number> = {
     },
     stringify: value => value.toString(),
 };
-export const floatConverter: Converter<number> = {
+/*
+const floatConverter: Converter<number> = {
     parse: value => {
         const num = Number.parseFloat(value);
         if (Number.isNaN(num)) return null;
@@ -91,7 +94,9 @@ export const floatConverter: Converter<number> = {
     },
     stringify: value => value.toString(),
 };
-export const isoDateConverter: Converter<Date> = {
+*/
+/*
+const isoDateConverter: Converter<Date> = {
     parse: value => {
         const date = new Date(value);
         if (Number.isNaN(+date)) return null;
@@ -99,3 +104,4 @@ export const isoDateConverter: Converter<Date> = {
     },
     stringify: value => value.toISOString(),
 };
+*/

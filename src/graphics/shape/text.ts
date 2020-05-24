@@ -2,10 +2,10 @@ import { noop } from "../../utils/noop";
 import { Color } from "../color";
 import { Object2d, Object2dOption } from "../object_2d";
 
-export interface TextUpdater {
+interface TextUpdater {
     (this: Text): void;
 }
-export interface TextOption extends Object2dOption {
+interface TextOption extends Object2dOption {
     updateSize?: TextUpdater;
     size?: number;
     isSizeRelative?: boolean;
@@ -120,7 +120,7 @@ export class Text extends Object2d {
         if (drawChildren) this.drawChildren(context);
     }
 }
-export function updateSizeWrapper(option: number | TextOption): TextUpdater {
+function updateSizeWrapper(option: number | TextOption): TextUpdater {
     if (typeof option === "number") {
         return function () {
             this.size = option;
@@ -139,7 +139,7 @@ export function updateSizeWrapper(option: number | TextOption): TextUpdater {
 }
 const NEWLINES = /\r\n|\r|\n/;
 const SPACES = /\s+/;
-export function getLines(
+function getLines(
     context: CanvasRenderingContext2D,
     text: string,
     maxWidth: number,

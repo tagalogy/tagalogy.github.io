@@ -25,7 +25,7 @@ export const hudBox = new Object2d({
 });
 export const timerColor = new Color();
 export const pauseColor = new Color();
-export const horizontalLine = new Horizontal({
+new Horizontal({
     x: 0,
     y: 1,
     width: 1,
@@ -36,7 +36,7 @@ export const horizontalLine = new Horizontal({
     updateThickness,
     parent: hudBox,
 });
-export const scoreBox = new Object2d({
+const scoreBox = new Object2d({
     x: 1 / 3,
     y: 0 / 1,
     width: 1 / 3,
@@ -71,7 +71,7 @@ export const pauseButton = new Object2d({
     height: 1 / 1,
     parent: hudBox,
 });
-export const pauseIcon = new Object2d({
+const pauseIcon = new Object2d({
     x: 3 / 10,
     y: 3 / 10,
     width: 4 / 10,
@@ -98,7 +98,7 @@ new Rectangle({
     updateThickness,
     parent: pauseIcon,
 });
-export const timerBox = new Object2d({
+const timerBox = new Object2d({
     x: 2 / 3,
     y: 0 / 1,
     width: 1 / 3,

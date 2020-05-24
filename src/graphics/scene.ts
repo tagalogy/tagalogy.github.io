@@ -1,7 +1,7 @@
 import { Object2d, Object2dOption } from "./object_2d";
 import { Frame } from "./frame";
 
-export interface SceneOption extends Object2dOption {
+interface SceneOption extends Object2dOption {
     autoresize?: boolean;
     canvas: HTMLCanvasElement;
     alpha?: boolean;

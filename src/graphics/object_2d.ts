@@ -7,7 +7,7 @@ import { Scene } from "./scene";
 declare function setTimeout(callback: () => void, delay: number): number;
 declare function clearTimeout(id: number): void;
 
-export interface Object2dUpdater {
+interface Object2dUpdater {
     (this: Object2d): void;
 }
 export interface Object2dOption {
@@ -312,7 +312,7 @@ export function updateBoundWrapper(option: Object2dOption): Object2dUpdater {
         this.height = offsetHeight * height;
     };
 }
-export function updateOpacityWrapper(
+function updateOpacityWrapper(
     option: number | Object2dOption,
 ): Object2dUpdater {
     if (typeof option === "number") {

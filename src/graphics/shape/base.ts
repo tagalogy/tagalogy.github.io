@@ -3,7 +3,7 @@ import { now } from "../../utils/time";
 import { Color } from "../color";
 import { Object2d, Object2dOption } from "../object_2d";
 
-export interface BaseUpdater {
+interface BaseUpdater {
     (this: Base): void;
 }
 export interface BaseOption extends Object2dOption {
@@ -86,9 +86,7 @@ export class Base extends Object2d {
         if (drawChildren) this.drawChildren(context);
     }
 }
-export function updateThicknessWrapper(
-    option: number | BaseOption,
-): BaseUpdater {
+function updateThicknessWrapper(option: number | BaseOption): BaseUpdater {
     if (typeof option === "number") {
         return function () {
             this.thickness = option;

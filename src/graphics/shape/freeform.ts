@@ -1,6 +1,6 @@
 import { Base, BaseOption } from "./base";
 
-export interface FreeFormOption extends BaseOption {
+interface FreeFormOption extends BaseOption {
     path?: [number, number][];
 }
 export class FreeForm extends Base {

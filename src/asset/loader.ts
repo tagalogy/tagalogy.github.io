@@ -84,11 +84,13 @@ async function getHttp(path: string): Promise<string> {
         xhr.send();
     });
 }
-export class TextLoader<Paths extends string> extends Loader<Paths, string> {
+/*
+class TextLoader<Paths extends string> extends Loader<Paths, string> {
     protected load(path: Paths): Promise<string> {
         return getHttp(path);
     }
 }
+*/
 export class WordLoader<Paths extends string> extends Loader<Paths, string[]> {
     protected async load(path: Paths): Promise<string[]> {
         return toArray(await getHttp(path));

@@ -1,10 +1,10 @@
 import { noop } from "../../utils/noop";
 import { Base, BaseOption } from "./base";
 
-export interface RoundedRectangleUpdater {
+interface RoundedRectangleUpdater {
     (this: RoundedRectangle): void;
 }
-export interface RoundedRectangleOption extends BaseOption {
+interface RoundedRectangleOption extends BaseOption {
     updateRadius?: RoundedRectangleUpdater;
     radius?: number;
     isRadiusRelative?: boolean;
@@ -44,7 +44,7 @@ export class RoundedRectangle extends Base {
         if (drawChildren) this.drawChildren(context);
     }
 }
-export function updateRadiusWrapper(
+function updateRadiusWrapper(
     option: number | RoundedRectangleOption,
 ): RoundedRectangleUpdater {
     if (typeof option === "number") {

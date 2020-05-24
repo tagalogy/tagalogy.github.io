@@ -26,7 +26,7 @@ export function startDifficulty(): void {
     startButton.enter();
     settings.fadeIn();
 }
-export async function end(): Promise<void> {
+async function end(): Promise<void> {
     startButton.exit();
     titleBox.exit();
     settings.fadeOut();

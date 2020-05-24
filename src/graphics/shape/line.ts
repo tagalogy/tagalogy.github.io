@@ -6,7 +6,7 @@ import { Base, BaseOption } from "./base";
 declare function setTimeout(callback: () => void, delay: number): number;
 declare function clearTimeout(id: number): void;
 
-export interface LineUpdater {
+interface LineUpdater {
     (this: Line): void;
 }
 export interface LineOption extends BaseOption {
@@ -80,7 +80,7 @@ export class Line extends Base {
         if (drawChildren) this.drawChildren(context);
     }
 }
-export function updateCoordsWrapper(option: LineOption): LineUpdater {
+function updateCoordsWrapper(option: LineOption): LineUpdater {
     const { updateCoords } = option;
     if (updateCoords) return updateCoords;
     const { x0 = 0, y0 = 0, x1 = 0, y1 = 0 } = option;

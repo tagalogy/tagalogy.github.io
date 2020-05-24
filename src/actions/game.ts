@@ -50,7 +50,7 @@ clearPlace.on("interactdown", () => {
 hyphenPlace.on("interactdown", () => {
     hyphenColor.setColor(black);
 });
-export let gameState: PlayState;
+let gameState: PlayState;
 pauseButton.on("interactdown", () => {
     if (gameState.paused) return;
     pauseColor.setColor(skyblue);
@@ -60,16 +60,16 @@ pauseButton.on("interactup", () => {
     pauseColor.setColor(background);
     pauseStart();
 });
-export let score = 0;
-export const time = 20;
-export let prevHandler: () => void;
-export let currentGame: symbol;
-export let currentDifficulty:
+let score = 0;
+const time = 20;
+let prevHandler: () => void;
+let currentGame: symbol;
+let currentDifficulty:
     | "highscore_easy"
     | "highscore_medium"
     | "highscore_hard"
     | "highscore_veryHard";
-export let wordBank: string[];
+let wordBank: string[];
 export function startGame(
     difficulty:
         | "highscore_easy"
@@ -88,7 +88,7 @@ export function startGame(
     timerText.content = `:${time}`;
     newGame();
 }
-export async function newGame(): Promise<void> {
+async function newGame(): Promise<void> {
     const twist = new Twist(wordBank);
     const correct = twist.sourceWord;
     await startTwist(twist);
@@ -111,7 +111,7 @@ export async function newGame(): Promise<void> {
     await gameState.timeout(time * 1000);
     if (thisGame === currentGame) await endGame(correct);
 }
-export async function nextGame(promise?: Promise<void>): Promise<void> {
+async function nextGame(promise?: Promise<void>): Promise<void> {
     score++;
     scoreText.content = score.toString();
     scene.off("frame", prevHandler);
@@ -120,7 +120,7 @@ export async function nextGame(promise?: Promise<void>): Promise<void> {
     if (promise) await promise;
     newGame();
 }
-export async function pauseStart(): Promise<void> {
+async function pauseStart(): Promise<void> {
     gameState.pause();
     const willContinue = await pause();
     if (willContinue) {
@@ -132,14 +132,14 @@ export async function pauseStart(): Promise<void> {
         exitGame();
     }
 }
-export async function exitGame(): Promise<void> {
+async function exitGame(): Promise<void> {
     resetScore();
     await hudBox.exit();
     await timeout(200);
     gameBox.remove();
     startDifficulty();
 }
-export async function endGame(correct: string): Promise<void> {
+async function endGame(correct: string): Promise<void> {
     gameState.stop();
     scene.off("frame", prevHandler);
     timerText.content = ":O";
@@ -165,7 +165,7 @@ function saveHighscore(): void {
     const high = storage.getItem(currentDifficulty) ?? 0;
     if (high < score) storage.setItem(currentDifficulty, score);
 }
-export async function shakeEffect(): Promise<void> {
+async function shakeEffect(): Promise<void> {
     const oldUpdateBound = gameBox.updateBound;
     const startTime = now();
     gameBox.updateBound = function () {

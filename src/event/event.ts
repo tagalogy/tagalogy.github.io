@@ -1,4 +1,4 @@
-export interface EventHandler {
+interface EventHandler {
     (this: EventTarget): void;
 }
 export class EventTarget {

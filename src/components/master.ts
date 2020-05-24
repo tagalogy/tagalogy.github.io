@@ -3,7 +3,7 @@ import { Scene } from "../graphics/scene";
 import { Rectangle } from "../graphics/shape/rectangle";
 import { background } from "../asset/color";
 
-export const canvas = document.querySelector("canvas")!;
+const canvas = document.querySelector("canvas")!;
 export const scene = new Scene({
     canvas,
     autoresize: true,

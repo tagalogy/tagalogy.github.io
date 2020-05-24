@@ -5,10 +5,10 @@ import { alphaToRange, EasingFunction, sine } from "./easing";
 declare function setTimeout(callback: () => void, delay: number): number;
 declare function clearTimeout(id: number): void;
 
-export interface ColorUpdater {
+interface ColorUpdater {
     (this: Color): void;
 }
-export interface ColorOption {
+interface ColorOption {
     red?: number;
     green?: number;
     blue?: number;
@@ -81,7 +81,7 @@ export class Color {
         await timeout(time);
     }
 }
-export function updateColorWrapper(option: string | ColorOption): ColorUpdater {
+function updateColorWrapper(option: string | ColorOption): ColorUpdater {
     if (typeof option === "string") {
         option = option.trim();
         if (option[0] === "#") {

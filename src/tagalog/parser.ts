@@ -210,7 +210,7 @@ const HYPHEN = /(\-)/;
 const VOWEL = /([AEIOU])/;
 const NG = /NG/g;
 const ENG = /Ŋ/g;
-export function parsePartialWord(word: string): string[] {
+function parsePartialWord(word: string): string[] {
     word = word.toUpperCase().replace(NG, "Ŋ");
     const tokens = word.split(VOWEL);
     const sliced = [tokens[0]];

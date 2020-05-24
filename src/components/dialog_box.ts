@@ -42,7 +42,7 @@ export const dialogBox = new RoundedRectangle({
         height: 4 / 10,
     },
 });
-export let buttonPlace = new Object2d({
+let buttonPlace = new Object2d({
     x: 0 / 8,
     y: 6 / 8,
     width: 8 / 8,
