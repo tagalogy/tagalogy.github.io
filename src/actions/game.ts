@@ -234,7 +234,7 @@ function initTwist(): void {
     );
 }
 // TODO: fix this mess
-export async function startTwist(twist: Twist): Promise<void> {
+async function startTwist(twist: Twist): Promise<void> {
     initTwist();
     const lineColors: Color[] = [];
     const fillColors: Color[] = [];
@@ -354,7 +354,7 @@ export async function startTwist(twist: Twist): Promise<void> {
         });
     }
 }
-export async function endTwist(): Promise<void> {
+async function endTwist(): Promise<void> {
     outputBox.animateBound(
         {
             x: -1,
