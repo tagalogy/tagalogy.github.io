@@ -8,18 +8,18 @@ import {
     updateColor,
 } from "../components/mainmenu";
 import { timeout } from "../utils/time";
-import { start as startGame } from "./difficulty";
+import { start } from "./difficulty";
 import { setTheme, theme } from "./theme";
 
 startButton.on("interactup", async () => {
     await end();
-    startGame();
+    start();
 });
 themeButton.on("interactup", () => {
     setTheme(theme === "dark" ? "light" : "dark");
     updateColor();
 });
-export function start(): void {
+export function startDifficulty(): void {
     updateColor();
     bulbImage.source = imageLoader.get("/asset/bulb.png");
     titleBox.enter();

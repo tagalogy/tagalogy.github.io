@@ -41,8 +41,8 @@ import { Text } from "../graphics/shape/text";
 import { storage } from "../storage/storage";
 import { now, timeout } from "../utils/time";
 import { popup } from "./dialog_box";
-import { start as startMainMenu } from "./mainmenu";
-import { pause as pauseStart } from "./pause";
+import { startDifficulty } from "./mainmenu";
+import { pause } from "./pause";
 
 clearPlace.on("interactdown", () => {
     clearColor.setColor(black);
@@ -58,7 +58,7 @@ pauseButton.on("interactdown", () => {
 pauseButton.on("interactup", () => {
     if (gameState.paused) return;
     pauseColor.setColor(background);
-    pause();
+    pauseStart();
 });
 export let score = 0;
 export const time = 20;
@@ -120,9 +120,9 @@ export async function nextGame(promise?: Promise<void>): Promise<void> {
     if (promise) await promise;
     newGame();
 }
-export async function pause(): Promise<void> {
+export async function pauseStart(): Promise<void> {
     gameState.pause();
-    const willContinue = await pauseStart();
+    const willContinue = await pause();
     if (willContinue) {
         gameState.play();
     } else {
@@ -137,7 +137,7 @@ export async function exitGame(): Promise<void> {
     await hudBox.exit();
     await timeout(200);
     gameBox.remove();
-    startMainMenu();
+    startDifficulty();
 }
 export async function endGame(correct: string): Promise<void> {
     gameState.stop();
