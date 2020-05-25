@@ -149,11 +149,7 @@ async function endGame(correct: string): Promise<void> {
     saveHighscore();
     timerText.content = ":(";
     endTwist();
-    const message = `\
-Tamang Sagot: ${correct}
-Puntos: ${score}
-Simulan muli?`;
-    const response = await popup(message, "Oo", "Hindi");
+    const response = await retryPrompt(correct, score);
     if (response) {
         gameState = new PlayState();
         resetScore();
@@ -161,6 +157,13 @@ Simulan muli?`;
     } else {
         exitGame();
     }
+}
+async function retryPrompt(correct: string, score: number): Promise<boolean> {
+    const message = `\
+Tamang Sagot: ${correct}
+Puntos: ${score}
+Simulan muli?`;
+    return await popup(message, "Oo", "Hindi");
 }
 function saveHighscore(): void {
     const high = storage.getItem(currentDifficulty) ?? 0;
