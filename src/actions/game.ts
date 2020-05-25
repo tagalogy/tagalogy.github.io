@@ -28,6 +28,7 @@ import {
     syllableBox,
     timerColor,
     timerText,
+    shakeEffect,
 } from "../components/game";
 import { scene } from "../components/master";
 import { updateThickness } from "../components/update_thickness";
@@ -39,7 +40,7 @@ import { Object2d } from "../graphics/object_2d";
 import { RoundedRectangle } from "../graphics/shape/rounded_rectangle";
 import { Text } from "../graphics/shape/text";
 import { storage } from "../storage/storage";
-import { now, timeout } from "../utils/time";
+import { timeout } from "../utils/time";
 import { popup } from "./dialog_box";
 import { startMainMenu } from "./mainmenu";
 import { pause } from "./pause";
@@ -164,19 +165,6 @@ Simulan muli?`;
 function saveHighscore(): void {
     const high = storage.getItem(currentDifficulty) ?? 0;
     if (high < score) storage.setItem(currentDifficulty, score);
-}
-async function shakeEffect(): Promise<void> {
-    const oldUpdateBound = gameBox.updateBound;
-    const startTime = now();
-    gameBox.updateBound = function () {
-        oldUpdateBound.call(this);
-        const { x, width } = this;
-        const alphaTime = (now() - startTime) / 500 - 1;
-        this.x =
-            x + (Math.sin(alphaTime * 8 * Math.PI) * alphaTime * width) / 8;
-    };
-    await timeout(500);
-    gameBox.updateBound = oldUpdateBound;
 }
 function resetScore(): void {
     score = 0;

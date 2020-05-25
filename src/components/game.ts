@@ -7,6 +7,7 @@ import { Text } from "../graphics/shape/text";
 import { safeArea } from "./master";
 import { updateThickness } from "./update_thickness";
 import { foreground, yellowPH, black } from "../asset/color";
+import { now, timeout } from "../utils/time";
 
 export const hudBox = new Object2d({
     entranceParent: safeArea,
@@ -132,6 +133,19 @@ export const gameBox = new Object2d({
         height: 4 / 5,
     },
 });
+export async function shakeEffect(): Promise<void> {
+    const oldUpdateBound = gameBox.updateBound;
+    const startTime = now();
+    gameBox.updateBound = function () {
+        oldUpdateBound.call(this);
+        const { x, width } = this;
+        const alphaTime = (now() - startTime) / 500 - 1;
+        this.x =
+            x + (Math.sin(alphaTime * 8 * Math.PI) * alphaTime * width) / 8;
+    };
+    await timeout(500);
+    gameBox.updateBound = oldUpdateBound;
+}
 export const inputBox = new Object2d();
 const sideBox = new Object2d({
     x: 3 / 4,
