@@ -54,12 +54,12 @@ You should be able to play Tagalogy at port 4000 (at url `http://localhost:4000/
 
 You could alternatively directly open `public/index.html`. Due to restriction with local html files, service worker and local storage is disabled for this setup.
 
-### Testing
+### Watch
 
 Run the following command.
 
 ```shell
-npm test
+npm watch
 ```
 
 With small delay, this updates or builds the distribution code as you edit and save the TypeScript files. These distribution code will have source mapping so you can debug right within the source code.
@@ -68,7 +68,7 @@ You need to [start Tagalogy](#starting) as well so you can play the modified Tag
 
 ### Building
 
-Upon installation, the distribution code is built with optimized size. However, when you use the [testing functionality](#testing), these codes have no longer optimized size, which is necessary for debugging. You can rebuild again with optimized size with the following command.
+Upon installation, the distribution code is built with optimized size. However, when you use the [watch functionality](#testing), these codes have no longer optimized size, which is necessary for debugging. You can rebuild again with optimized size with the following command.
 
 ```shell
 npm run build
