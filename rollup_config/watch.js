@@ -18,6 +18,6 @@ export default {
         }),
     ],
     watch: {
-        include: ["src/**.ts"],
+        include: ["src/**/*.ts"],
     },
 };
